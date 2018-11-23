@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>2018 *CTF/starCTF Smart? Contract writeup - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="目录 一：前言 二：染色币 三：智能合约 四：漏洞原理 五：漏洞利用 六：总结  前言&amp;emsp;&amp;emsp;这个题我一直想着复现，但也一直拖着，其中也有writeup难找的原因，那个*真是坑爹中的坑爹，直接被Google当成了通配符，好在跟大佬求了份writeup，终于可以学习学习。首先放出参加DDCTF2018颁奖的时候出题人放的解题思路：     &amp;emsp;&amp;emsp;从这个PPT里我们也">
+<meta name="keywords" content="CTF,Smart Contract">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2018 *CTF&#x2F;starCTF Smart? Contract writeup">
+<meta property="og:url" content="http://yoursite.com/2018/05/starctf-writeup/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="目录 一：前言 二：染色币 三：智能合约 四：漏洞原理 五：漏洞利用 六：总结  前言&amp;emsp;&amp;emsp;这个题我一直想着复现，但也一直拖着，其中也有writeup难找的原因，那个*真是坑爹中的坑爹，直接被Google当成了通配符，好在跟大佬求了份writeup，终于可以学习学习。首先放出参加DDCTF2018颁奖的时候出题人放的解题思路：     &amp;emsp;&amp;emsp;从这个PPT里我们也">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/posts/other/24.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/other/25.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/other/26.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/other/27.png">
+<meta property="og:updated_time" content="2018-11-23T12:51:05.121Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2018 *CTF&#x2F;starCTF Smart? Contract writeup">
+<meta name="twitter:description" content="目录 一：前言 二：染色币 三：智能合约 四：漏洞原理 五：漏洞利用 六：总结  前言&amp;emsp;&amp;emsp;这个题我一直想着复现，但也一直拖着，其中也有writeup难找的原因，那个*真是坑爹中的坑爹，直接被Google当成了通配符，好在跟大佬求了份writeup，终于可以学习学习。首先放出参加DDCTF2018颁奖的时候出题人放的解题思路：     &amp;emsp;&amp;emsp;从这个PPT里我们也">
+<meta name="twitter:image" content="http://yoursite.com/images/posts/other/24.png">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="2018 *CTF/starCTF Smart? Contract writeup" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-05-03T14:47:56.000Z">2018-05-03</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/CTF/">CTF</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    30 分钟 读完 (大约 4425 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                2018 *CTF/starCTF Smart? Contract writeup
+            
+        </h1>
+        <div class="content">
+            <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><a href="#1">一：前言</a></li>
+<li><a href="#2">二：染色币</a></li>
+<li><a href="#3">三：智能合约</a></li>
+<li><a href="#4">四：漏洞原理</a></li>
+<li><a href="#5">五：漏洞利用</a></li>
+<li><a href="#6">六：总结</a></li>
+</ul>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><a name="1"></a>前言</h2><p>&emsp;&emsp;这个题我一直想着复现，但也一直拖着，其中也有writeup难找的原因，那个<code>*</code>真是坑爹中的坑爹，直接被Google当成了通配符，好在跟大佬求了份writeup，终于可以学习学习。首先放出参加<code>DDCTF2018</code>颁奖的时候出题人放的解题思路：</p>
+<div align="center"><br>    <img src="/images/posts/other/24.png" height="60%"><br></div><br>&emsp;&emsp;从这个PPT里我们也能一窥解题的思路，我们还是先从理论基础知识讲起。<br><br><a id="more"></a><br><br>## <a name="2"></a>染色币<br>&emsp;&emsp;定义：<br>&gt;染色币是指一组使用比特币交易记录比特币以外的外部资产的创建，所有权和转让的类似技术。“外在”是指不直接存储在比特币区块链中的资产，而不是比特币本身，这是区块链固有的资产。<br><br>&emsp;&emsp;作者粗略的理解就是在比特币上增加额外的功能，比如在人民币1元钱的上面增加一个股权信息，或者增加<code>这可以抵换1美元</code>的信息，当然这个附加信息还可以是其他的。这样我们用那<code>染色</code>的<code>人民币1元钱</code>进行交易时也把附加的<code>股权</code>给转让出去了。这样做的一个好处就是将<code>虚拟货币</code>增加了<code>实体有形</code>的资产。<br><br>&emsp;&emsp;而题目中的染色区是在<code>extra</code>字段，它这里增加了<code>token</code>，并且提供了从<code>token</code>到<code>StarCoins</code>的转换功能。<br><div align="center"><br>    <img src="/images/posts/other/25.png" height="60%"><br></div>
+
+<h2 id="智能合约"><a href="#智能合约" class="headerlink" title="智能合约"></a><a name="3">智能合约</a></h2><p>&emsp;&emsp;在区块链上运行的<code>程序</code>，通常称为智能合约（Smart Contract）。这个程序就像一个可以被信任的人，可以临时保管资产，并且总是按照事先约定的规则执行操作。执行的过程中不受人为控制。题目中的<code>SRC20SmartContract</code>智能合约制定了两个功能：<code>购买</code>和<code>赎回</code>，并且在<code>赎回 starcoins</code>的时候自动拿出银行的私钥进行签名，以保证交易的正确性。这就导致了只要我们<code>tokens</code>足够，我们就能提出任意多的<code>starcoins</code>，这也是下面漏洞利用的前提。</p>
+<p>&emsp;&emsp;对于合约安全，我们应该多注意合约实现的逻辑问题，因为合约本身就是一个逻辑的处理过程，只不过是用程序语言表达出来而已。</p>
+<h2 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a><a name="4">漏洞原理</a></h2><p>&emsp;&emsp;对于一个writeup，先说明漏洞的产生原理会对读者的理解起到一个很好的帮助，所以这里先说一下此题的漏洞原理。这里参考了<code>Henryzhao大佬</code>的<a href="https://clannad.me/starCTF-web-2.html" target="_blank">writeup</a>，也非常感谢大佬的指点。</p>
+<p>&emsp;&emsp;首先我们知道有两个功能函数：<code>购买</code>和<code>赎回</code>starcoins。并且会在交易的时候检查<code>input</code>里的<code>tokens/starcoins</code>余额是否足够，如果足够则交易成功，反之失败。我们的目标是得到<code>200个StarCoins</code>，很显然，我们需要找到一个漏洞让我们的<code>100 StarCoins</code>变成200个。而这道题就是在计算<code>tokens余额</code>的方法上存在漏洞，具体如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/other/26.png" height="60%"><br></div><br>&emsp;&emsp;注意到它进行了<code>del utxo</code>操作，它<code>默认</code>output id和input id相同的<code>utxo</code>是一样的，这样为了减少计算就可以把output出来的ID在input里<code>删去</code>，从而造成了这个漏洞。</p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a><a name="5">漏洞利用</a></h2><p>&emsp;&emsp;下面详细说一下漏洞的细节，我们可以简单的认为这里有两个账本，一个是<code>tokens</code>，一个是<code>starcoins</code>，所以对于每一步交易我们都应该同时记录tokens和starcoins的变化，当我们执行完购买、赎回后，所产生的账单如下（这里还是借用<code>Henryzhao大佬</code>的表）：</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Operation</th>
+<th>My Coins</th>
+<th>Bank Coins</th>
+<th>My Tokens</th>
+<th>Bank Tokens</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Init</td>
+<td>100</td>
+<td>200</td>
+<td>0</td>
+<td>9999</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Buy 100 Token</td>
+<td>0</td>
+<td>300</td>
+<td>100</td>
+<td>9999</td>
+<td>Using the initial utxo of 100 <code>Coins</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Withdraw 100 Token</td>
+<td>100</td>
+<td>200</td>
+<td>0</td>
+<td>9999</td>
+<td>Using the utxo of buying the <code>Token</code> in step 2</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;此时所有的<code>utxo</code>如下：<br><figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4"</span>,</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"9ce516a92ae1eaf302af93b0183f5c3bd4f1d9e0253cdb83940937bf8ad98619"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">    <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"4804944d429db348a56bdcd75ae5064603917063e484b47d96f7f19b7baaeb417320be64883ff296cda0a588e78d1cdc$$$&#123;\"tokenNum\": -100, \"utxo_id\": \"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4\"&#125;"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"071a33e4-95be-4d06-921c-9aca4f43f6bd"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"071a33e4-95be-4d06-921c-9aca4f43f6bd"</span>,</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"ee71b83bd19926d1565b9221fac364211b712e625509c8ffe77ac1954d4ad882"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">    <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"14d6d4b5536cb4791ba546f4b94cd1e4464fdbcec6f3dcf1fae2ecb69713dd21371ab93869ce54bfbce755b13614490d$$$&#123;\"tokenNum\": 100, \"utxo_id\": \"071a33e4-95be-4d06-921c-9aca4f43f6bd\"&#125;"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"be4fb3ca-4cdb-4bcc-8f5b-2cbe0b307e01"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">200</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"bcb9c319ba2eb3c7f2bb24a4119b819cddd2b27f732628d07f69232cc7af9a7f"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481"</span>,</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"be4fb3ca-4cdb-4bcc-8f5b-2cbe0b307e01"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"cc220143-4532-4bfc-9cea-0cae95231efb"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">100</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"417c4bc8ee752db2d276fe6bb1e06c8dd630b5b235756aa7ef9aa5da0dcef4e8"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"cc220143-4532-4bfc-9cea-0cae95231efb"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;注意到<code>1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4</code>的<code>tokenNum</code>是<code>-100</code>，这样在计算startokens的时候就是：100 + (-100) = 0，从而得到当前黑客剩余的余额：<br><figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// StarTokens balance of all addresses</span><br><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481"</span>: <span class="hljs-number">999999999</span>,</span><br><span class="line">  <span class="hljs-attr">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>: <span class="hljs-number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;因为当前<code>startokens</code>的余额为0，所以无法再进行赎回操作。但是此时我们联想起上面他对<code>utxo</code>统计的逻辑，如果我们用<code>1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4</code>作为一个<code>tx</code>的input id，那么就会因为这个id已经在<code>output</code>里，导致它进行<code>del utxo</code>操作，这样下面这个块就被擦除了：<br><figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4"</span>,</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"9ce516a92ae1eaf302af93b0183f5c3bd4f1d9e0253cdb83940937bf8ad98619"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">    <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"4804944d429db348a56bdcd75ae5064603917063e484b47d96f7f19b7baaeb417320be64883ff296cda0a588e78d1cdc$$$&#123;\"tokenNum\": -100, \"utxo_id\": \"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4\"&#125;"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这样再进行余额检查的时候就是：100 + 0 = 100(startokens)，此时我们再进行购买100startokens，那么我们总共就会有：100 + 100 = 200(startokens)，接着我们将这200startokens进行赎回，最终我们能得到200 starcoins。</p>
+<p>&emsp;&emsp;理解了这一点后我们就能比较好的理解<code>Henryzhao大佬</code>的整个表了：</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Operation</th>
+<th>My Coins</th>
+<th>Bank Coins</th>
+<th>My Tokens</th>
+<th>Bank Tokens</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Init</td>
+<td>100</td>
+<td>200</td>
+<td>0</td>
+<td>9999</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Buy 100 Token</td>
+<td>0</td>
+<td>300</td>
+<td>100</td>
+<td>9999</td>
+<td>Using the initial utxo of 100 <code>Coins</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Withdraw 100 Token</td>
+<td>100</td>
+<td>200</td>
+<td>0</td>
+<td>9999</td>
+<td>Using the utxo of buying the <code>Token</code> in step 2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Transfer 0 coin from me to me</td>
+<td>100</td>
+<td>200</td>
+<td>100</td>
+<td>9999</td>
+<td>Using the generated utxo in step 3, contains <code>-100 Tokens</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Buy 100 Token</td>
+<td>0</td>
+<td>300</td>
+<td>200</td>
+<td>9999</td>
+<td>Using the uxto of withdrawing 100 <code>Coins</code> in step 3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Withdrawal 200 Token</td>
+<td>200</td>
+<td>100</td>
+<td>0</td>
+<td>9999</td>
+</tr>
+</tbody>
+</table>
+<p>&emsp;&emsp;特别提示下，在step 4的id是包含了<code>-100 tokens</code>的那个<code>utxo</code>的id，如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/other/27.png" height="60%"><br></div><br>&emsp;&emsp;因为我们的目的是擦除<code>-100 tokens</code>，所以要用那个块作为<code>input</code>。</p>
+<p>&emsp;&emsp;下面是作者自己写的半自动化脚本，这也方便一开始的理解，需要注意的是，使用脚本的时候需要一步一步走，step 2的参数需要你<code>手动</code>将step 1执行完的结果进行输入，如果想学习全自动化脚本，请移步<a href="https://github.com/sixstars/starctf2018/blob/master/web-smart_contract/solve.py" target="_blank">官方writeup</a>，作者的脚本如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> json, uuid, hashlib,rsa,pickle</span><br><span class="line"><span class="hljs-keyword">import</span> random,string</span><br><span class="line"></span><br><span class="line">EMPTY_HASH = <span class="hljs-string">'0'</span> * <span class="hljs-number">64</span></span><br><span class="line">DIFFICULTY = int(<span class="hljs-string">'00000'</span> + <span class="hljs-string">'f'</span> * <span class="hljs-number">59</span>, <span class="hljs-number">16</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash</span><span class="hljs-params">(x)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> hashlib.sha256(hashlib.md5(x).digest()).hexdigest()</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash_reducer</span><span class="hljs-params">(x, y)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> hash(hash(x) + hash(y))</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">sign_input_utxo</span><span class="hljs-params">(input_utxo_id, privkey)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> rsa.sign(input_utxo_id, privkey, <span class="hljs-string">'SHA-1'</span>).encode(<span class="hljs-string">'hex'</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 对 output 进行hash</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash_utxo</span><span class="hljs-params">(utxo)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> reduce(hash_reducer, [utxo[<span class="hljs-string">'id'</span>], utxo[<span class="hljs-string">'addr'</span>], str(utxo[<span class="hljs-string">'amount'</span>])])</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">create_output_utxo</span><span class="hljs-params">(addr_to, amount)</span>:</span></span><br><span class="line">    utxo = &#123;<span class="hljs-string">'id'</span>: str(uuid.uuid4()), <span class="hljs-string">'addr'</span>: addr_to, <span class="hljs-string">'amount'</span>: amount&#125;</span><br><span class="line">    utxo[<span class="hljs-string">'hash'</span>] = str(hash_utxo(utxo))</span><br><span class="line">    <span class="hljs-keyword">return</span> utxo</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 对 transactions 进行hash</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash_tx</span><span class="hljs-params">(tx)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> reduce(hash_reducer, [</span><br><span class="line">        reduce(hash_reducer, tx[<span class="hljs-string">'input'</span>], EMPTY_HASH),</span><br><span class="line">        reduce(hash_reducer, [utxo[<span class="hljs-string">'hash'</span>] <span class="hljs-keyword">for</span> utxo <span class="hljs-keyword">in</span> tx[<span class="hljs-string">'output'</span>]], EMPTY_HASH)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">#对整个块 hash</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">hash_block</span><span class="hljs-params">(block)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> reduce(hash_reducer, [block[<span class="hljs-string">'prev'</span>], block[<span class="hljs-string">'nonce'</span>],</span><br><span class="line">                                 reduce(hash_reducer, [tx[<span class="hljs-string">'hash'</span>] <span class="hljs-keyword">for</span> tx <span class="hljs-keyword">in</span> block[<span class="hljs-string">'transactions'</span>]], EMPTY_HASH)])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bank_address = <span class="hljs-string">'990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481'</span></span><br><span class="line"><span class="hljs-comment"># 赎回的时候用我们的地址</span></span><br><span class="line">my_address = <span class="hljs-string">'885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d'</span></span><br><span class="line">privkey = <span class="hljs-string">"63636f70795f7265670a5f7265636f6e7374727563746f720a70300a28637273612e6b65790a507269766174654b65790a70310a635f5f6275696c74696e5f5f0a6f626a6563740a70320a4e7470330a5270340a284c32303938363636363237303537323732343838373030383730323036363732333136393238303137323032343534343938313032363737323634363839323131323835363837373831323038303136313038313237383037383133393437363432373033333630333437323031333135383938394c0a4936353533370a4c31323437333737323233393135363830323330323837373030303334343932303639353337373733333831323533343931333830333432353937303731363138333937373239373030383935393937393035363631393636323538343335343331303337323633303536353930303439333035334c0a4c31393137383739323838363234353439363834343231363735363631343935323633323537323137333231353630393833363838363031323638343937394c0a4c313039343236343139303430323932303737373532303136373639353739373330323733383036313232343832303334393033323139314c0a4c353235383136373931343030333637383634343037373138383139363835373738383736313431343239303231383932323838353831383333303436354c0a4c3135333439343532353236363234373332313437383539383337333835363937353531313130303535313434303736353830363338334c0a4c31353233353733313234323832353338343731393937363436383035313739363834393833383638343332333536373932373431343938363239393433334c0a7470350a622e"</span></span><br><span class="line">tmp_privkey = pickle.loads(privkey.decode(<span class="hljs-string">'hex'</span>))   <span class="hljs-comment"># 进行解码</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">### step1: 购买 100 tokens</span></span><br><span class="line"><span class="hljs-comment"># 创世块/上一块中的 output 里的ID</span></span><br><span class="line">input_id = <span class="hljs-string">"d924f0db-0b46-4c93-8c8e-3d83291c83a2"</span></span><br><span class="line">prev = <span class="hljs-string">"41bc26b103e779479118b5b315d944e5eb785563870acccb39bd71d8d417d89a"</span></span><br><span class="line">signature = [sign_input_utxo(input_id, tmp_privkey)]</span><br><span class="line"></span><br><span class="line">output = [create_output_utxo(bank_address,<span class="hljs-number">100</span>)]</span><br><span class="line"></span><br><span class="line">transactions = &#123;</span><br><span class="line">    <span class="hljs-string">"input"</span>: [input_id],</span><br><span class="line">    <span class="hljs-string">"signature"</span>:signature,</span><br><span class="line">    <span class="hljs-string">"output"</span>:output,</span><br><span class="line">    <span class="hljs-string">"call_smart_contract"</span>:<span class="hljs-string">'buyTokens'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 对 transactions 进行签名</span></span><br><span class="line">hash_transactions = hash_tx(transactions)</span><br><span class="line">transactions[<span class="hljs-string">'hash'</span>] = str(hash_transactions)</span><br><span class="line"></span><br><span class="line">block = &#123;</span><br><span class="line">    <span class="hljs-string">"prev"</span>:prev,</span><br><span class="line">    <span class="hljs-string">"transactions"</span>:[transactions],</span><br><span class="line">    <span class="hljs-string">"nonce"</span> : <span class="hljs-string">"step1"</span></span><br><span class="line">&#125;</span><br><span class="line">block[<span class="hljs-string">'hash'</span>] = str(hash_block(block))</span><br><span class="line">print(json.dumps(block))</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">### step2: 赎回</span></span><br><span class="line">prev = <span class="hljs-string">"860aa2c3c1ab16ba0378498165b3a6a75662a2c4847cf9532a46b3257cc80d2d"</span></span><br><span class="line"><span class="hljs-comment"># 购买tokens时转给银行的 id</span></span><br><span class="line">input_id = <span class="hljs-string">'bf722709-bbea-406d-9486-4b259444dec8'</span></span><br><span class="line">output = [create_output_utxo(my_address,<span class="hljs-number">100</span>)]</span><br><span class="line">transactions = &#123;</span><br><span class="line">    <span class="hljs-string">"input"</span>: [input_id],</span><br><span class="line">    <span class="hljs-string">"signature"</span>:[],</span><br><span class="line">    <span class="hljs-string">"output"</span>:output,</span><br><span class="line">    <span class="hljs-string">"call_smart_contract"</span>:<span class="hljs-string">'withdraw'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-comment"># 对 transactions 进行签名</span></span><br><span class="line">hash_transactions = hash_tx(transactions)</span><br><span class="line">transactions[<span class="hljs-string">'hash'</span>] = str(hash_transactions)</span><br><span class="line"></span><br><span class="line">block = &#123;</span><br><span class="line">    <span class="hljs-string">"prev"</span>:prev,</span><br><span class="line">    <span class="hljs-string">"transactions"</span>:[transactions],</span><br><span class="line">    <span class="hljs-string">"nonce"</span> : <span class="hljs-string">"step2"</span></span><br><span class="line">&#125;</span><br><span class="line">block[<span class="hljs-string">'hash'</span>] = str(hash_block(block))</span><br><span class="line">print(json.dumps(block))</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">### step3: 转 0 给自己</span></span><br><span class="line">prev = <span class="hljs-string">"861dadc278df24efb3e9dfab420a4137f7c933cd93d27a0980eb843735341b30"</span></span><br><span class="line"><span class="hljs-comment"># -100 tokennum 的 input_id</span></span><br><span class="line">input_id = <span class="hljs-string">'1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4'</span></span><br><span class="line">output = [create_output_utxo(my_address,<span class="hljs-number">0</span>)]</span><br><span class="line">signature = [sign_input_utxo(input_id, tmp_privkey)]</span><br><span class="line"></span><br><span class="line">transactions = &#123;</span><br><span class="line">    <span class="hljs-string">"input"</span>: [input_id],</span><br><span class="line">    <span class="hljs-string">"signature"</span>:signature,</span><br><span class="line">    <span class="hljs-string">"output"</span>:output,</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-comment"># 对 transactions 进行签名</span></span><br><span class="line">hash_transactions = hash_tx(transactions)</span><br><span class="line">transactions[<span class="hljs-string">'hash'</span>] = str(hash_transactions)</span><br><span class="line"></span><br><span class="line">block = &#123;</span><br><span class="line">    <span class="hljs-string">"prev"</span>:prev,</span><br><span class="line">    <span class="hljs-string">"transactions"</span>:[transactions],</span><br><span class="line">    <span class="hljs-string">"nonce"</span> : <span class="hljs-string">"step3"</span></span><br><span class="line">&#125;</span><br><span class="line">block[<span class="hljs-string">'hash'</span>] = str(hash_block(block))</span><br><span class="line">print(json.dumps(block))</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">### step4: 再购买 100 tokens</span></span><br><span class="line"><span class="hljs-comment"># 使用 上面赎回来的 input_id</span></span><br><span class="line">input_id = <span class="hljs-string">"cc220143-4532-4bfc-9cea-0cae95231efb"</span></span><br><span class="line">prev = <span class="hljs-string">"4149dafccdb394829022055ef59e572d558d7cdb62a4e4ea47b4e630ef4a2c43"</span></span><br><span class="line">signature = [sign_input_utxo(input_id, tmp_privkey)]</span><br><span class="line"></span><br><span class="line">output = [create_output_utxo(bank_address,<span class="hljs-number">100</span>)]</span><br><span class="line"></span><br><span class="line">transactions = &#123;</span><br><span class="line">    <span class="hljs-string">"input"</span>: [input_id],</span><br><span class="line">    <span class="hljs-string">"signature"</span>:signature,</span><br><span class="line">    <span class="hljs-string">"output"</span>:output,</span><br><span class="line">    <span class="hljs-string">"call_smart_contract"</span>:<span class="hljs-string">'buyTokens'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 对 transactions 进行签名</span></span><br><span class="line">hash_transactions = hash_tx(transactions)</span><br><span class="line">transactions[<span class="hljs-string">'hash'</span>] = str(hash_transactions)</span><br><span class="line"></span><br><span class="line">block = &#123;</span><br><span class="line">    <span class="hljs-string">"prev"</span>:prev,</span><br><span class="line">    <span class="hljs-string">"transactions"</span>:[transactions],</span><br><span class="line">    <span class="hljs-string">"nonce"</span> : <span class="hljs-string">"step4"</span></span><br><span class="line">&#125;</span><br><span class="line">block[<span class="hljs-string">'hash'</span>] = str(hash_block(block))</span><br><span class="line">print(json.dumps(block))</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">### step5: 现在有 200个tokens，直接赎回</span></span><br><span class="line">prev = <span class="hljs-string">"cc396f7b9265af9ca39a54dad473cead6e1f5f46adcb357427b1f6b159c6f720"</span></span><br><span class="line"><span class="hljs-comment"># 一开始发行的银行里的 200中的input_id</span></span><br><span class="line">input_id = <span class="hljs-string">'be4fb3ca-4cdb-4bcc-8f5b-2cbe0b307e01'</span></span><br><span class="line">output = [create_output_utxo(my_address,<span class="hljs-number">200</span>)]   <span class="hljs-comment"># 转200</span></span><br><span class="line">transactions = &#123;</span><br><span class="line">    <span class="hljs-string">"input"</span>: [input_id],</span><br><span class="line">    <span class="hljs-string">"signature"</span>:[],</span><br><span class="line">    <span class="hljs-string">"output"</span>:output,</span><br><span class="line">    <span class="hljs-string">"call_smart_contract"</span>:<span class="hljs-string">'withdraw'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-comment"># 对 transactions 进行签名</span></span><br><span class="line">hash_transactions = hash_tx(transactions)</span><br><span class="line">transactions[<span class="hljs-string">'hash'</span>] = str(hash_transactions)</span><br><span class="line"></span><br><span class="line">block = &#123;</span><br><span class="line">    <span class="hljs-string">"prev"</span>:prev,</span><br><span class="line">    <span class="hljs-string">"transactions"</span>:[transactions],</span><br><span class="line">    <span class="hljs-string">"nonce"</span> : <span class="hljs-string">"step5"</span></span><br><span class="line">&#125;</span><br><span class="line">block[<span class="hljs-string">'hash'</span>] = str(hash_block(block))</span><br><span class="line">print(json.dumps(block))</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;为了方便读者对比，我提供了整个流程的区块链结构和<code>utxos</code>。下面是整个流程走完得到的<code>区块链</code>：<br><figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"cc396f7b9265af9ca39a54dad473cead6e1f5f46adcb357427b1f6b159c6f720"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"nonce"</span>: <span class="hljs-string">"step4"</span>,</span><br><span class="line">    <span class="hljs-attr">"prev"</span>: <span class="hljs-string">"4149dafccdb394829022055ef59e572d558d7cdb62a4e4ea47b4e630ef4a2c43"</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"cc396f7b9265af9ca39a54dad473cead6e1f5f46adcb357427b1f6b159c6f720"</span>,</span><br><span class="line">    <span class="hljs-attr">"transactions"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="hljs-attr">"call_smart_contract"</span>: <span class="hljs-string">"buyTokens"</span>,</span><br><span class="line">        <span class="hljs-attr">"input"</span>: [</span><br><span class="line">          <span class="hljs-string">"cc220143-4532-4bfc-9cea-0cae95231efb"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"signature"</span>: [</span><br><span class="line">          <span class="hljs-string">"2e3394dc0adf2ef0b5537540d8429f9621ff23534002566818b675acd5c6a5edd269dfe67281f6dd3e2d51498953f061"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"05521a130db3bb9262380330e914a03abca4497ab9d0733606149b3d02a6e900"</span>,</span><br><span class="line">        <span class="hljs-attr">"output"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">100</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"4beb7b7d7ded41cb904faeb550f32336c0bd6b9873ceec50e859e2774929a6a5"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481"</span>,</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"4ca03386-e345-40b0-a197-5aa8fa8b36ba"</span></span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"7e82a104-6d3b-4e53-8f07-c7211bbe872a"</span>,</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"3ddfa82c48b68cd088e38acbe149eafb95d2e530bb2c894f47a49ba43f92c3f6"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">            <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"7534ef9e99494d752f67eb6416164888433d3f79ba5679a8de42035054e0a3dc371c7457309ce96d86ed1281d533e06a$$$&#123;\"tokenNum\": 100, \"utxo_id\": \"7e82a104-6d3b-4e53-8f07-c7211bbe872a\"&#125;"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-attr">"height"</span>: <span class="hljs-number">4</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"860aa2c3c1ab16ba0378498165b3a6a75662a2c4847cf9532a46b3257cc80d2d"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"nonce"</span>: <span class="hljs-string">"step1"</span>,</span><br><span class="line">    <span class="hljs-attr">"prev"</span>: <span class="hljs-string">"41bc26b103e779479118b5b315d944e5eb785563870acccb39bd71d8d417d89a"</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"860aa2c3c1ab16ba0378498165b3a6a75662a2c4847cf9532a46b3257cc80d2d"</span>,</span><br><span class="line">    <span class="hljs-attr">"transactions"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="hljs-attr">"call_smart_contract"</span>: <span class="hljs-string">"buyTokens"</span>,</span><br><span class="line">        <span class="hljs-attr">"input"</span>: [</span><br><span class="line">          <span class="hljs-string">"d924f0db-0b46-4c93-8c8e-3d83291c83a2"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"signature"</span>: [</span><br><span class="line">          <span class="hljs-string">"1983a3034b4e07021c8e94205778904eef0679aa16fbc56cd205ea5fc64c23f7cf21acd760799b35f5932325cc30afe2"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"e3bdf5c0ca4d3fa741c6c6d7f56bd63dd9f1d61e44c872c1dfed8a886f55c828"</span>,</span><br><span class="line">        <span class="hljs-attr">"output"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">100</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"5ef33d8805fecff8e01cd11d4806307bf070d4ee0bfd1eb7a7185fe95c99b698"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481"</span>,</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"bf722709-bbea-406d-9486-4b259444dec8"</span></span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"071a33e4-95be-4d06-921c-9aca4f43f6bd"</span>,</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"ee71b83bd19926d1565b9221fac364211b712e625509c8ffe77ac1954d4ad882"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">            <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"14d6d4b5536cb4791ba546f4b94cd1e4464fdbcec6f3dcf1fae2ecb69713dd21371ab93869ce54bfbce755b13614490d$$$&#123;\"tokenNum\": 100, \"utxo_id\": \"071a33e4-95be-4d06-921c-9aca4f43f6bd\"&#125;"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-attr">"height"</span>: <span class="hljs-number">1</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"4149dafccdb394829022055ef59e572d558d7cdb62a4e4ea47b4e630ef4a2c43"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"nonce"</span>: <span class="hljs-string">"step3"</span>,</span><br><span class="line">    <span class="hljs-attr">"prev"</span>: <span class="hljs-string">"861dadc278df24efb3e9dfab420a4137f7c933cd93d27a0980eb843735341b30"</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"4149dafccdb394829022055ef59e572d558d7cdb62a4e4ea47b4e630ef4a2c43"</span>,</span><br><span class="line">    <span class="hljs-attr">"transactions"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="hljs-attr">"input"</span>: [</span><br><span class="line">          <span class="hljs-string">"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"signature"</span>: [</span><br><span class="line">          <span class="hljs-string">"81c958e5df32248f779d9d1aa50e44f50e786729178e235b3bcc6d0248bd402cd2c7e38874e5c74938b1c640a6b0fdef"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"dbd16f5af0794539a9bc6c1f0466920855a35316817b3ed9de6d4990a93b6bab"</span>,</span><br><span class="line">        <span class="hljs-attr">"output"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"94f41f448309e57220a2c3d25dec3d0bf21258014dbef8554702daf3a6030dcd"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"ba2c9e75-cd1d-4d8b-9144-98fac2a3f6f2"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-attr">"height"</span>: <span class="hljs-number">3</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"861dadc278df24efb3e9dfab420a4137f7c933cd93d27a0980eb843735341b30"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"nonce"</span>: <span class="hljs-string">"step2"</span>,</span><br><span class="line">    <span class="hljs-attr">"prev"</span>: <span class="hljs-string">"860aa2c3c1ab16ba0378498165b3a6a75662a2c4847cf9532a46b3257cc80d2d"</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"861dadc278df24efb3e9dfab420a4137f7c933cd93d27a0980eb843735341b30"</span>,</span><br><span class="line">    <span class="hljs-attr">"transactions"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="hljs-attr">"call_smart_contract"</span>: <span class="hljs-string">"withdraw"</span>,</span><br><span class="line">        <span class="hljs-attr">"input"</span>: [</span><br><span class="line">          <span class="hljs-string">"bf722709-bbea-406d-9486-4b259444dec8"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"signature"</span>: [</span><br><span class="line">          <span class="hljs-string">"71e0f8ee912afda2f92f21c923651d65ddd1a18882b2d1841d9b29ee73d5f3fb669fa938fa1ad3158b6ab71d0cc5c51b"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"9853e97de2fe47a1967a658981fb5407d53923632b2c18cbf1110e373737cce8"</span>,</span><br><span class="line">        <span class="hljs-attr">"output"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">100</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"417c4bc8ee752db2d276fe6bb1e06c8dd630b5b235756aa7ef9aa5da0dcef4e8"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"cc220143-4532-4bfc-9cea-0cae95231efb"</span></span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4"</span>,</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"9ce516a92ae1eaf302af93b0183f5c3bd4f1d9e0253cdb83940937bf8ad98619"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">            <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"4804944d429db348a56bdcd75ae5064603917063e484b47d96f7f19b7baaeb417320be64883ff296cda0a588e78d1cdc$$$&#123;\"tokenNum\": -100, \"utxo_id\": \"1f7ab476-00dc-4cf2-b7e9-b82b8cb83bf4\"&#125;"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-attr">"height"</span>: <span class="hljs-number">2</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"41bc26b103e779479118b5b315d944e5eb785563870acccb39bd71d8d417d89a"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"nonce"</span>: <span class="hljs-string">"The Times 03/Jan/2009 Chancellor on brink of second bailout for bank"</span>,</span><br><span class="line">    <span class="hljs-attr">"prev"</span>: <span class="hljs-string">"0000000000000000000000000000000000000000000000000000000000000000"</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"41bc26b103e779479118b5b315d944e5eb785563870acccb39bd71d8d417d89a"</span>,</span><br><span class="line">    <span class="hljs-attr">"transactions"</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="hljs-attr">"input"</span>: [],</span><br><span class="line">        <span class="hljs-attr">"signature"</span>: [],</span><br><span class="line">        <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"0194a50e9adb6d4ebc3ee4abf60ea11f2ce59cef9afecc316b34fdf007177fc9"</span>,</span><br><span class="line">        <span class="hljs-attr">"output"</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">200</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"bcb9c319ba2eb3c7f2bb24a4119b819cddd2b27f732628d07f69232cc7af9a7f"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481"</span>,</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"be4fb3ca-4cdb-4bcc-8f5b-2cbe0b307e01"</span></span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="hljs-attr">"amount"</span>: <span class="hljs-number">100</span>,</span><br><span class="line">            <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"475e9bd5f35105926339d8ea814a340180a3f80e16ed621f4b581bc22a6ce50e"</span>,</span><br><span class="line">            <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">            <span class="hljs-attr">"id"</span>: <span class="hljs-string">"d924f0db-0b46-4c93-8c8e-3d83291c83a2"</span></span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-attr">"height"</span>: <span class="hljs-number">0</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;再下面是整个payload的执行完的<code>utxos</code>：<br><figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"ba2c9e75-cd1d-4d8b-9144-98fac2a3f6f2"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"94f41f448309e57220a2c3d25dec3d0bf21258014dbef8554702daf3a6030dcd"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"ba2c9e75-cd1d-4d8b-9144-98fac2a3f6f2"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"4ca03386-e345-40b0-a197-5aa8fa8b36ba"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">100</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"4beb7b7d7ded41cb904faeb550f32336c0bd6b9873ceec50e859e2774929a6a5"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481"</span>,</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"4ca03386-e345-40b0-a197-5aa8fa8b36ba"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"071a33e4-95be-4d06-921c-9aca4f43f6bd"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"071a33e4-95be-4d06-921c-9aca4f43f6bd"</span>,</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"ee71b83bd19926d1565b9221fac364211b712e625509c8ffe77ac1954d4ad882"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">    <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"14d6d4b5536cb4791ba546f4b94cd1e4464fdbcec6f3dcf1fae2ecb69713dd21371ab93869ce54bfbce755b13614490d$$$&#123;\"tokenNum\": 100, \"utxo_id\": \"071a33e4-95be-4d06-921c-9aca4f43f6bd\"&#125;"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"7e82a104-6d3b-4e53-8f07-c7211bbe872a"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"7e82a104-6d3b-4e53-8f07-c7211bbe872a"</span>,</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">0</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"3ddfa82c48b68cd088e38acbe149eafb95d2e530bb2c894f47a49ba43f92c3f6"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"885a66372ff02f9697aabf2e280684066c3024385bdcf56cfc6da1d05d86cb12ebd867fe63e546b6850f1ef0c4dc6a4d"</span>,</span><br><span class="line">    <span class="hljs-attr">"extra"</span>: <span class="hljs-string">"7534ef9e99494d752f67eb6416164888433d3f79ba5679a8de42035054e0a3dc371c7457309ce96d86ed1281d533e06a$$$&#123;\"tokenNum\": 100, \"utxo_id\": \"7e82a104-6d3b-4e53-8f07-c7211bbe872a\"&#125;"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"be4fb3ca-4cdb-4bcc-8f5b-2cbe0b307e01"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"amount"</span>: <span class="hljs-number">200</span>,</span><br><span class="line">    <span class="hljs-attr">"hash"</span>: <span class="hljs-string">"bcb9c319ba2eb3c7f2bb24a4119b819cddd2b27f732628d07f69232cc7af9a7f"</span>,</span><br><span class="line">    <span class="hljs-attr">"addr"</span>: <span class="hljs-string">"990da5a0ccd7c610f45316d7de526f6e5a8eb0e7172c0049abd57cd77ade4c5daca55487024096ea727b2329bb26c481"</span>,</span><br><span class="line">    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"be4fb3ca-4cdb-4bcc-8f5b-2cbe0b307e01"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><a name="6">总结</a></h2><p>&emsp;&emsp;其实这道题跟<code>DDCTF 2018</code>里的<code>mini blockchain</code>都是一个人出的，而自己从这两道题中也学到很多关于区块链、智能合约的知识，虽然知识点不多，但都非常具有参考价值。而且自己也觉得区块链会<code>继续</code>在CTF的赛场上出现，所以多花点时间学习区块链相关的知识是非常值得的。</p>
+<p>&emsp;&emsp;PS：自己会做跟写出理想的writeup真的还是差点距离，写writeup的好处非常明显，因为在写的过程你需要<code>不断</code>改善你的表达（措辞）以让读者理解你的想法，这是非常考验作者本身对这道题的理解的，写完writeup顿时感觉理解得又深了一步。<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2018/05/ddctf-writeup5/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">DDCTF2018 2道web writeup</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2018/05/ciscn-writeup/">
+                <span class="level-item">2018 国赛ciscn writeup</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        56
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        18
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="2018 *CTF/starCTF Smart? Contract writeup" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

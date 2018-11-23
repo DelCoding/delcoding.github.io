@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>分类: jekyll update - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="CTF、网络安全爱好者">
+<meta name="keywords" content="CTF,网络安全">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Junay的博客">
+<meta property="og:url" content="http://yoursite.com/categories/jekyll-update/page/3/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="CTF、网络安全爱好者">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Junay的博客">
+<meta name="twitter:description" content="CTF、网络安全爱好者">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="Junay的博客" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/categories">分类</a></li>
+            
+            <li class="is-active"><a href="#" aria-current="page">jekyll update</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-21T14:20:00.000Z">2017-12-21</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 927 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/scrapy-proxy/">解决Scrapy爬虫卡(停)顿问题</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;最近在做爬虫的时候经常遇到<code>爬虫卡顿（停顿）</code>的情况，让人很是苦恼，稍不注意就进程就卡住，在搜索了方法后，最后采用<code>自动代理切换+超时下载件</code>的方法解决。</p>
+<h3 id="编写自动代理中间件"><a href="#编写自动代理中间件" class="headerlink" title="编写自动代理中间件"></a>编写自动代理中间件</h3><p>&emsp;&emsp;在项目的<code>middlewares.py</code>中新建一个自动代理中间件的类，如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyproxyMiddleware</span><span class="hljs-params">(object)</span>:</span></span><br><span class="line">    <span class="hljs-string">"""docstring for ProxyMiddleWare"""</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_request</span><span class="hljs-params">(self, request, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对request对象加上proxy'''</span></span><br><span class="line">        <span class="hljs-comment"># proxy = self.get_random_proxy()</span></span><br><span class="line">        haha = random.randint(<span class="hljs-number">0</span>,<span class="hljs-number">10</span>)</span><br><span class="line">        <span class="hljs-keyword">if</span> haha &gt;= <span class="hljs-number">5</span>:</span><br><span class="line">            print(<span class="hljs-string">'\n随机&#123;&#125;正在使用代理\n'</span>.format(haha))</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_response</span><span class="hljs-params">(self, request, response, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对返回的response处理'''</span></span><br><span class="line">        <span class="hljs-comment"># 如果返回的response状态不是200，重新生成当前request对象</span></span><br><span class="line">        <span class="hljs-keyword">if</span> response.status != <span class="hljs-number">200</span>:</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            <span class="hljs-comment"># print("this is response ip:" + proxy)</span></span><br><span class="line">            <span class="hljs-comment"># 对当前reque加上代理</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">            <span class="hljs-keyword">return</span> request</span><br><span class="line">        <span class="hljs-keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_exception</span><span class="hljs-params">(self, request, exception, spider)</span>:</span></span><br><span class="line">        <span class="hljs-comment"># 出现异常时（超时）使用代理</span></span><br><span class="line">        print(<span class="hljs-string">"\n出现异常，正在使用代理重试....\n"</span>)</span><br><span class="line">        proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">        request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">        <span class="hljs-keyword">return</span> request</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>process_request()</code>方法是发起请求时调用的，所以如果你希望一开始请求就使用代理就可在这里写上代理地址，这个函数可以返回三个值：<code>None</code>、<code>request</code>、<code>response</code>。<br>如果是返回None，说明不对请求头做任何处理；如果返回request，则按照用户定制的请求头请求网页，如果我们要使用代理则需返回request，不写明写返回也是返回request；response表示不再使用其他下载中间件，直接返回响应结果。</p>
+<p>&emsp;&emsp;这里我使用随机的方法使用代理，毕竟代理流量也是有限度的。我使用的是<code>XX-NET</code>免费代理，它的主要用途是被国人拿来扶墙的，它提供自动IP切换服务，可以很好的为爬虫服务。另一种免费躲避IP限制的方法是使用<code>tor</code>，不过在国内的话需要先科学上网。</p>
+<p>&emsp;&emsp;<code>process_exception()</code>是对爬虫请求是出现的异常情况进行处理的方法，它会捕捉<code>超时、503</code>等异常，当我们出现卡顿或停顿时很有可能就是超时，所以我们要编写这个函数。当返回<code>request</code>时，爬虫会重新使用使用代理进行请求，我们需要的就是这个功能。</p>
+<h3 id="添加下载中间件"><a href="#添加下载中间件" class="headerlink" title="添加下载中间件"></a>添加下载中间件</h3><p>&emsp;&emsp;将上面的中间件添加到<code>setting.py</code>中，<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.MyproxyMiddleware'</span>:<span class="hljs-number">200</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.RandomUserAgent'</span>:<span class="hljs-number">158</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware'</span>:<span class="hljs-number">500</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware</code>这个中间件可以定义超时时间，配合<code>DOWNLOAD_TIMEOUT = 200</code>使用。这也是防止爬虫停顿的方法。另一个跟这个功能差不多的是：<code>scrapy.contrib.downloadermiddleware.retry.RetryMiddleware</code>，有需要的也可以添加进去，它会把超时或者 HTTP 500 错误导致失败的页面记录下来，当爬虫爬取完正常的页面后再统一重新请求这些异常也页面。它有三个属性：</p>
+<ul>
+<li>RETRY_ENABLED</li>
+<li>RETRY_TIMES</li>
+<li>RETRY_HTTP_CODES</li>
+</ul>
+<p>&emsp;&emsp;各自的属性：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">RETRY_ENABLED</span><br><span class="line"></span><br><span class="line">新版功能。</span><br><span class="line"></span><br><span class="line">默认： True</span><br><span class="line"></span><br><span class="line">Retry Middleware 是否启用。</span><br><span class="line"></span><br><span class="line">RETRY_TIMES</span><br><span class="line"></span><br><span class="line">默认：2</span><br><span class="line"></span><br><span class="line">包括第一次下载，最多的重试次数</span><br><span class="line"></span><br><span class="line">RETRY_HTTP_CODES</span><br><span class="line"></span><br><span class="line">默认： [500, 502, 503, 504, 400, 408]</span><br><span class="line"></span><br><span class="line">重试的 response 返回值(code)。其他错误(DNS 查找问题、连接失败及其他)则一定会进行重试。</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;通过合理配置这些下载中间件就能很好的避免爬虫卡死的情况。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-17T09:57:00.000Z">2017-12-17</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    9 分钟 读完 (大约 1331 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/whoosh-mongo/">Whoosh使用及为Mongodb建立索引</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;由于作者的项目中需要为数据库建立索引以便以搜索，经过考察后还是决定使用<code>Whoosh+MongoDB</code>的方案。所以这篇文章是介绍怎样使用whoosh为mongodb建立索引，网上关于这方面的文章还是相对比较少的，所以有必要记录一下。</p>
+<p>&emsp;&emsp;whoosh是原生唯一的python写的<code>全文搜索引擎</code>，虽然说whoosh性能不一定比得上lucene,sphinx,xapian等,但由于是基于python，所以扩展性极好，非常容易集成到<code>django</code>或其他框架中，而且whoosh运行消耗的资源也比lucene等引擎少，加之作者的服务器性能较弱，数据量也还不大，就选择了<code>whoosh作为搜索引擎</code>。</p>
+<h3 id="架构方案"><a href="#架构方案" class="headerlink" title="架构方案"></a>架构方案</h3><p>&emsp;&emsp;作者使用的方案是：使用<code>jieba</code>为需要索引的whoosh的字段进行<code>中文分词</code>，搜索时，whoosh只返回<code>_id</code>字段的值，然后在mongodb中查找。当然，这个whoosh也可以把所有的字段都储存起来，这样就可以直接返回搜索结果，而省去在mongodb上查找的时间，但由此引发的一个问题就是索引文件过大，是空间利用问题，而且这样做就把whoosh当成了数据库角色。所以作者放弃了这一方案。</p>
+<h3 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h3><p>&emsp;&emsp;这里不介绍whoosh,mongodb的安装方法，请自行搜索。</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.fields <span class="hljs-keyword">import</span> Schema, TEXT, ID, DATETIME</span><br><span class="line"><span class="hljs-keyword">from</span> jieba.analyse <span class="hljs-keyword">import</span> ChineseAnalyzer</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">import</span> jieba</span><br><span class="line">jieba.load_userdict(<span class="hljs-string">"dict.txt"</span>)</span><br><span class="line"></span><br><span class="line">analyzer = ChineseAnalyzer()</span><br><span class="line"></span><br><span class="line">schema = Schema(</span><br><span class="line">            nid=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">True</span>),</span><br><span class="line">            url=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">False</span>),</span><br><span class="line">            date=DATETIME(unique=<span class="hljs-keyword">False</span>, stored=<span class="hljs-keyword">False</span>, sortable=<span class="hljs-keyword">True</span>),</span><br><span class="line">            title=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer),</span><br><span class="line">            content=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(<span class="hljs-string">'D:/pythonCode/whoosh/index/'</span>):</span><br><span class="line">    os.mkdir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line">    create_in(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>, schema)    <span class="hljs-comment"># 创建索引文件，需指定Schema</span></span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;因为whoosh是python实现的，所以很方便的就能跟结巴结合。而结巴允许的用户自定义字典，这对专业领域的分词很有帮助，我们只需要在<code>dict.txt</code>中存放专业名词就行。</p>
+<p>&emsp;&emsp;索引首先需要定义<code>Schema</code>，<code>stored</code>代表是否存储这个字段的值，<code>sortable</code>为是否可以排序，这里因为是时间，所以我选择True，<code>analyzer</code>分词器，这里我们使用结巴中文分词器。这里再啰嗦几句，ID的值为不可分割，所以适合url、id等一类不用分割查找的项；DATETIME为时间，不用解释；这里的<code>TEXT</code>才是我们需要<code>分词、建立索引</code>的项目。</p>
+<p>&emsp;&emsp;PPS：按照whoosh官方文档，对于简单的字段即使没有指定排序，但仍可以排序，只是结果可能不是那么完美。还有一种情况就是：如果你已经创建了Schema，并且写入数据，但是你想为某个字段排序，那么你可以使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> sorting</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> open_dir</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> w:</span><br><span class="line">    sorting.add_sortable(w, <span class="hljs-string">"date"</span>, sorting.FieldFacet(<span class="hljs-string">"date"</span>))</span><br></pre></td></tr></table></figure></p>
+<h3 id="索引数据"><a href="#索引数据" class="headerlink" title="索引数据"></a>索引数据</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line">_id = collections.insert(dict(item))</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> writer:</span><br><span class="line">    writer.update_document(</span><br><span class="line">        nid=_id.__str__(),</span><br><span class="line">        url=item[<span class="hljs-string">'url'</span>],</span><br><span class="line">        title=item[<span class="hljs-string">'title'</span>],</span><br><span class="line">        date=datetime.strptime(item[<span class="hljs-string">'date'</span>], <span class="hljs-string">'%Y-%m-%d'</span>),   <span class="hljs-comment"># 字符串化成时间格式</span></span><br><span class="line">        content=item[<span class="hljs-string">'index_content'</span>]</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在需要建立索引的地方使用如上代码。这里注意的一点是，mongodb插入数据返回的是ObjectId，如ObjectId(“5a2e2652c0bae92df4dd2372”)，而whoosh不支持存储ObjectId类型，所以我们需要的是括号里面的字符串，所以需要使用<code>_id.__str__()</code>提取。</p>
+<h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>&emsp;&emsp;搜索代码如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.qparser <span class="hljs-keyword">import</span> MultifieldParser, QueryParser</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> scoring, sorting</span><br><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line"><span class="hljs-keyword">with</span> ix.searcher() <span class="hljs-keyword">as</span> searcher:</span><br><span class="line">    query = MultifieldParser([<span class="hljs-string">"title"</span>, <span class="hljs-string">"content"</span>], ix.schema).parse(<span class="hljs-string">"xss"</span>)</span><br><span class="line">    <span class="hljs-comment">#query = QueryParser("content", ix.schema).parse("xss")</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 排序</span></span><br><span class="line">    mf = sorting.MultiFacet()</span><br><span class="line">    mf.add_field(<span class="hljs-string">"date"</span>, reverse=<span class="hljs-keyword">True</span>)</span><br><span class="line">    results = searcher.search(query, limit=<span class="hljs-number">10</span>, sortedby=mf)</span><br><span class="line">    print(len(results))</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> results:</span><br><span class="line">        _id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">        res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br><span class="line">        print(res[<span class="hljs-string">'date'</span>] + res[<span class="hljs-string">'title'</span>])</span><br><span class="line">        print(<span class="hljs-string">'-----------------------\n'</span>)</span><br><span class="line">        count += <span class="hljs-number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>MultifieldParser</code>是搜索多个field，也就是多个字段，而<code>QueryParser</code>只能搜索一个字段。<code>sorting.MultiFacet()</code>是whoosh中实现排序的一种方法，<code>reverse=True</code>是反向排序，这里实现的是时间降序。<code>searcher.search(sortedby=mf)</code>指定排序方式。其实whoosh里提供多种排序方法，功能还挺全面。</p>
+<p>&emsp;&emsp;这里提供了mongodb如何使用<code>_id</code>查找的方法。</p>
+<p>&emsp;&emsp;如果需要将<code>_id</code>中的值提取出来，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_id = collections.insert(dict(item))</span><br><span class="line">nid=_id.__str__()</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;如果需要使用字符串查找，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">_id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;完整的事例可查看<a href="https://github.com/DelCoding/MyCodes/blob/master/whoosh.py" target="_blank" rel="noopener">此页面</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-03T14:20:00.000Z">2017-12-03</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    1 分钟 读完 (大约 130 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/some-codes/">学习中的一些代码及小tips记录</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;本项目记录各种代码及小tips，项目地址为：<a href="https://github.com/DelCoding/MyCodes，" target="_blank" rel="noopener">https://github.com/DelCoding/MyCodes，</a> 这篇文章将<code>持续更新</code>。</p>
+<h3 id="代码记录"><a href="#代码记录" class="headerlink" title="代码记录"></a>代码记录</h3><ul>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/Using%20Stack%20and%20Suffix" target="_blank" rel="noopener">1、将中缀表达式转化成后缀表达式</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/send_ip.py" target="_blank" rel="noopener">2、获取本机IP，并通过邮箱发送</a></strong></li>
+<li><strong>3、Java多线程多人聊天室</strong><ul>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/MulitServer.java" target="_blank" rel="noopener">MulitServer.java是服务器版</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/MulitClient.java" target="_blank" rel="noopener">Mulitclient.java是客户端</a></strong></li>
+</ul>
+</li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/idea%E4%B8%8B%E4%BD%BF%E7%94%A8JavaBean.md" target="_blank" rel="noopener">4、idea下使用JavaBean</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/bank.py" target="_blank" rel="noopener">5、银行家算法</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/checksum.py" target="_blank" rel="noopener">6、计算一个文件的16位校验和算法</a></strong></li>
+<li><strong><a href="https://github.com/DelCoding/MyCodes/blob/master/whoosh.py" target="_blank" rel="noopener">7、使用whoosh为mongodb建立索引</a></strong></li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-28T16:00:00.000Z">2017-11-29</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 709 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/selenium-verity-code/">Selenium下自动识别验证码登陆</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;在自动化或者爬虫登陆网站时经常遇到验证码模块，这也算是反爬的一种手段。这篇文章将介绍如何在selenium框架下自动识别验证码登陆。</p>
+<h3 id="一：安装Tesseract-ocr"><a href="#一：安装Tesseract-ocr" class="headerlink" title="一：安装Tesseract-ocr"></a>一：安装Tesseract-ocr</h3><p>&emsp;Tesseract-ocr是文字识别系统，能识别英文、数字，如果需要识别汉字，则需要导入汉字语言包。<br></p>
+<ul>
+<li><strong>在Windows下安装</strong><br><br>&emsp;&emsp;下载地址：<a href="https://digi.bib.uni-mannheim.de/tesseract/" target="_blank" rel="noopener">Tesseract-ocr</a>，这里可以选择版本，本机中选择<a href="https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-setup-4.0.0-alpha.20170804.exe" target="_blank" rel="noopener">4.0.0版</a>。下载后默认安装，这里可以选择修改原安装路径，但修改后在后续进行环境变量的配置时记得更改。<br>&emsp;&emsp;安装完毕后，配置系统环境变量。在Path一项中新增Tesseract-ocr的安装路径。<div align="center"><br>  <img src="/images/posts/other/9.png"><br></div>
+
+</li>
+</ul>
+<p>&emsp;&emsp;接着在系统变量中新建如下系统变量，告诉Tesseract-ocr数据集的位置。</p>
+<div align="center"><br>    <img src="/images/posts/other/10.png"><br></div>
+
+<p>&emsp;&emsp;然后验证是否安装成功。</p>
+<div align="center"><br>    <img src="/images/posts/other/11.png"><br></div>
+
+<ul>
+<li><strong>在Linux下安装</strong><br><br>&emsp;&emsp;直接执行：apt install tesseract-ocr。</li>
+</ul>
+<h3 id="二：python脚本"><a href="#二：python脚本" class="headerlink" title="二：python脚本"></a>二：python脚本</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver</span><br><span class="line"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">browser = webdriver.Chrome()</span><br><span class="line"></span><br><span class="line">host = <span class="hljs-string">"https://www.baidu.com"</span></span><br><span class="line">browser.get(host)</span><br><span class="line"><span class="hljs-comment"># 获取整个网页的截图</span></span><br><span class="line">browser.save_screenshot(<span class="hljs-string">"temp.png"</span>)</span><br><span class="line"><span class="hljs-comment"># 获取元素位置</span></span><br><span class="line">element = browser.find_element_by_css_selector(<span class="hljs-string">"img"</span>)</span><br><span class="line">location = element.location</span><br><span class="line">size = element.size</span><br><span class="line"><span class="hljs-comment"># # 计算出元素位置图像坐标</span></span><br><span class="line">img = Image.open(<span class="hljs-string">"temp.png"</span>)</span><br><span class="line">left = location[<span class="hljs-string">'x'</span>] + <span class="hljs-number">145</span></span><br><span class="line">top = location[<span class="hljs-string">'y'</span>] + <span class="hljs-number">90</span></span><br><span class="line">right = location[<span class="hljs-string">'x'</span>] + size[<span class="hljs-string">'width'</span>] + <span class="hljs-number">155</span></span><br><span class="line">bottom = location[<span class="hljs-string">'y'</span>] + size[<span class="hljs-string">'height'</span>] + <span class="hljs-number">100</span></span><br><span class="line">img = img.crop((int(left), int(top), int(right), int(bottom)))</span><br><span class="line">img.save(<span class="hljs-string">'screenshot.png'</span>)  <span class="hljs-comment"># 是否保存图像</span></span><br><span class="line"></span><br><span class="line">log = os.system(<span class="hljs-string">'tesseract screenshot.png png -l eng'</span>)</span><br><span class="line">keyword = open(<span class="hljs-string">'png.txt'</span>, <span class="hljs-string">'r'</span>).readline().rstrip(<span class="hljs-string">'\n'</span>)</span><br><span class="line">rex = re.compile(<span class="hljs-string">r'\D'</span>)</span><br><span class="line"><span class="hljs-keyword">if</span> re.search(rex, keyword) != <span class="hljs-keyword">None</span>:</span><br><span class="line">    print(<span class="hljs-string">'错误的验证码：'</span> + keyword)</span><br><span class="line"><span class="hljs-keyword">else</span>:</span><br><span class="line">    print(<span class="hljs-string">'keyword is '</span> + keyword)</span><br></pre></td></tr></table></figure>
+<p>&emsp;代码说明：selenium自带有截图功能，如果是选择<code>非PhantomJS</code>作为浏览器的话，当使用<code>browser.save_screenshot(&quot;temp.png&quot;)</code>时截的只是当前浏览器窗口显示的图片而<code>不是整个网页</code>，但使用PhantomJS时，截取的<code>是整个网页</code>。<br>&emsp;selenium也可以选择区域或网页元素进行截图，不过需要<code>PIL</code>辅助，先从网页中获取该元素的位置，然后使用PIL Image里的<code>crop</code>截取。这里需要<code>注意</code>，如果使用例如<code>Chrome</code>等浏览器而非<code>PhantomJS</code>的话，会因为浏览器弹出的位置不同，导致无法准确的截到该元素的位置，需要自己反复调节，但使用PhantomJS时不会有这个问题。</p>
+<p>&emsp;可以注意到，我这里是使用系统调用的方法进行识别，但有另一种方法是安装pyocr。直接执行<code>pip install pyocr</code>即可。由于作者不熟悉，加之有急需，故不再演示，只提出方法。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-24T01:26:00.000Z">2017-11-24</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 245 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/kali-install-pocscan/">Kali安装pocscan</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;简单记录在<code>Kali下安装Pocscan</code>，Pocscan是一款开源 Poc 调用框架,可轻松调用Pocsuite,Tangscan,Beebeeto,Knowsec老版本POC 按照官方规范编写的 Poc对目标域名进行扫描，并可以通过 Docker 一键部署。</p>
+<ul>
+<li><p>Step 1：apt-get install docker</p>
+</li>
+<li><p>Step 2: 更改更新源列表（/etc/apt/source.list），往里面增加docker更新源。解决：<br>没有可用的软件包 docker.io，但是它被其它的软件包引用了。<br>E: 软件包 docker.io 没有可安装候选</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://http.debian.net/debian jessie-backports main</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>step 3：apt-get install docker.io</p>
+</li>
+<li><p>step 4：service docker start</p>
+</li>
+<li><p>step 5: docker pull daocloud.io/aber/pocscan:latest</p>
+</li>
+<li><p>step 6: cd /</p>
+</li>
+<li><p>step 7: git clone <a href="https://github.com/erevus-cn/pocscan.git" target="_blank" rel="noopener">https://github.com/erevus-cn/pocscan.git</a></p>
+</li>
+<li><p>step 8: chmod -R 0777 pocscan</p>
+</li>
+<li><p>step 9: docker run -d -v /pocscan:/www -p 8090:8000 -p 8088:8088 daocloud.io/aber/pocscan:latest</p>
+</li>
+<li><p>step 10: 访问本地8090端口，后台和终端的帐号是root,密码是password.</p>
+</li>
+<li><p>Step 11：安装google chrome，并把主目录下pocsuite中的pocscan.crx安装到chrome。</p>
+</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-24T01:00:00.000Z">2017-11-24</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 337 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/fckeditor-upload/">FCKeditor 上传漏洞-截断上传</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;<code>FCKeditor编辑器</code>还是使用比较广泛的网站后台编辑器，在此次实战中应用了截断上传漏洞，不过有些不同的是，截断的不是文件名，而是上传路径。适用版本：<code>&lt;=2.6.4</code>。</p>
+<p><strong>涉及手段： %00截断、文件覆盖</strong></p>
+<h2 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h2><p>&emsp;一开始，尝试在文件名后截断，但全都无果，Google后发现篇paper，使用之，成功upload。<code>主要思路文件夹截断，并把文件夹名当作上传文件名，从而绕过对文件名的验证</code>。</p>
+<p>&emsp;Step 1：在本地编辑好PHP一句话，并且保存为txt格式。（不免杀）</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/1.png"><br></div>
+
+<p>&emsp;Step 2：选择PHP上传，并选中编辑好的txt文件。</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/2.png"><br></div>
+
+<p>&emsp;Step 3：用burpsuite抓包，在文件夹路径下写好<code>上传后</code>的文件名，并在最后用<code>%00截断</code>，如下图：</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/3.png"><br></div><br><br><br><div align="center"><br>    <img src="/images/posts/shizhan/4.png"><br></div>
+
+<p>&emsp;Step 4：改好后放行，可以看到文件成功上传，然后访问返回的<code>command.php</code>。</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/5.png"><br></div>
+
+<p>&emsp;Step 5：在这执行系统命令，但可以会受到权限限制。</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/6.png"><br></div>
+
+<p>&emsp;Step 6：同样的方法可用于一句话上传，然后使用菜刀连接。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://secureyes.net/nw/assets/File-Upload-Vulnerability-in-FCKEditor.pdf" target="_blank" rel="noopener">File-Upload-Vulnerability-in-FCKEditor.pdf</a><br><br><br><a href="http://3xp10it.cc/web/2016/08/12/fckeditor%E5%90%84%E7%89%88%E6%9C%AC%E7%BB%95%E8%BF%87/" target="_blank" rel="noopener">FCKeditor各版本绕过</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    9 分钟 读完 (大约 1385 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/wechall-write1/">Wechall WriteUp</a>
+            
+        </h1>
+        <div class="content">
+            <p>初入ctf，写下记录以便查看。这里是wechall的一些题解。</p>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
+<li><a href="#1">Training: Tracks (HTTP)</a></li>
+<li><a href="#2">Training: Baconian (Stegano, Encoding, Crypto, Training)</a></li>
+<li><a href="#3">Repeating History (Research)</a></li>
+<li><a href="#4">PHP 0818 (Exploit, PHP)</a></li>
+<li><a href="#5">Warchall: Live LFI (Linux, Exploit, Warchall)</a></li>
+<li><a href="#6">Warchall: Live RFI (Linux, Exploit, Warchall)</a></li>
+<li><a href="#7">Can you read me (Coding, Image)</a></li>
+</ul>
+<hr>
+<h3 id="1-Training-Tracks-HTTP"><a href="#1-Training-Tracks-HTTP" class="headerlink" title="1. Training: Tracks (HTTP)"></a><a name="1"></a>1. Training: Tracks (HTTP)</h3><p> 1、进入投票页面</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/1.png" height="300" width="500"><br></div>
+
+<p>点击 + 号，</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/2.png" height="300" width="500"><br></div>
+
+<p>再次点击进行投票。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/3.png" height="300" width="500"><br></div>
+
+<p>此时完成第一次投票。进行第二次时会报错。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/4.png" height="300" width="500"><br></div>
+
+<p>这时，我们将VOTE cookie删掉，如果不删会导致后续不成功。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/5.png" height="300" width="500"><br></div>
+
+<p> 打开burpsuite，抓包改包。修改If-None-Match的值，请求更新数据，因为服务器一开始会分配Etag，然后下次检测时会对比两者的值，如果一样就不更新数据，导致无法投票。</p>
+<p>然后投票成功，通过题目。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/6.png" height="300" width="500"><br></div>
+
+<hr>
+<h3 id="2、Training-Baconian-Stegano-Encoding-Crypto-Training"><a href="#2、Training-Baconian-Stegano-Encoding-Crypto-Training" class="headerlink" title="2、Training: Baconian (Stegano, Encoding, Crypto, Training)"></a><a name="2"></a>2、Training: Baconian (Stegano, Encoding, Crypto, Training)</h3><p>这题是解密培根密码，培根密码有两种密码表，并使用’A’、’B’代替0，1进行编码。<br>第一种密码表：</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/7.png" height="300" width="500"><br></div>
+
+<p>第二种密码表：</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/8.png" height="300" width="500"><br></div>
+
+<p>假如我要加密‘hello’，按照第一种方法加密的结果为：aabbb,aabaa,ababa,ababa,abbab；第二种为：aabbb,aabaa,ababb,ababb,abbba。<br>假如要解密‘WOrld…’，把整个字符串的大小写代表着‘A’、‘B’编码，所以这里有两个编码可能性，一是大写代表‘A’，小写代表‘B’，第二种相反。同时这里又有两种密码表，所以这里一共有2*2=4种可能性。<br>大写代表‘A’，小写代表‘B’，用第一种密码表可得：‘h’，第二种为：‘h’，这里刚好一样。<br>大写代表‘B’，小写代表‘A’，用第一种密码表没有结果，第二种为：‘y’。</p>
+<p>所以将题目中给出的字符进行清洗，去除非字母字符包括数字。然后写个python脚本 。</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> re</span><br><span class="line">Str = ‘………..’</span><br><span class="line">arr = re.findall(<span class="hljs-string">'.&#123;5&#125;'</span>, str)</span><br><span class="line">alphabet = [<span class="hljs-string">'a'</span>,<span class="hljs-string">'b'</span>,<span class="hljs-string">'c'</span>,<span class="hljs-string">'d'</span>,<span class="hljs-string">'e'</span>,<span class="hljs-string">'f'</span>,<span class="hljs-string">'g'</span>,<span class="hljs-string">'h'</span>,<span class="hljs-string">'i'</span>,<span class="hljs-string">'j'</span>,<span class="hljs-string">'k'</span>,<span class="hljs-string">'l'</span>,<span class="hljs-string">'m'</span>,<span class="hljs-string">'n'</span>,<span class="hljs-string">'o'</span>,<span class="hljs-string">'p'</span>,<span class="hljs-string">'q'</span>,<span class="hljs-string">'r'</span>,<span class="hljs-string">'s'</span>,<span class="hljs-string">'t'</span>,<span class="hljs-string">'u'</span>,<span class="hljs-string">'v'</span>,<span class="hljs-string">'w'</span>,<span class="hljs-string">'x'</span>,<span class="hljs-string">'y'</span>,<span class="hljs-string">'z'</span>]</span><br><span class="line">first_cipher = [<span class="hljs-string">"aaaaa"</span>,<span class="hljs-string">"aaaab"</span>,<span class="hljs-string">"aaaba"</span>,<span class="hljs-string">"aaabb"</span>,<span class="hljs-string">"aabaa"</span>,<span class="hljs-string">"aabab"</span>,<span class="hljs-string">"aabba"</span>,<span class="hljs-string">"aabbb"</span>,<span class="hljs-string">"abaaa"</span>,<span class="hljs-string">"abaab"</span>,<span class="hljs-string">"ababa"</span>,<span class="hljs-string">"ababb"</span>,<span class="hljs-string">"abbaa"</span>,<span class="hljs-string">"abbab"</span>,<span class="hljs-string">"abbba"</span>,<span class="hljs-string">"abbbb"</span>,<span class="hljs-string">"baaaa"</span>,<span class="hljs-string">"baaab"</span>,<span class="hljs-string">"baaba"</span>,<span class="hljs-string">"baabb"</span>,<span class="hljs-string">"babaa"</span>,<span class="hljs-string">"babab"</span>,<span class="hljs-string">"babba"</span>,<span class="hljs-string">"babbb"</span>,<span class="hljs-string">"bbaaa"</span>,<span class="hljs-string">"bbaab"</span>]</span><br><span class="line">second_cipher = [<span class="hljs-string">"aaaaa"</span>,<span class="hljs-string">"aaaab"</span>,<span class="hljs-string">"aaaba"</span>,<span class="hljs-string">"aaabb"</span>,<span class="hljs-string">"aabaa"</span>,<span class="hljs-string">"aabab"</span>,<span class="hljs-string">"aabba"</span>,<span class="hljs-string">"aabbb"</span>,<span class="hljs-string">"abaaa"</span>,<span class="hljs-string">"abaaa"</span>,<span class="hljs-string">"abaab"</span>,<span class="hljs-string">"ababa"</span>,<span class="hljs-string">"ababb"</span>,<span class="hljs-string">"abbaa"</span>,<span class="hljs-string">"abbab"</span>,<span class="hljs-string">"abbba"</span>,<span class="hljs-string">"abbbb"</span>,<span class="hljs-string">"baaaa"</span>,<span class="hljs-string">"baaab"</span>,<span class="hljs-string">"baaba"</span>,<span class="hljs-string">"baabb"</span>,<span class="hljs-string">"baabb"</span>,<span class="hljs-string">"babaa"</span>,<span class="hljs-string">"babab"</span>,<span class="hljs-string">"babba"</span>,<span class="hljs-string">"babbb"</span>]</span><br><span class="line"></span><br><span class="line">keyword1 = <span class="hljs-string">""</span></span><br><span class="line">keyword2 = <span class="hljs-string">""</span></span><br><span class="line">keyword3 = <span class="hljs-string">""</span></span><br><span class="line">keyword4 = <span class="hljs-string">""</span></span><br><span class="line"><span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> arr:</span><br><span class="line">    toab1 = <span class="hljs-string">""</span></span><br><span class="line">    toab2 = <span class="hljs-string">""</span></span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> one:</span><br><span class="line">        <span class="hljs-keyword">if</span> i.isupper():</span><br><span class="line">            toab1 += <span class="hljs-string">'b'</span></span><br><span class="line">            toab2 += <span class="hljs-string">'a'</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            toab1 += <span class="hljs-string">'a'</span></span><br><span class="line">            toab2 += <span class="hljs-string">'b'</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> local,ab <span class="hljs-keyword">in</span> enumerate(first_cipher):</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab1:</span><br><span class="line">            keyword1 += alphabet[local]</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab2:</span><br><span class="line">            keyword3 += alphabet[local]</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> local,ab <span class="hljs-keyword">in</span> enumerate(second_cipher):</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab1:</span><br><span class="line">            keyword2 += alphabet[local]</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab2:</span><br><span class="line">            keyword4 += alphabet[local]</span><br><span class="line"></span><br><span class="line">print(keyword1)</span><br><span class="line">print(keyword2)</span><br><span class="line">print(keyword3)</span><br><span class="line">print(keyword4)</span><br></pre></td></tr></table></figure>
+<p>在输出中匹配‘is’，（别问为什么可以如此操作，，，直觉）并替换‘x’为空格。即可得出flag：iblpsclsennp</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/9.png" height="300" width="500"><br></div>
+
+<div align="center"><br>    <img src="/images/posts/writeup1/10.png" height="300" width="500"><br></div>
+
+<hr>
+<h3 id="3、Repeating-History-Research"><a href="#3、Repeating-History-Research" class="headerlink" title="3、Repeating History (Research)"></a><a name="3"></a>3、Repeating History (Research)</h3><p>打开题中给出的github项目地址，找到该题目的文件夹。发现有两个文件夹，然后，，找。。。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/11.png" height="300" width="500"><br></div>
+
+<p>先打开history</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/12.png" height="300" width="500"><br></div>
+
+<p>然后在install.php中可以找到$solution = ‘2bda2998d9b0ee197da142a0447f6725’; 进行md5解码可得“wrong”，发现是错误的。再查看提交记录。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/13.png" height="300" width="500"><br></div>
+
+<p>查看图示中的历史</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/14.png" height="300" width="500"><br></div>
+
+<p>可以找到真实的solution。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/15.png" height="300" width="500"><br></div>
+
+<p>翻遍这个文件夹也没有找到其他信息，返回打开repeating文件夹，可以找到第一部分。</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Oh right... the solution to part one is &apos;&lt;?php /*InDaxIn*/ ?&gt;&apos; without the PHP comments and singlequotes.</span><br></pre></td></tr></table></figure>
+<p>所以，flag为：InDaxInNothingHereMoveAlong</p>
+<hr>
+<h2 id="4、PHP-0818-Exploit-PHP"><a href="#4、PHP-0818-Exploit-PHP" class="headerlink" title="4、PHP 0818 (Exploit, PHP)"></a><a name="4"></a>4、PHP 0818 (Exploit, PHP)</h2><p>审计，可以看到要提交的魔数，但在前面的for循环中又不允许出现“1-9”的数字。同时，return时用的是“==”而不是“===”，所以可能是弱类型利用。将魔数进行16进制转换，可以得到：deadc0de，0并不在其中。所以提交0xdeadc0de，解决问题。</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/16.png" height="300" width="500"><br></div>
+
+<hr>
+<h3 id="5、Warchall-Live-LFI-Linux-Exploit-Warchall"><a href="#5、Warchall-Live-LFI-Linux-Exploit-Warchall" class="headerlink" title="5、Warchall: Live LFI (Linux, Exploit, Warchall)"></a><a name="5"></a>5、Warchall: Live LFI (Linux, Exploit, Warchall)</h3><p>文件包含，打开链接，发现只有设置网站语言的地方有参数传递，所以尝试构造：<a href="http://lfi.warchall.net/index.php?lang=solution.php。" target="_blank" rel="noopener">http://lfi.warchall.net/index.php?lang=solution.php。</a></p>
+<div align="center"><br>    <img src="/images/posts/writeup1/17.png" height="300" width="500"><br></div>
+
+<p>一看有戏，尝试读取文件源码。这里介绍读源码的两种：</p>
+<pre><code>?file=data:text/plain,&lt;?php system(&quot;cat solution.php&quot;)?&gt;
+?file=php://filter/read=convert.base64-encode/resource=index.php
+</code></pre><p>构造：<a href="http://lfi.warchall.net/?lang=php://filter/read=convert.base64-encode/resource=solution.php。" target="_blank" rel="noopener">http://lfi.warchall.net/?lang=php://filter/read=convert.base64-encode/resource=solution.php。</a></p>
+<p>Base64解密后可得：SteppinStones42Pie</p>
+<hr>
+<h3 id="6、Warchall-Live-RFI-Linux-Exploit-Warchall"><a href="#6、Warchall-Live-RFI-Linux-Exploit-Warchall" class="headerlink" title="6、Warchall: Live RFI (Linux, Exploit, Warchall)"></a><a name="6"></a>6、Warchall: Live RFI (Linux, Exploit, Warchall)</h3><p>与上题类似，读取文件，构造：<a href="http://rfi.warchall.net/index.php?lang=php://filter/read=convert.base64-encode/resource=solution.php。" target="_blank" rel="noopener">http://rfi.warchall.net/index.php?lang=php://filter/read=convert.base64-encode/resource=solution.php。</a></p>
+<div align="center"><br>    <img src="/images/posts/writeup1/18.png" height="300" width="500"><br></div>
+
+<p>Base64解码：</p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;pre&gt;NOTHING HERE????&lt;/pre&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">&lt;?php return &apos;Low_H4NGING_Fruit&apos;; ?&gt;</span><br></pre></td></tr></table></figure>
+<p>这里也可以用：<code>http://rfi.warchall.net/index.php?lang=data:text/plain,&lt;?php system(&quot;cat solution.php&quot;)?&gt;。</code></p>
+<div align="center"><br>    <img src="/images/posts/writeup1/19.png" height="300" width="500"><br></div>
+
+<p>点击查看源代码：</p>
+<div align="center"><br>    <img src="/images/posts/writeup1/20.png" height="300" width="500"><br></div>
+
+<p>手工，提交。</p>
+<hr>
+<h3 id="7、Can-you-read-me-Coding-Image"><a href="#7、Can-you-read-me-Coding-Image" class="headerlink" title="7、Can you read me (Coding, Image)"></a><a name="7"></a>7、Can you read me (Coding, Image)</h3><pre><code>Description
+    A friend and me have a bet running, that you won&apos;t beat his OCR program in scanning text out of images.
+    His average scan time is 2.5 seconds, can you beat that?
+</code></pre><p>要求在2.5s内识别并提交，首先安装tesseract：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install tesseract-ocr。</span><br></pre></td></tr></table></figure>
+<p>编写python脚本：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">import</span> os</span><br><span class="line"></span><br><span class="line">cookie = &#123;</span><br><span class="line">    <span class="hljs-string">'WC'</span>:<span class="hljs-string">'9953502-36792-3nWdWNVeHmWfnYj'</span>,</span><br><span class="line">&#125;</span><br><span class="line">html = requests.get(<span class="hljs-string">'http://www.wechall.net/challenge/can_you_readme/gimme.php'</span>, cookies=cookie)</span><br><span class="line">png = open(<span class="hljs-string">'png.jpg'</span>, <span class="hljs-string">'wb'</span>).write(html.content) <span class="hljs-comment">#写图片要使用二进制，并且使用html.content，而不是html.text</span></span><br><span class="line"></span><br><span class="line">log = os.system(<span class="hljs-string">'tesseract png.jpg png -l eng'</span>)</span><br><span class="line">keyword = open(<span class="hljs-string">'dec.txt'</span>, <span class="hljs-string">'r'</span>).readline().rstrip(<span class="hljs-string">'\n'</span>)</span><br><span class="line">print(<span class="hljs-string">'keyword is '</span> + keyword)</span><br><span class="line">url = <span class="hljs-string">'http://www.wechall.net/challenge/can_you_readme/index.php?solution=&#123;0&#125;&amp;cmd=Answer'</span>.format(keyword)</span><br><span class="line">page = requests.get(url, cookies=cookie)</span><br><span class="line">print(page.text)</span><br></pre></td></tr></table></figure>
+<p>搞定。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+    
+<div class="card card-transparent">
+    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <div class="pagination-previous">
+            <a class="is-flex-grow has-text-black-ter" href="/categories/jekyll-update/page/2/">上一页</a>
+        </div>
+        <div class="pagination-next is-invisible is-hidden-mobile">
+            <a class="is-flex-grow has-text-black-ter" href="/categories/jekyll-update/page/4/">下一页</a>
+        </div>
+        <ul class="pagination-list is-hidden-mobile">
+            
+            <li><a class="pagination-link has-text-black-ter" href="/categories/jekyll-update/">1</a></li>
+            
+            <li><a class="pagination-link has-text-black-ter" href="/categories/jekyll-update/page/2/">2</a></li>
+            
+            <li><a class="pagination-link is-current" href="/categories/jekyll-update/page/3/">3</a></li>
+            
+        </ul>
+    </nav>
+</div>
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        56
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        18
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="Junay的博客" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

