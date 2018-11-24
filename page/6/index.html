@@ -365,90 +365,6 @@
             <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
                 
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 分钟 读完 (大约 245 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/kali-remote/">Windows 远程连接 kali</a>
-            
-        </h1>
-        <div class="content">
-            <p><strong>这篇文章成功解决了windows下远程连接 kali 的一些问题，免去了网上一些教程中提到的卸载桌面再安装桌面的步骤。</strong></p>
-<blockquote>
-<p>本篇教程的系统环境为：<br>    windows 7 专业版<br>    kali linux 2016-2</p>
-</blockquote>
-<hr>
-<p>Step 1：安装xrdp</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install xrdp</span></span><br></pre></td></tr></table></figure>
-<p>Step 2：安装vnc4server</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install vnc4server</span></span><br></pre></td></tr></table></figure>
-<p>Step 3：编辑xrdp配置文件</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> nano /etc/xrdp/xrdp.ini</span></span><br></pre></td></tr></table></figure>
-<p>为了防止出现诸如以下错误，需对该配置文件进行修改。</p>
-<div align="center"><br>    <img src="/images/posts/kali/1.png" height="300" width="500"><br></div>
-
-
-<p>将原来max_bpp=32改成max_bpp=16，以防止远程连接时闪退。</p>
-<div align="center"><br>    <img src="/images/posts/kali/2.png" height="300" width="500"><br></div>
-
-
-
-<p>Step 4：开启xrdp服务</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp start</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp-sesman start</span></span><br></pre></td></tr></table></figure>
-<p>Step 5：开启VNC服务</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> cnvserver</span></span><br></pre></td></tr></table></figure>
-<p>输入连接密码</p>
-<div align="center"><br>    <img src="/images/posts/kali/3.png" height="300" width="500"><br></div>
-
-
-
-<p>Step 6：在windows下运行mstsc</p>
-<div align="center"><br>    <img src="/images/posts/kali/4.png" height="300" width="500"><br></div>
-
-<div align="center"><br>    <img src="/images/posts/kali/5.png" height="300" width="500"><br></div>
-
-
-
-
-<p>因为远程服务器将颜色调成了32位，所以我们需要在本地上调整颜色深度。</p>
-<div align="center"><br>    <img src="/images/posts/kali/6.png" height="300" width="500"><br></div>
-
-
-
-<p>这里选择Xvnc，然后输入用户、密码。</p>
-<div align="center"><br>    <img src="/images/posts/kali/7.png" height="300" width="500"><br></div>
-
-
-<p>可以看到成功连接到kali。</p>
-<div align="center"><br>    <img src="/images/posts/kali/8.png" height="300" width="500"><br></div>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
-                
                 <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
                 </div>
@@ -568,6 +484,90 @@
 <p>编写python脚本：</p>
 <figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">import</span> os</span><br><span class="line"></span><br><span class="line">cookie = &#123;</span><br><span class="line">    <span class="hljs-string">'WC'</span>:<span class="hljs-string">'9953502-36792-3nWdWNVeHmWfnYj'</span>,</span><br><span class="line">&#125;</span><br><span class="line">html = requests.get(<span class="hljs-string">'http://www.wechall.net/challenge/can_you_readme/gimme.php'</span>, cookies=cookie)</span><br><span class="line">png = open(<span class="hljs-string">'png.jpg'</span>, <span class="hljs-string">'wb'</span>).write(html.content) <span class="hljs-comment">#写图片要使用二进制，并且使用html.content，而不是html.text</span></span><br><span class="line"></span><br><span class="line">log = os.system(<span class="hljs-string">'tesseract png.jpg png -l eng'</span>)</span><br><span class="line">keyword = open(<span class="hljs-string">'dec.txt'</span>, <span class="hljs-string">'r'</span>).readline().rstrip(<span class="hljs-string">'\n'</span>)</span><br><span class="line">print(<span class="hljs-string">'keyword is '</span> + keyword)</span><br><span class="line">url = <span class="hljs-string">'http://www.wechall.net/challenge/can_you_readme/index.php?solution=&#123;0&#125;&amp;cmd=Answer'</span>.format(keyword)</span><br><span class="line">page = requests.get(url, cookies=cookie)</span><br><span class="line">print(page.text)</span><br></pre></td></tr></table></figure>
 <p>搞定。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 245 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/kali-remote/">Windows 远程连接 kali</a>
+            
+        </h1>
+        <div class="content">
+            <p><strong>这篇文章成功解决了windows下远程连接 kali 的一些问题，免去了网上一些教程中提到的卸载桌面再安装桌面的步骤。</strong></p>
+<blockquote>
+<p>本篇教程的系统环境为：<br>    windows 7 专业版<br>    kali linux 2016-2</p>
+</blockquote>
+<hr>
+<p>Step 1：安装xrdp</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install xrdp</span></span><br></pre></td></tr></table></figure>
+<p>Step 2：安装vnc4server</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install vnc4server</span></span><br></pre></td></tr></table></figure>
+<p>Step 3：编辑xrdp配置文件</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> nano /etc/xrdp/xrdp.ini</span></span><br></pre></td></tr></table></figure>
+<p>为了防止出现诸如以下错误，需对该配置文件进行修改。</p>
+<div align="center"><br>    <img src="/images/posts/kali/1.png" height="300" width="500"><br></div>
+
+
+<p>将原来max_bpp=32改成max_bpp=16，以防止远程连接时闪退。</p>
+<div align="center"><br>    <img src="/images/posts/kali/2.png" height="300" width="500"><br></div>
+
+
+
+<p>Step 4：开启xrdp服务</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp start</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp-sesman start</span></span><br></pre></td></tr></table></figure>
+<p>Step 5：开启VNC服务</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> cnvserver</span></span><br></pre></td></tr></table></figure>
+<p>输入连接密码</p>
+<div align="center"><br>    <img src="/images/posts/kali/3.png" height="300" width="500"><br></div>
+
+
+
+<p>Step 6：在windows下运行mstsc</p>
+<div align="center"><br>    <img src="/images/posts/kali/4.png" height="300" width="500"><br></div>
+
+<div align="center"><br>    <img src="/images/posts/kali/5.png" height="300" width="500"><br></div>
+
+
+
+
+<p>因为远程服务器将颜色调成了32位，所以我们需要在本地上调整颜色深度。</p>
+<div align="center"><br>    <img src="/images/posts/kali/6.png" height="300" width="500"><br></div>
+
+
+
+<p>这里选择Xvnc，然后输入用户、密码。</p>
+<div align="center"><br>    <img src="/images/posts/kali/7.png" height="300" width="500"><br></div>
+
+
+<p>可以看到成功连接到kali。</p>
+<div align="center"><br>    <img src="/images/posts/kali/8.png" height="300" width="500"><br></div>
 
         </div>
         
