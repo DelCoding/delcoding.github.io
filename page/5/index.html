@@ -140,6 +140,59 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-01-22T16:40:00.000Z">2018-01-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    7 分钟 读完 (大约 1037 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/01/hackta-yingji/">记黑塔的一次应急响应</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h3><p>&emsp;&emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示<code>账号密码不正确</code>！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！</p>
+<h3 id="处理过程"><a href="#处理过程" class="headerlink" title="处理过程"></a>处理过程</h3><p>&emsp;&emsp;在登陆服务器后第一件事就是<code>history</code>判断服务器是否被<code>get shell</code>，然而却发现并没有可疑的操作，当然也有可能被擦除掉，但我相信这个可能性比较低。由于不清楚危险等级，所以只能把web服务先关闭，换成正在升级的公告，这也是为了避免不必要的影响。</p>
+<p>&emsp;&emsp;关闭服务器后，马上查看运行日志，第一顺序就是判断后台是否沦陷，使用正则提取<code>POST/GET</code>到后台地址的记录，发现条数并不是很多，而且查看今天操作的时间也跟自己操作的时间重合，昨天只有三条记录，看着这心里顿时松了口气，由此可见后台地址的重要性，这也是用户数据的最后一颗稻草。</p>
+<p>&emsp;&emsp;然后查看一下日志的记录大小，没把我吓一跳，39W+的记录，我就是对黑塔项目再自信也不认为两三天内能产生那么多<code>正常</code>的访问记录。</p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/1.png"><br></div><br>&emsp;&emsp;接着为了分析日志方便，我把几十兆的日志文件从服务器上拉了下来，欣慰的是下载速度能达到2M左右，所以也没耽误什么时间。用UE打开后，随便一拉就发现了某用户（这里之所以说某是因为后面通过日志发现了他）在激活页面疯狂提交重置<code>admin</code>密码的验证码，好家伙，足足爆破了3个小时左右，接近10W条记录。</p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/2.jpg"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/3.png"><br></div><br>&emsp;&emsp;为了更清晰的还原他的操作，继续分析日志，此时重点就在爆破前和爆破后的日志记录了，先翻到爆破前，发现此用户尝试注册<code>admin</code>用户，但提示用户存在，注册失败！接着根据日志，他跑到了重置密码页面，一开始使用<code>admin + 他的邮箱</code>重置密码，但这肯定不行。这时，他灵光一闪【奸笑】，想到了他注册时给他发送邮件的邮箱，这也正是<code>admin</code>的邮箱！！然后，他再使用重置密码，但激活码发送到了<code>admin</code>的邮箱，这才出现了39W+的爆破记录，很明显，这将<code>无疾而终</code>。但他成功的把<code>admin</code>的账号给冻结了，导致一开始出现的<code>admin</code>用户无法登陆现象。</p>
+<h3 id="总结和修复方案"><a href="#总结和修复方案" class="headerlink" title="总结和修复方案"></a>总结和修复方案</h3><p>&emsp;&emsp;可以看到，整件事的产生都是因为<code>admin</code>信息的泄漏，而<code>admin</code>及其邮箱都是本地开发时使用的调试信息，在上线前，作者对系统中用户可控的各个输入点都进行了严密的过滤，但却没能防止敏感信息泄漏。所以，在以后的开发中，一定要<code>注意调试环境跟生产环境间敏感信息的保护</code>，像拿到调试环境所泄漏的敏感信息从而攻克整个生产系统的案例并不少见，如默认用户、test用户等。</p>
+<p>&emsp;&emsp;修复方案：</p>
+<ul>
+<li>删除默认管理员账号，禁用诸如<code>admin</code>、<code>root</code>用户名作为管理员账号；</li>
+<li>对提交页面做次数限制，防止恶意爆破，就算不能爆破成功也要减少系统开销；</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-01-17T18:00:00.000Z">2018-01-18</time>
                 
                 <div class="level-item">
@@ -758,72 +811,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-24T01:50:00.000Z">2017-11-24</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    4 分钟 读完 (大约 659 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/linux-install-xdebug/">Linux Xampp安装配置Xdebug</a>
-            
-        </h1>
-        <div class="content">
-            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;<code>Xdebug</code>是一个开源的PHP程序调试工具，可以使用它来调试、跟踪及分析程序运行状态，<code>XAMPP</code>（Apache+MySQL+PHP+PERL）是一个功能强大的建站集成软件包，很多PHP初学者都会使用XAMPP+Xdebug的组合。下面介绍怎样在<code>Linux xmapp</code>下安装xdebug。</p>
-<h3 id="Step-1：安装Xdebug"><a href="#Step-1：安装Xdebug" class="headerlink" title="Step 1：安装Xdebug"></a>Step 1：安装Xdebug</h3><p>&emsp;前往xdebug官网下载相应的版本，如果不知道下载什么版本，可通过官网上自动判断程序。只需新建一个php文件，内容如下：</p>
-<figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">    phpinfo();</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在浏览器中访问并把整个网页的源代码复制下来，提交到如下链接中</p>
-<div align="center"><br>    <img src="/images/posts/other/1.png" height="300" width="500"><br></div><br><br><br><div align="center"><br>    <img src="/images/posts/other/2.png" height="300" width="500"><br></div>
-
-<p>点击判断。即可得到适合的版本。</p>
-<h3 id="Step-2：解压、安装文件"><a href="#Step-2：解压、安装文件" class="headerlink" title="Step 2：解压、安装文件"></a>Step 2：解压、安装文件</h3><p>解压文件：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> tar –xzvf xdebug-2.5.4.tgz</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> <span class="hljs-built_in">cd</span> xdebug-2.5.4/</span></span><br></pre></td></tr></table></figure></p>
-<p>安装前检索，执行phpize，这里由于每个人的路径不一，建议使用find命令查找执行。<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> find / -name phpize</span></span><br></pre></td></tr></table></figure></p>
-<p>得到路径后执行，如：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> /opt/lampp/bin/phpize</span></span><br></pre></td></tr></table></figure></p>
-<p>执行时如遇如下错误需要安装autoconf解决。</p>
-<div align="center"><br>    <img src="/images/posts/other/3.png"><br></div><br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install autoconf</span></span><br></pre></td></tr></table></figure><br><br>安装完成后，重新执行<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> /opt/lampp/bin/phpize</span></span><br></pre></td></tr></table></figure><br><br><div align="center"><br>    <img src="/images/posts/other/4.png" height="300" width="500"><br></div>
-
-<p>可见成功运行。</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> ./configure –<span class="hljs-built_in">enable</span>-xdebug –with-php-config=/opt/lampp/bin/php-config</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> make</span></span><br></pre></td></tr></table></figure>
-<div align="center"><br>    <img src="/images/posts/other/5.png"><br></div>
-
-<p>按提示执行<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> make  <span class="hljs-built_in">test</span></span></span><br></pre></td></tr></table></figure></p>
-<div align="center"><br>    <img src="/images/posts/other/6.png"><br></div>
-
-<p>接下来安装xdebug<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash">make install</span></span><br></pre></td></tr></table></figure></p>
-<div align="center"><br>    <img src="/images/posts/other/7.png" height="300" width="500"><br></div>
-
-<p>成功安装.</p>
-<h3 id="Step-3：配置php-ini"><a href="#Step-3：配置php-ini" class="headerlink" title="Step 3：配置php.ini"></a>Step 3：配置php.ini</h3><p>&emsp;首先找到php.ini文件，如果不知道位置可通过find找到。在xampp下是/opt/lampp/etc/php.ini</p>
-<p></p><p><br>&emsp;然后将xdebug.so路径添加进配置文件，不知道路径同样使用find查找。Xampp下是在 /opt/xdebug-2.5.4/modules/xdebug.so。在文尾添加：<br></p><br>    zend_extension=” /opt/xdebug-2.5.4/modules/xdebug.so”<p></p>
-<p>再将如下配置添加到末尾：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">;显示错误信息</span><br><span class="line">xdebug.default_enable = 1 </span><br><span class="line">;函数调试 </span><br><span class="line">xdebug.auto_trace=on </span><br><span class="line">xdebug.trace_output_dir </span><br><span class="line">xdebug.trace_output_name </span><br><span class="line">;Type: string, Default value: trace.%c </span><br><span class="line">; (参数长度，参数值，参数=值)</span><br><span class="line">xdebug.collect_params = 1|3|4</span><br><span class="line">; 显示内存</span><br><span class="line">xdebug.show_mem_delta=1 </span><br><span class="line">显示返回值</span><br><span class="line">xdebug.collect_return=1 </span><br><span class="line">; 追加日志</span><br><span class="line">xdebug.trace_options =1 </span><br><span class="line">xdebug.collect_params=1 </span><br><span class="line">xdebug.collect_vars = 1 </span><br><span class="line">;开启性能分析 </span><br><span class="line">xdebug.profiler_enable=1 </span><br><span class="line">;性能分析日志保存目录 </span><br><span class="line">xdebug.profiler_output_dir = /data/logs/xdebug/ </span><br><span class="line">;性能分析日志文件名称 </span><br><span class="line">xdebug.profiler_output_name = cachegrind.out.log </span><br><span class="line">;默认是如下格式,t时间,p进程id </span><br><span class="line">;xdebug.profiler_output_name = cachegrind.out.%t.%p </span><br><span class="line">;代码覆盖率 </span><br><span class="line">xdebug.coverage_enable = 1 </span><br><span class="line">;以下是远程调试配置 </span><br><span class="line">xdebug.remote_host= 127.0.0.1 </span><br><span class="line">xdebug.remote_connect_back = 1 </span><br><span class="line">xdebug.remote_port = 9000 xdebug.remote_log="/data/logs/xdebug/xdebug.log"</span><br></pre></td></tr></table></figure></p>
-<h3 id="step-4：重启xampp"><a href="#step-4：重启xampp" class="headerlink" title="step 4：重启xampp"></a>step 4：重启xampp</h3><p>&emsp;此时在phpinfo页面上可以看到xdebug的信息</p>
-<div align="center"><br>    <img src="/images/posts/other/8.png"><br></div>
-
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -889,7 +876,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        56
+                        57
                     </p>
                 </div>
             </div>
@@ -1004,7 +991,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 10px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
     </div>
 </div>
 
@@ -1018,6 +1005,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bypass-pie-and-libcdatabase/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite2 and libcdatabase">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/bypass-pie-and-libcdatabase/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite2 and libcdatabase</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1095,25 +1101,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
-                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1132,7 +1119,7 @@
                     <span class="level-item">十一月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">3</span>
+                    <span class="level-item tag">4</span>
                 </span>
             </a>
         </li>
@@ -1277,7 +1264,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">12</span>
+                            <span class="level-item tag">13</span>
                         </span>
                     </a>
                 </li>
@@ -1321,7 +1308,7 @@
                             <span class="level-item">bypass pie</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">1</span>
+                            <span class="level-item tag">2</span>
                         </span>
                     </a>
                 </li>
@@ -1482,6 +1469,25 @@
         
         <article class="media">
             
+            <a href="/2018/11/bypass-pie-and-libcdatabase/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite2 and libcdatabase">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/bypass-pie-and-libcdatabase/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite2 and libcdatabase</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
@@ -1556,25 +1562,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/10/oracle-sqli-get-shell/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Oracle 从sqli到get (root) shell">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-02T08:47:56.000Z">2018-10-02</time></div>
-                    <a href="/2018/10/oracle-sqli-get-shell/" class="has-link-black-ter is-size-6">Oracle 从sqli到get (root) shell</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1593,7 +1580,7 @@
                     <span class="level-item">十一月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">3</span>
+                    <span class="level-item tag">4</span>
                 </span>
             </a>
         </li>
@@ -1738,7 +1725,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">12</span>
+                            <span class="level-item tag">13</span>
                         </span>
                     </a>
                 </li>
@@ -1782,7 +1769,7 @@
                             <span class="level-item">bypass pie</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">1</span>
+                            <span class="level-item tag">2</span>
                         </span>
                     </a>
                 </li>

