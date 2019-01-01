@@ -140,6 +140,62 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-12-17T09:57:00.000Z">2017-12-17</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    9 分钟 读完 (大约 1331 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/12/whoosh-mongo/">Whoosh使用及为Mongodb建立索引</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;由于作者的项目中需要为数据库建立索引以便以搜索，经过考察后还是决定使用<code>Whoosh+MongoDB</code>的方案。所以这篇文章是介绍怎样使用whoosh为mongodb建立索引，网上关于这方面的文章还是相对比较少的，所以有必要记录一下。</p>
+<p>&emsp;&emsp;whoosh是原生唯一的python写的<code>全文搜索引擎</code>，虽然说whoosh性能不一定比得上lucene,sphinx,xapian等,但由于是基于python，所以扩展性极好，非常容易集成到<code>django</code>或其他框架中，而且whoosh运行消耗的资源也比lucene等引擎少，加之作者的服务器性能较弱，数据量也还不大，就选择了<code>whoosh作为搜索引擎</code>。</p>
+<h3 id="架构方案"><a href="#架构方案" class="headerlink" title="架构方案"></a>架构方案</h3><p>&emsp;&emsp;作者使用的方案是：使用<code>jieba</code>为需要索引的whoosh的字段进行<code>中文分词</code>，搜索时，whoosh只返回<code>_id</code>字段的值，然后在mongodb中查找。当然，这个whoosh也可以把所有的字段都储存起来，这样就可以直接返回搜索结果，而省去在mongodb上查找的时间，但由此引发的一个问题就是索引文件过大，是空间利用问题，而且这样做就把whoosh当成了数据库角色。所以作者放弃了这一方案。</p>
+<h3 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h3><p>&emsp;&emsp;这里不介绍whoosh,mongodb的安装方法，请自行搜索。</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.fields <span class="hljs-keyword">import</span> Schema, TEXT, ID, DATETIME</span><br><span class="line"><span class="hljs-keyword">from</span> jieba.analyse <span class="hljs-keyword">import</span> ChineseAnalyzer</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">import</span> jieba</span><br><span class="line">jieba.load_userdict(<span class="hljs-string">"dict.txt"</span>)</span><br><span class="line"></span><br><span class="line">analyzer = ChineseAnalyzer()</span><br><span class="line"></span><br><span class="line">schema = Schema(</span><br><span class="line">            nid=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">True</span>),</span><br><span class="line">            url=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">False</span>),</span><br><span class="line">            date=DATETIME(unique=<span class="hljs-keyword">False</span>, stored=<span class="hljs-keyword">False</span>, sortable=<span class="hljs-keyword">True</span>),</span><br><span class="line">            title=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer),</span><br><span class="line">            content=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(<span class="hljs-string">'D:/pythonCode/whoosh/index/'</span>):</span><br><span class="line">    os.mkdir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line">    create_in(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>, schema)    <span class="hljs-comment"># 创建索引文件，需指定Schema</span></span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;因为whoosh是python实现的，所以很方便的就能跟结巴结合。而结巴允许的用户自定义字典，这对专业领域的分词很有帮助，我们只需要在<code>dict.txt</code>中存放专业名词就行。</p>
+<p>&emsp;&emsp;索引首先需要定义<code>Schema</code>，<code>stored</code>代表是否存储这个字段的值，<code>sortable</code>为是否可以排序，这里因为是时间，所以我选择True，<code>analyzer</code>分词器，这里我们使用结巴中文分词器。这里再啰嗦几句，ID的值为不可分割，所以适合url、id等一类不用分割查找的项；DATETIME为时间，不用解释；这里的<code>TEXT</code>才是我们需要<code>分词、建立索引</code>的项目。</p>
+<p>&emsp;&emsp;PPS：按照whoosh官方文档，对于简单的字段即使没有指定排序，但仍可以排序，只是结果可能不是那么完美。还有一种情况就是：如果你已经创建了Schema，并且写入数据，但是你想为某个字段排序，那么你可以使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> sorting</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> open_dir</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> w:</span><br><span class="line">    sorting.add_sortable(w, <span class="hljs-string">"date"</span>, sorting.FieldFacet(<span class="hljs-string">"date"</span>))</span><br></pre></td></tr></table></figure></p>
+<h3 id="索引数据"><a href="#索引数据" class="headerlink" title="索引数据"></a>索引数据</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line">_id = collections.insert(dict(item))</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> writer:</span><br><span class="line">    writer.update_document(</span><br><span class="line">        nid=_id.__str__(),</span><br><span class="line">        url=item[<span class="hljs-string">'url'</span>],</span><br><span class="line">        title=item[<span class="hljs-string">'title'</span>],</span><br><span class="line">        date=datetime.strptime(item[<span class="hljs-string">'date'</span>], <span class="hljs-string">'%Y-%m-%d'</span>),   <span class="hljs-comment"># 字符串化成时间格式</span></span><br><span class="line">        content=item[<span class="hljs-string">'index_content'</span>]</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;在需要建立索引的地方使用如上代码。这里注意的一点是，mongodb插入数据返回的是ObjectId，如ObjectId(“5a2e2652c0bae92df4dd2372”)，而whoosh不支持存储ObjectId类型，所以我们需要的是括号里面的字符串，所以需要使用<code>_id.__str__()</code>提取。</p>
+<h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>&emsp;&emsp;搜索代码如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.qparser <span class="hljs-keyword">import</span> MultifieldParser, QueryParser</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> scoring, sorting</span><br><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line"><span class="hljs-keyword">with</span> ix.searcher() <span class="hljs-keyword">as</span> searcher:</span><br><span class="line">    query = MultifieldParser([<span class="hljs-string">"title"</span>, <span class="hljs-string">"content"</span>], ix.schema).parse(<span class="hljs-string">"xss"</span>)</span><br><span class="line">    <span class="hljs-comment">#query = QueryParser("content", ix.schema).parse("xss")</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 排序</span></span><br><span class="line">    mf = sorting.MultiFacet()</span><br><span class="line">    mf.add_field(<span class="hljs-string">"date"</span>, reverse=<span class="hljs-keyword">True</span>)</span><br><span class="line">    results = searcher.search(query, limit=<span class="hljs-number">10</span>, sortedby=mf)</span><br><span class="line">    print(len(results))</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> results:</span><br><span class="line">        _id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">        res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br><span class="line">        print(res[<span class="hljs-string">'date'</span>] + res[<span class="hljs-string">'title'</span>])</span><br><span class="line">        print(<span class="hljs-string">'-----------------------\n'</span>)</span><br><span class="line">        count += <span class="hljs-number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>MultifieldParser</code>是搜索多个field，也就是多个字段，而<code>QueryParser</code>只能搜索一个字段。<code>sorting.MultiFacet()</code>是whoosh中实现排序的一种方法，<code>reverse=True</code>是反向排序，这里实现的是时间降序。<code>searcher.search(sortedby=mf)</code>指定排序方式。其实whoosh里提供多种排序方法，功能还挺全面。</p>
+<p>&emsp;&emsp;这里提供了mongodb如何使用<code>_id</code>查找的方法。</p>
+<p>&emsp;&emsp;如果需要将<code>_id</code>中的值提取出来，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_id = collections.insert(dict(item))</span><br><span class="line">nid=_id.__str__()</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;如果需要使用字符串查找，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">_id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;完整的事例可查看<a href="https://github.com/DelCoding/MyCodes/blob/master/whoosh.py" target="_blank" rel="noopener">此页面</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-12-08T03:30:00.000Z">2017-12-08</time>
                 
                 
@@ -759,145 +815,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    9 分钟 读完 (大约 1385 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/wechall-write1/">Wechall WriteUp</a>
-            
-        </h1>
-        <div class="content">
-            <p>初入ctf，写下记录以便查看。这里是wechall的一些题解。</p>
-<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
-<li><a href="#1">Training: Tracks (HTTP)</a></li>
-<li><a href="#2">Training: Baconian (Stegano, Encoding, Crypto, Training)</a></li>
-<li><a href="#3">Repeating History (Research)</a></li>
-<li><a href="#4">PHP 0818 (Exploit, PHP)</a></li>
-<li><a href="#5">Warchall: Live LFI (Linux, Exploit, Warchall)</a></li>
-<li><a href="#6">Warchall: Live RFI (Linux, Exploit, Warchall)</a></li>
-<li><a href="#7">Can you read me (Coding, Image)</a></li>
-</ul>
-<hr>
-<h3 id="1-Training-Tracks-HTTP"><a href="#1-Training-Tracks-HTTP" class="headerlink" title="1. Training: Tracks (HTTP)"></a><a name="1"></a>1. Training: Tracks (HTTP)</h3><p> 1、进入投票页面</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/1.png" height="300" width="500"><br></div>
-
-<p>点击 + 号，</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/2.png" height="300" width="500"><br></div>
-
-<p>再次点击进行投票。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/3.png" height="300" width="500"><br></div>
-
-<p>此时完成第一次投票。进行第二次时会报错。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/4.png" height="300" width="500"><br></div>
-
-<p>这时，我们将VOTE cookie删掉，如果不删会导致后续不成功。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/5.png" height="300" width="500"><br></div>
-
-<p> 打开burpsuite，抓包改包。修改If-None-Match的值，请求更新数据，因为服务器一开始会分配Etag，然后下次检测时会对比两者的值，如果一样就不更新数据，导致无法投票。</p>
-<p>然后投票成功，通过题目。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/6.png" height="300" width="500"><br></div>
-
-<hr>
-<h3 id="2、Training-Baconian-Stegano-Encoding-Crypto-Training"><a href="#2、Training-Baconian-Stegano-Encoding-Crypto-Training" class="headerlink" title="2、Training: Baconian (Stegano, Encoding, Crypto, Training)"></a><a name="2"></a>2、Training: Baconian (Stegano, Encoding, Crypto, Training)</h3><p>这题是解密培根密码，培根密码有两种密码表，并使用’A’、’B’代替0，1进行编码。<br>第一种密码表：</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/7.png" height="300" width="500"><br></div>
-
-<p>第二种密码表：</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/8.png" height="300" width="500"><br></div>
-
-<p>假如我要加密‘hello’，按照第一种方法加密的结果为：aabbb,aabaa,ababa,ababa,abbab；第二种为：aabbb,aabaa,ababb,ababb,abbba。<br>假如要解密‘WOrld…’，把整个字符串的大小写代表着‘A’、‘B’编码，所以这里有两个编码可能性，一是大写代表‘A’，小写代表‘B’，第二种相反。同时这里又有两种密码表，所以这里一共有2*2=4种可能性。<br>大写代表‘A’，小写代表‘B’，用第一种密码表可得：‘h’，第二种为：‘h’，这里刚好一样。<br>大写代表‘B’，小写代表‘A’，用第一种密码表没有结果，第二种为：‘y’。</p>
-<p>所以将题目中给出的字符进行清洗，去除非字母字符包括数字。然后写个python脚本 。</p>
-<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> re</span><br><span class="line">Str = ‘………..’</span><br><span class="line">arr = re.findall(<span class="hljs-string">'.&#123;5&#125;'</span>, str)</span><br><span class="line">alphabet = [<span class="hljs-string">'a'</span>,<span class="hljs-string">'b'</span>,<span class="hljs-string">'c'</span>,<span class="hljs-string">'d'</span>,<span class="hljs-string">'e'</span>,<span class="hljs-string">'f'</span>,<span class="hljs-string">'g'</span>,<span class="hljs-string">'h'</span>,<span class="hljs-string">'i'</span>,<span class="hljs-string">'j'</span>,<span class="hljs-string">'k'</span>,<span class="hljs-string">'l'</span>,<span class="hljs-string">'m'</span>,<span class="hljs-string">'n'</span>,<span class="hljs-string">'o'</span>,<span class="hljs-string">'p'</span>,<span class="hljs-string">'q'</span>,<span class="hljs-string">'r'</span>,<span class="hljs-string">'s'</span>,<span class="hljs-string">'t'</span>,<span class="hljs-string">'u'</span>,<span class="hljs-string">'v'</span>,<span class="hljs-string">'w'</span>,<span class="hljs-string">'x'</span>,<span class="hljs-string">'y'</span>,<span class="hljs-string">'z'</span>]</span><br><span class="line">first_cipher = [<span class="hljs-string">"aaaaa"</span>,<span class="hljs-string">"aaaab"</span>,<span class="hljs-string">"aaaba"</span>,<span class="hljs-string">"aaabb"</span>,<span class="hljs-string">"aabaa"</span>,<span class="hljs-string">"aabab"</span>,<span class="hljs-string">"aabba"</span>,<span class="hljs-string">"aabbb"</span>,<span class="hljs-string">"abaaa"</span>,<span class="hljs-string">"abaab"</span>,<span class="hljs-string">"ababa"</span>,<span class="hljs-string">"ababb"</span>,<span class="hljs-string">"abbaa"</span>,<span class="hljs-string">"abbab"</span>,<span class="hljs-string">"abbba"</span>,<span class="hljs-string">"abbbb"</span>,<span class="hljs-string">"baaaa"</span>,<span class="hljs-string">"baaab"</span>,<span class="hljs-string">"baaba"</span>,<span class="hljs-string">"baabb"</span>,<span class="hljs-string">"babaa"</span>,<span class="hljs-string">"babab"</span>,<span class="hljs-string">"babba"</span>,<span class="hljs-string">"babbb"</span>,<span class="hljs-string">"bbaaa"</span>,<span class="hljs-string">"bbaab"</span>]</span><br><span class="line">second_cipher = [<span class="hljs-string">"aaaaa"</span>,<span class="hljs-string">"aaaab"</span>,<span class="hljs-string">"aaaba"</span>,<span class="hljs-string">"aaabb"</span>,<span class="hljs-string">"aabaa"</span>,<span class="hljs-string">"aabab"</span>,<span class="hljs-string">"aabba"</span>,<span class="hljs-string">"aabbb"</span>,<span class="hljs-string">"abaaa"</span>,<span class="hljs-string">"abaaa"</span>,<span class="hljs-string">"abaab"</span>,<span class="hljs-string">"ababa"</span>,<span class="hljs-string">"ababb"</span>,<span class="hljs-string">"abbaa"</span>,<span class="hljs-string">"abbab"</span>,<span class="hljs-string">"abbba"</span>,<span class="hljs-string">"abbbb"</span>,<span class="hljs-string">"baaaa"</span>,<span class="hljs-string">"baaab"</span>,<span class="hljs-string">"baaba"</span>,<span class="hljs-string">"baabb"</span>,<span class="hljs-string">"baabb"</span>,<span class="hljs-string">"babaa"</span>,<span class="hljs-string">"babab"</span>,<span class="hljs-string">"babba"</span>,<span class="hljs-string">"babbb"</span>]</span><br><span class="line"></span><br><span class="line">keyword1 = <span class="hljs-string">""</span></span><br><span class="line">keyword2 = <span class="hljs-string">""</span></span><br><span class="line">keyword3 = <span class="hljs-string">""</span></span><br><span class="line">keyword4 = <span class="hljs-string">""</span></span><br><span class="line"><span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> arr:</span><br><span class="line">    toab1 = <span class="hljs-string">""</span></span><br><span class="line">    toab2 = <span class="hljs-string">""</span></span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> one:</span><br><span class="line">        <span class="hljs-keyword">if</span> i.isupper():</span><br><span class="line">            toab1 += <span class="hljs-string">'b'</span></span><br><span class="line">            toab2 += <span class="hljs-string">'a'</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            toab1 += <span class="hljs-string">'a'</span></span><br><span class="line">            toab2 += <span class="hljs-string">'b'</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> local,ab <span class="hljs-keyword">in</span> enumerate(first_cipher):</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab1:</span><br><span class="line">            keyword1 += alphabet[local]</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab2:</span><br><span class="line">            keyword3 += alphabet[local]</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> local,ab <span class="hljs-keyword">in</span> enumerate(second_cipher):</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab1:</span><br><span class="line">            keyword2 += alphabet[local]</span><br><span class="line">        <span class="hljs-keyword">if</span> ab == toab2:</span><br><span class="line">            keyword4 += alphabet[local]</span><br><span class="line"></span><br><span class="line">print(keyword1)</span><br><span class="line">print(keyword2)</span><br><span class="line">print(keyword3)</span><br><span class="line">print(keyword4)</span><br></pre></td></tr></table></figure>
-<p>在输出中匹配‘is’，（别问为什么可以如此操作，，，直觉）并替换‘x’为空格。即可得出flag：iblpsclsennp</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/9.png" height="300" width="500"><br></div>
-
-<div align="center"><br>    <img src="/images/posts/writeup1/10.png" height="300" width="500"><br></div>
-
-<hr>
-<h3 id="3、Repeating-History-Research"><a href="#3、Repeating-History-Research" class="headerlink" title="3、Repeating History (Research)"></a><a name="3"></a>3、Repeating History (Research)</h3><p>打开题中给出的github项目地址，找到该题目的文件夹。发现有两个文件夹，然后，，找。。。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/11.png" height="300" width="500"><br></div>
-
-<p>先打开history</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/12.png" height="300" width="500"><br></div>
-
-<p>然后在install.php中可以找到$solution = ‘2bda2998d9b0ee197da142a0447f6725’; 进行md5解码可得“wrong”，发现是错误的。再查看提交记录。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/13.png" height="300" width="500"><br></div>
-
-<p>查看图示中的历史</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/14.png" height="300" width="500"><br></div>
-
-<p>可以找到真实的solution。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/15.png" height="300" width="500"><br></div>
-
-<p>翻遍这个文件夹也没有找到其他信息，返回打开repeating文件夹，可以找到第一部分。</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Oh right... the solution to part one is &apos;&lt;?php /*InDaxIn*/ ?&gt;&apos; without the PHP comments and singlequotes.</span><br></pre></td></tr></table></figure>
-<p>所以，flag为：InDaxInNothingHereMoveAlong</p>
-<hr>
-<h2 id="4、PHP-0818-Exploit-PHP"><a href="#4、PHP-0818-Exploit-PHP" class="headerlink" title="4、PHP 0818 (Exploit, PHP)"></a><a name="4"></a>4、PHP 0818 (Exploit, PHP)</h2><p>审计，可以看到要提交的魔数，但在前面的for循环中又不允许出现“1-9”的数字。同时，return时用的是“==”而不是“===”，所以可能是弱类型利用。将魔数进行16进制转换，可以得到：deadc0de，0并不在其中。所以提交0xdeadc0de，解决问题。</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/16.png" height="300" width="500"><br></div>
-
-<hr>
-<h3 id="5、Warchall-Live-LFI-Linux-Exploit-Warchall"><a href="#5、Warchall-Live-LFI-Linux-Exploit-Warchall" class="headerlink" title="5、Warchall: Live LFI (Linux, Exploit, Warchall)"></a><a name="5"></a>5、Warchall: Live LFI (Linux, Exploit, Warchall)</h3><p>文件包含，打开链接，发现只有设置网站语言的地方有参数传递，所以尝试构造：<a href="http://lfi.warchall.net/index.php?lang=solution.php。" target="_blank" rel="noopener">http://lfi.warchall.net/index.php?lang=solution.php。</a></p>
-<div align="center"><br>    <img src="/images/posts/writeup1/17.png" height="300" width="500"><br></div>
-
-<p>一看有戏，尝试读取文件源码。这里介绍读源码的两种：</p>
-<pre><code>?file=data:text/plain,&lt;?php system(&quot;cat solution.php&quot;)?&gt;
-?file=php://filter/read=convert.base64-encode/resource=index.php
-</code></pre><p>构造：<a href="http://lfi.warchall.net/?lang=php://filter/read=convert.base64-encode/resource=solution.php。" target="_blank" rel="noopener">http://lfi.warchall.net/?lang=php://filter/read=convert.base64-encode/resource=solution.php。</a></p>
-<p>Base64解密后可得：SteppinStones42Pie</p>
-<hr>
-<h3 id="6、Warchall-Live-RFI-Linux-Exploit-Warchall"><a href="#6、Warchall-Live-RFI-Linux-Exploit-Warchall" class="headerlink" title="6、Warchall: Live RFI (Linux, Exploit, Warchall)"></a><a name="6"></a>6、Warchall: Live RFI (Linux, Exploit, Warchall)</h3><p>与上题类似，读取文件，构造：<a href="http://rfi.warchall.net/index.php?lang=php://filter/read=convert.base64-encode/resource=solution.php。" target="_blank" rel="noopener">http://rfi.warchall.net/index.php?lang=php://filter/read=convert.base64-encode/resource=solution.php。</a></p>
-<div align="center"><br>    <img src="/images/posts/writeup1/18.png" height="300" width="500"><br></div>
-
-<p>Base64解码：</p>
-<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;pre&gt;NOTHING HERE????&lt;/pre&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">&lt;?php return &apos;Low_H4NGING_Fruit&apos;; ?&gt;</span><br></pre></td></tr></table></figure>
-<p>这里也可以用：<code>http://rfi.warchall.net/index.php?lang=data:text/plain,&lt;?php system(&quot;cat solution.php&quot;)?&gt;。</code></p>
-<div align="center"><br>    <img src="/images/posts/writeup1/19.png" height="300" width="500"><br></div>
-
-<p>点击查看源代码：</p>
-<div align="center"><br>    <img src="/images/posts/writeup1/20.png" height="300" width="500"><br></div>
-
-<p>手工，提交。</p>
-<hr>
-<h3 id="7、Can-you-read-me-Coding-Image"><a href="#7、Can-you-read-me-Coding-Image" class="headerlink" title="7、Can you read me (Coding, Image)"></a><a name="7"></a>7、Can you read me (Coding, Image)</h3><pre><code>Description
-    A friend and me have a bet running, that you won&apos;t beat his OCR program in scanning text out of images.
-    His average scan time is 2.5 seconds, can you beat that?
-</code></pre><p>要求在2.5s内识别并提交，首先安装tesseract：</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install tesseract-ocr。</span><br></pre></td></tr></table></figure>
-<p>编写python脚本：</p>
-<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">import</span> os</span><br><span class="line"></span><br><span class="line">cookie = &#123;</span><br><span class="line">    <span class="hljs-string">'WC'</span>:<span class="hljs-string">'9953502-36792-3nWdWNVeHmWfnYj'</span>,</span><br><span class="line">&#125;</span><br><span class="line">html = requests.get(<span class="hljs-string">'http://www.wechall.net/challenge/can_you_readme/gimme.php'</span>, cookies=cookie)</span><br><span class="line">png = open(<span class="hljs-string">'png.jpg'</span>, <span class="hljs-string">'wb'</span>).write(html.content) <span class="hljs-comment">#写图片要使用二进制，并且使用html.content，而不是html.text</span></span><br><span class="line"></span><br><span class="line">log = os.system(<span class="hljs-string">'tesseract png.jpg png -l eng'</span>)</span><br><span class="line">keyword = open(<span class="hljs-string">'dec.txt'</span>, <span class="hljs-string">'r'</span>).readline().rstrip(<span class="hljs-string">'\n'</span>)</span><br><span class="line">print(<span class="hljs-string">'keyword is '</span> + keyword)</span><br><span class="line">url = <span class="hljs-string">'http://www.wechall.net/challenge/can_you_readme/index.php?solution=&#123;0&#125;&amp;cmd=Answer'</span>.format(keyword)</span><br><span class="line">page = requests.get(url, cookies=cookie)</span><br><span class="line">print(page.text)</span><br></pre></td></tr></table></figure>
-<p>搞定。</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -963,7 +880,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        61
+                        62
                     </p>
                 </div>
             </div>
@@ -983,7 +900,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        22
+                        23
                     </p>
                 </div>
             </div>
@@ -1078,7 +995,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 10px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -1092,6 +1009,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/01/ret2dl_resolve_x86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve exp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-01T16:00:00.000Z">2019-01-02</time></div>
+                    <a href="/2019/01/ret2dl_resolve_x86/" class="has-link-black-ter is-size-6">ret2dl_resolve exp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1169,25 +1105,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
-                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1199,6 +1116,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/12/">
@@ -1362,7 +1290,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">17</span>
+                            <span class="level-item tag">18</span>
                         </span>
                     </a>
                 </li>
@@ -1473,6 +1401,17 @@
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/ret2dl-resolve/">
+                        <span class="level-start">
+                            <span class="level-item">ret2dl_resolve</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
                         </span>
                     </a>
                 </li>
@@ -1611,6 +1550,25 @@
         
         <article class="media">
             
+            <a href="/2019/01/ret2dl_resolve_x86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve exp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-01T16:00:00.000Z">2019-01-02</time></div>
+                    <a href="/2019/01/ret2dl_resolve_x86/" class="has-link-black-ter is-size-6">ret2dl_resolve exp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2018/12/dl_runtime_resolve/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt之_dl_runtime_resolve">
@@ -1685,25 +1643,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
-                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1715,6 +1654,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/12/">
@@ -1878,7 +1828,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">17</span>
+                            <span class="level-item tag">18</span>
                         </span>
                     </a>
                 </li>
@@ -1989,6 +1939,17 @@
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/ret2dl-resolve/">
+                        <span class="level-start">
+                            <span class="level-item">ret2dl_resolve</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
                         </span>
                     </a>
                 </li>
@@ -2124,7 +2085,7 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2018 Junay&nbsp;
+                &copy; 2019 Junay&nbsp;
                 Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
                         href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
                 </p>

