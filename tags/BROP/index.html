@@ -2,27 +2,22 @@
 <html  lang="zh">
 <head>
     <meta charset="utf-8">
-<title>记黑塔的一次应急响应 - Junay的博客</title>
+<title>标签: BROP - Junay的博客</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
 
 
-    <meta name="description" content="发现问题&amp;emsp;&amp;emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示账号密码不正确！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！ 处理过程&amp;emsp;&amp;emsp;在登陆服务器后第一件事就是history判断服务器是否被get shell，然而却发现并没有可疑的操作，当然也有">
-<meta name="keywords" content="hexo,javascript">
-<meta property="og:type" content="article">
-<meta property="og:title" content="记黑塔的一次应急响应">
-<meta property="og:url" content="http://yoursite.com/2018/01/hackta-yingji/index.html">
+    <meta name="description" content="CTF、网络安全爱好者">
+<meta name="keywords" content="CTF,网络安全">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Junay的博客">
+<meta property="og:url" content="http://yoursite.com/tags/BROP/index.html">
 <meta property="og:site_name" content="Junay的博客">
-<meta property="og:description" content="发现问题&amp;emsp;&amp;emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示账号密码不正确！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！ 处理过程&amp;emsp;&amp;emsp;在登陆服务器后第一件事就是history判断服务器是否被get shell，然而却发现并没有可疑的操作，当然也有">
+<meta property="og:description" content="CTF、网络安全爱好者">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/posts/hackta/1.png">
-<meta property="og:image" content="http://yoursite.com/images/posts/hackta/2.jpg">
-<meta property="og:image" content="http://yoursite.com/images/posts/hackta/3.png">
-<meta property="og:updated_time" content="2018-11-23T12:44:39.152Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="记黑塔的一次应急响应">
-<meta name="twitter:description" content="发现问题&amp;emsp;&amp;emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示账号密码不正确！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！ 处理过程&amp;emsp;&amp;emsp;在登陆服务器后第一件事就是history判断服务器是否被get shell，然而却发现并没有可疑的操作，当然也有">
-<meta name="twitter:image" content="http://yoursite.com/images/posts/hackta/1.png">
+<meta name="twitter:title" content="Junay的博客">
+<meta name="twitter:description" content="CTF、网络安全爱好者">
 
 
 
@@ -88,7 +83,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="记黑塔的一次应急响应" height="28">
+                <img src="/images/logo.svg" alt="Junay的博客" height="28">
             
             </a>
         </div>
@@ -139,22 +134,29 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/tags">标签</a></li>
+            <li class="is-active"><a href="#" aria-current="page">BROP</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    <div class="card">
     
     <div class="card-content article ">
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-01-22T16:40:00.000Z">2018-01-23</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
+                <time class="level-item has-text-grey" datetime="2019-01-15T15:00:00.000Z">2019-01-15</time>
                 
                 
                 <span class="level-item has-text-grey">
                     
                     
-                    7 分钟 读完 (大约 1037 个字)
+                    12 分钟 读完 (大约 1831 个字)
                 </span>
                 
             </div>
@@ -162,78 +164,30 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                记黑塔的一次应急响应
+                <a class="has-link-black-ter" href="/2019/01/small_stack_and_brop/">x86下栈溢出太小和BROP</a>
             
         </h1>
         <div class="content">
-            <h3 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h3><p>&emsp;&emsp;今天下午15时左右，跟往常一样登陆后台查看信息，在输入账号密码后居然发现提示<code>账号密码不正确</code>！第一次以为自己输入错误，但接连输入几次后发现都是错误，心里顿时毛骨悚然，mmp的，难道那么快就被hack掉了？？赶紧远程服务器！！</p>
-<h3 id="处理过程"><a href="#处理过程" class="headerlink" title="处理过程"></a>处理过程</h3><p>&emsp;&emsp;在登陆服务器后第一件事就是<code>history</code>判断服务器是否被<code>get shell</code>，然而却发现并没有可疑的操作，当然也有可能被擦除掉，但我相信这个可能性比较低。由于不清楚危险等级，所以只能把web服务先关闭，换成正在升级的公告，这也是为了避免不必要的影响。</p>
-<p>&emsp;&emsp;关闭服务器后，马上查看运行日志，第一顺序就是判断后台是否沦陷，使用正则提取<code>POST/GET</code>到后台地址的记录，发现条数并不是很多，而且查看今天操作的时间也跟自己操作的时间重合，昨天只有三条记录，看着这心里顿时松了口气，由此可见后台地址的重要性，这也是用户数据的最后一颗稻草。</p>
-<p>&emsp;&emsp;然后查看一下日志的记录大小，没把我吓一跳，39W+的记录，我就是对黑塔项目再自信也不认为两三天内能产生那么多<code>正常</code>的访问记录。</p>
-<p><div align="center"><br>    <img src="/images/posts/hackta/1.png"><br></div><br>&emsp;&emsp;接着为了分析日志方便，我把几十兆的日志文件从服务器上拉了下来，欣慰的是下载速度能达到2M左右，所以也没耽误什么时间。用UE打开后，随便一拉就发现了某用户（这里之所以说某是因为后面通过日志发现了他）在激活页面疯狂提交重置<code>admin</code>密码的验证码，好家伙，足足爆破了3个小时左右，接近10W条记录。</p>
-<p><div align="center"><br>    <img src="/images/posts/hackta/2.jpg"><br></div></p>
-<p><div align="center"><br>    <img src="/images/posts/hackta/3.png"><br></div><br>&emsp;&emsp;为了更清晰的还原他的操作，继续分析日志，此时重点就在爆破前和爆破后的日志记录了，先翻到爆破前，发现此用户尝试注册<code>admin</code>用户，但提示用户存在，注册失败！接着根据日志，他跑到了重置密码页面，一开始使用<code>admin + 他的邮箱</code>重置密码，但这肯定不行。这时，他灵光一闪【奸笑】，想到了他注册时给他发送邮件的邮箱，这也正是<code>admin</code>的邮箱！！然后，他再使用重置密码，但激活码发送到了<code>admin</code>的邮箱，这才出现了39W+的爆破记录，很明显，这将<code>无疾而终</code>。但他成功的把<code>admin</code>的账号给冻结了，导致一开始出现的<code>admin</code>用户无法登陆现象。</p>
-<h3 id="总结和修复方案"><a href="#总结和修复方案" class="headerlink" title="总结和修复方案"></a>总结和修复方案</h3><p>&emsp;&emsp;可以看到，整件事的产生都是因为<code>admin</code>信息的泄漏，而<code>admin</code>及其邮箱都是本地开发时使用的调试信息，在上线前，作者对系统中用户可控的各个输入点都进行了严密的过滤，但却没能防止敏感信息泄漏。所以，在以后的开发中，一定要<code>注意调试环境跟生产环境间敏感信息的保护</code>，像拿到调试环境所泄漏的敏感信息从而攻克整个生产系统的案例并不少见，如默认用户、test用户等。</p>
-<p>&emsp;&emsp;修复方案：</p>
-<ul>
-<li>删除默认管理员账号，禁用诸如<code>admin</code>、<code>root</code>用户名作为管理员账号；</li>
-<li>对提交页面做次数限制，防止恶意爆破，就算不能爆破成功也要减少系统开销；</li>
-</ul>
-
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;这篇文章主要记录在<code>x86</code>下解决栈溢出空间太小和<code>BROP</code>。</p>
         </div>
         
+        
+        <div class="level is-mobile">
+            <div class="level-start">
+                <div class="level-item">
+                <a class="button is-size-7 is-light" href="/2019/01/small_stack_and_brop/#more">阅读更多</a>
+                </div>
+            </div>
+        </div>
         
         
     </div>
 </div>
 
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2018/02/tamu-ctf-writeup/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">tamu ctf writeup</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2018/01/kali-mongodb/">
-                <span class="level-item">kali下安装mongodb遇到的问题及解决方案</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
 
 
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">评论</h3>
-        
-<script>
-    var disqus_config = function () {
-        this.page.url = 'http://yoursite.com/2018/01/hackta-yingji/';
-        this.page.identifier = '2018/01/hackta-yingji/';
-    };
-    (function() {
-        var d = document, s = d.createElement('script');  
-        s.src = '//' + 'delcoding' + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-
-<div id="disqus_thread">
-    
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-    </div>
-</div>
 </div>
                 
 
@@ -1497,7 +1451,7 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="记黑塔的一次应急响应" height="28">
+                    <img src="/images/logo.svg" alt="Junay的博客" height="28">
                 
                 </a>
                 <p class="is-size-7">

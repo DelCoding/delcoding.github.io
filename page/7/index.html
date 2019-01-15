@@ -279,6 +279,90 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 245 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/kali-remote/">Windows 远程连接 kali</a>
+            
+        </h1>
+        <div class="content">
+            <p><strong>这篇文章成功解决了windows下远程连接 kali 的一些问题，免去了网上一些教程中提到的卸载桌面再安装桌面的步骤。</strong></p>
+<blockquote>
+<p>本篇教程的系统环境为：<br>    windows 7 专业版<br>    kali linux 2016-2</p>
+</blockquote>
+<hr>
+<p>Step 1：安装xrdp</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install xrdp</span></span><br></pre></td></tr></table></figure>
+<p>Step 2：安装vnc4server</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install vnc4server</span></span><br></pre></td></tr></table></figure>
+<p>Step 3：编辑xrdp配置文件</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> nano /etc/xrdp/xrdp.ini</span></span><br></pre></td></tr></table></figure>
+<p>为了防止出现诸如以下错误，需对该配置文件进行修改。</p>
+<div align="center"><br>    <img src="/images/posts/kali/1.png" height="300" width="500"><br></div>
+
+
+<p>将原来max_bpp=32改成max_bpp=16，以防止远程连接时闪退。</p>
+<div align="center"><br>    <img src="/images/posts/kali/2.png" height="300" width="500"><br></div>
+
+
+
+<p>Step 4：开启xrdp服务</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp start</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp-sesman start</span></span><br></pre></td></tr></table></figure>
+<p>Step 5：开启VNC服务</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> cnvserver</span></span><br></pre></td></tr></table></figure>
+<p>输入连接密码</p>
+<div align="center"><br>    <img src="/images/posts/kali/3.png" height="300" width="500"><br></div>
+
+
+
+<p>Step 6：在windows下运行mstsc</p>
+<div align="center"><br>    <img src="/images/posts/kali/4.png" height="300" width="500"><br></div>
+
+<div align="center"><br>    <img src="/images/posts/kali/5.png" height="300" width="500"><br></div>
+
+
+
+
+<p>因为远程服务器将颜色调成了32位，所以我们需要在本地上调整颜色深度。</p>
+<div align="center"><br>    <img src="/images/posts/kali/6.png" height="300" width="500"><br></div>
+
+
+
+<p>这里选择Xvnc，然后输入用户、密码。</p>
+<div align="center"><br>    <img src="/images/posts/kali/7.png" height="300" width="500"><br></div>
+
+
+<p>可以看到成功连接到kali。</p>
+<div align="center"><br>    <img src="/images/posts/kali/8.png" height="300" width="500"><br></div>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-11-22T16:47:56.000Z">2017-11-23</time>
                 
                 
@@ -408,7 +492,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        62
+                        63
                     </p>
                 </div>
             </div>
@@ -428,7 +512,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        23
+                        24
                     </p>
                 </div>
             </div>
@@ -523,7 +607,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 10px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 10px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -537,6 +621,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/01/small_stack_and_brop/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86下栈溢出太小和BROP">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-15T15:00:00.000Z">2019-01-15</time></div>
+                    <a href="/2019/01/small_stack_and_brop/" class="has-link-black-ter is-size-6">x86下栈溢出太小和BROP</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -614,25 +717,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bctf2018-fake3d-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 Fake3D Study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-30T14:05:56.000Z">2018-11-30</time></div>
-                    <a href="/2018/11/bctf2018-fake3d-writeup/" class="has-link-black-ter is-size-6">BCTF2018 Fake3D Study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -651,7 +735,7 @@
                     <span class="level-item">一月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -800,6 +884,17 @@
                 标签
             </h3>
             <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BROP/">
+                        <span class="level-start">
+                            <span class="level-item">BROP</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
                 
                 <li>
                     <a class="level is-marginless" href="/tags/BlockChain/">
@@ -1078,6 +1173,25 @@
         
         <article class="media">
             
+            <a href="/2019/01/small_stack_and_brop/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86下栈溢出太小和BROP">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-15T15:00:00.000Z">2019-01-15</time></div>
+                    <a href="/2019/01/small_stack_and_brop/" class="has-link-black-ter is-size-6">x86下栈溢出太小和BROP</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/01/ret2dl_resolve_x86/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve exp">
@@ -1152,25 +1266,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/bctf2018-fake3d-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="BCTF2018 Fake3D Study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-30T14:05:56.000Z">2018-11-30</time></div>
-                    <a href="/2018/11/bctf2018-fake3d-writeup/" class="has-link-black-ter is-size-6">BCTF2018 Fake3D Study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1189,7 +1284,7 @@
                     <span class="level-item">一月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -1338,6 +1433,17 @@
                 标签
             </h3>
             <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BROP/">
+                        <span class="level-start">
+                            <span class="level-item">BROP</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
                 
                 <li>
                     <a class="level is-marginless" href="/tags/BlockChain/">
