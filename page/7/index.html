@@ -140,6 +140,66 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-24T01:00:00.000Z">2017-11-24</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 337 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/fckeditor-upload/">FCKeditor 上传漏洞-截断上传</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>&emsp;<code>FCKeditor编辑器</code>还是使用比较广泛的网站后台编辑器，在此次实战中应用了截断上传漏洞，不过有些不同的是，截断的不是文件名，而是上传路径。适用版本：<code>&lt;=2.6.4</code>。</p>
+<p><strong>涉及手段： %00截断、文件覆盖</strong></p>
+<h2 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h2><p>&emsp;一开始，尝试在文件名后截断，但全都无果，Google后发现篇paper，使用之，成功upload。<code>主要思路文件夹截断，并把文件夹名当作上传文件名，从而绕过对文件名的验证</code>。</p>
+<p>&emsp;Step 1：在本地编辑好PHP一句话，并且保存为txt格式。（不免杀）</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/1.png"><br></div>
+
+<p>&emsp;Step 2：选择PHP上传，并选中编辑好的txt文件。</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/2.png"><br></div>
+
+<p>&emsp;Step 3：用burpsuite抓包，在文件夹路径下写好<code>上传后</code>的文件名，并在最后用<code>%00截断</code>，如下图：</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/3.png"><br></div><br><br><br><div align="center"><br>    <img src="/images/posts/shizhan/4.png"><br></div>
+
+<p>&emsp;Step 4：改好后放行，可以看到文件成功上传，然后访问返回的<code>command.php</code>。</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/5.png"><br></div>
+
+<p>&emsp;Step 5：在这执行系统命令，但可以会受到权限限制。</p>
+<div align="center"><br>    <img src="/images/posts/shizhan/6.png"><br></div>
+
+<p>&emsp;Step 6：同样的方法可用于一句话上传，然后使用菜刀连接。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://secureyes.net/nw/assets/File-Upload-Vulnerability-in-FCKEditor.pdf" target="_blank" rel="noopener">File-Upload-Vulnerability-in-FCKEditor.pdf</a><br><br><br><a href="http://3xp10it.cc/web/2016/08/12/fckeditor%E5%90%84%E7%89%88%E6%9C%AC%E7%BB%95%E8%BF%87/" target="_blank" rel="noopener">FCKeditor各版本绕过</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-11-23T16:00:00.000Z">2017-11-24</time>
                 
                 
@@ -219,90 +279,6 @@
 <div align="center"><br>    <img src="/images/posts/office/18.png"><br></div>
 
 <p>&emsp;可证实该exploit可行。<br>&emsp;但生成的.rtf在执行时会被杀软报毒，需要解决。</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 分钟 读完 (大约 245 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/kali-remote/">Windows 远程连接 kali</a>
-            
-        </h1>
-        <div class="content">
-            <p><strong>这篇文章成功解决了windows下远程连接 kali 的一些问题，免去了网上一些教程中提到的卸载桌面再安装桌面的步骤。</strong></p>
-<blockquote>
-<p>本篇教程的系统环境为：<br>    windows 7 专业版<br>    kali linux 2016-2</p>
-</blockquote>
-<hr>
-<p>Step 1：安装xrdp</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install xrdp</span></span><br></pre></td></tr></table></figure>
-<p>Step 2：安装vnc4server</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install vnc4server</span></span><br></pre></td></tr></table></figure>
-<p>Step 3：编辑xrdp配置文件</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> nano /etc/xrdp/xrdp.ini</span></span><br></pre></td></tr></table></figure>
-<p>为了防止出现诸如以下错误，需对该配置文件进行修改。</p>
-<div align="center"><br>    <img src="/images/posts/kali/1.png" height="300" width="500"><br></div>
-
-
-<p>将原来max_bpp=32改成max_bpp=16，以防止远程连接时闪退。</p>
-<div align="center"><br>    <img src="/images/posts/kali/2.png" height="300" width="500"><br></div>
-
-
-
-<p>Step 4：开启xrdp服务</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp start</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp-sesman start</span></span><br></pre></td></tr></table></figure>
-<p>Step 5：开启VNC服务</p>
-<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> cnvserver</span></span><br></pre></td></tr></table></figure>
-<p>输入连接密码</p>
-<div align="center"><br>    <img src="/images/posts/kali/3.png" height="300" width="500"><br></div>
-
-
-
-<p>Step 6：在windows下运行mstsc</p>
-<div align="center"><br>    <img src="/images/posts/kali/4.png" height="300" width="500"><br></div>
-
-<div align="center"><br>    <img src="/images/posts/kali/5.png" height="300" width="500"><br></div>
-
-
-
-
-<p>因为远程服务器将颜色调成了32位，所以我们需要在本地上调整颜色深度。</p>
-<div align="center"><br>    <img src="/images/posts/kali/6.png" height="300" width="500"><br></div>
-
-
-
-<p>这里选择Xvnc，然后输入用户、密码。</p>
-<div align="center"><br>    <img src="/images/posts/kali/7.png" height="300" width="500"><br></div>
-
-
-<p>可以看到成功连接到kali。</p>
-<div align="center"><br>    <img src="/images/posts/kali/8.png" height="300" width="500"><br></div>
 
         </div>
         
@@ -460,6 +436,90 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-23T03:47:56.000Z">2017-11-23</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 分钟 读完 (大约 245 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/kali-remote/">Windows 远程连接 kali</a>
+            
+        </h1>
+        <div class="content">
+            <p><strong>这篇文章成功解决了windows下远程连接 kali 的一些问题，免去了网上一些教程中提到的卸载桌面再安装桌面的步骤。</strong></p>
+<blockquote>
+<p>本篇教程的系统环境为：<br>    windows 7 专业版<br>    kali linux 2016-2</p>
+</blockquote>
+<hr>
+<p>Step 1：安装xrdp</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install xrdp</span></span><br></pre></td></tr></table></figure>
+<p>Step 2：安装vnc4server</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> apt-get install vnc4server</span></span><br></pre></td></tr></table></figure>
+<p>Step 3：编辑xrdp配置文件</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> nano /etc/xrdp/xrdp.ini</span></span><br></pre></td></tr></table></figure>
+<p>为了防止出现诸如以下错误，需对该配置文件进行修改。</p>
+<div align="center"><br>    <img src="/images/posts/kali/1.png" height="300" width="500"><br></div>
+
+
+<p>将原来max_bpp=32改成max_bpp=16，以防止远程连接时闪退。</p>
+<div align="center"><br>    <img src="/images/posts/kali/2.png" height="300" width="500"><br></div>
+
+
+
+<p>Step 4：开启xrdp服务</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp start</span></span><br><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> service xrdp-sesman start</span></span><br></pre></td></tr></table></figure>
+<p>Step 5：开启VNC服务</p>
+<figure class="highlight shell hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#</span><span class="hljs-bash"> cnvserver</span></span><br></pre></td></tr></table></figure>
+<p>输入连接密码</p>
+<div align="center"><br>    <img src="/images/posts/kali/3.png" height="300" width="500"><br></div>
+
+
+
+<p>Step 6：在windows下运行mstsc</p>
+<div align="center"><br>    <img src="/images/posts/kali/4.png" height="300" width="500"><br></div>
+
+<div align="center"><br>    <img src="/images/posts/kali/5.png" height="300" width="500"><br></div>
+
+
+
+
+<p>因为远程服务器将颜色调成了32位，所以我们需要在本地上调整颜色深度。</p>
+<div align="center"><br>    <img src="/images/posts/kali/6.png" height="300" width="500"><br></div>
+
+
+
+<p>这里选择Xvnc，然后输入用户、密码。</p>
+<div align="center"><br>    <img src="/images/posts/kali/7.png" height="300" width="500"><br></div>
+
+
+<p>可以看到成功连接到kali。</p>
+<div align="center"><br>    <img src="/images/posts/kali/8.png" height="300" width="500"><br></div>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-11-22T16:47:56.000Z">2017-11-23</time>
                 
                 
@@ -589,7 +649,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        64
+                        65
                     </p>
                 </div>
             </div>
@@ -609,7 +669,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        24
+                        25
                     </p>
                 </div>
             </div>
@@ -704,7 +764,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 13.33px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 16.67px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/seccomp/" style="font-size: 10px;">seccomp</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -718,6 +778,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/dl_resolve_seccomp/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve to bypass seccomp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-21T16:00:00.000Z">2019-03-22</time></div>
+                    <a href="/2019/03/dl_resolve_seccomp/" class="has-link-black-ter is-size-6">ret2dl_resolve to bypass seccomp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -795,25 +874,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/rop-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
-                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -832,7 +892,7 @@
                     <span class="level-item">三月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -1021,7 +1081,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">19</span>
+                            <span class="level-item tag">20</span>
                         </span>
                     </a>
                 </li>
@@ -1142,7 +1202,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">2</span>
+                            <span class="level-item tag">3</span>
                         </span>
                     </a>
                 </li>
@@ -1151,6 +1211,17 @@
                     <a class="level is-marginless" href="/tags/rop/">
                         <span class="level-start">
                             <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/seccomp/">
+                        <span class="level-start">
+                            <span class="level-item">seccomp</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
@@ -1281,6 +1352,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/dl_resolve_seccomp/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve to bypass seccomp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-21T16:00:00.000Z">2019-03-22</time></div>
+                    <a href="/2019/03/dl_resolve_seccomp/" class="has-link-black-ter is-size-6">ret2dl_resolve to bypass seccomp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/ret2dl_resolve_x64/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve x64 study">
@@ -1355,25 +1445,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/rop-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
-                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1392,7 +1463,7 @@
                     <span class="level-item">三月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -1581,7 +1652,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">19</span>
+                            <span class="level-item tag">20</span>
                         </span>
                     </a>
                 </li>
@@ -1702,7 +1773,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">2</span>
+                            <span class="level-item tag">3</span>
                         </span>
                     </a>
                 </li>
@@ -1711,6 +1782,17 @@
                     <a class="level is-marginless" href="/tags/rop/">
                         <span class="level-start">
                             <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/seccomp/">
+                        <span class="level-start">
+                            <span class="level-item">seccomp</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>

